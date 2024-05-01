@@ -10,7 +10,7 @@ namespace IB.Api.Client.Examples
         public static void RunGetNewsProviders(ConnectionDetails connectionDetails)
         {
             var ibClient = new IBClient();
-            ibClient.NotificationReceived += new EventHandler<Notification>(Common.NotificationReceived);
+            ibClient.NotificationReceived += new EventHandler<Notification>(ConnectionHelper.NotificationReceived);
             ibClient.NewsProvidersUpdateReceived += new EventHandler<NewsProvider[]>(NewsProvidersUpdateReceived);
             ConnectionHelper.StartIbClient(ibClient, connectionDetails);
             ibClient.GetNewsProviders();
