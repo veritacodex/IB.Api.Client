@@ -107,12 +107,12 @@ namespace IBApi
 
         string SkipSuffix(string perfix)
         {
-            return Rest.Substring(Rest.IndexOf(perfix) + perfix.Length);
+            return Rest[(Rest.IndexOf(perfix) + perfix.Length)..];
         }
 
         public string GetNextSuffixedValue(string perfix)
         {
-            var rval = Rest.Substring(0, Rest.IndexOf(perfix));
+            var rval = Rest[..Rest.IndexOf(perfix)];
             Rest = SkipSuffix(perfix);
 
             return rval;
