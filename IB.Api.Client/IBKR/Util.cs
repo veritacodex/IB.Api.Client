@@ -124,7 +124,7 @@ namespace IBApi
             for (int i = 0; i < tagValuesCount; i++)
             {
                 TagValue tagValue = options[i];
-                tagValuesStr.Append(tagValue.Tag).Append("=").Append(tagValue.Value).Append(";");
+                tagValuesStr.Append(tagValue.Tag).Append('=').Append(tagValue.Value).Append(';');
             }
 
             return tagValuesStr.ToString();
