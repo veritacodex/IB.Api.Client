@@ -25,5 +25,11 @@ namespace IB.Api.Client.Helper
             //Force the thread to sleep in order to get all notifications from the gateway before going ahead
             Thread.Sleep(TimeSpan.FromSeconds(5));
         }
+
+        public static void NotificationReceived(object sender, Notification notification)
+        {
+            ArgumentNullException.ThrowIfNull(sender);
+            Console.WriteLine($"Type:{notification.NotificationType} Code:{notification.Code} Id:{notification.Id} Message: {notification.Message}");
+        }
     }
 }

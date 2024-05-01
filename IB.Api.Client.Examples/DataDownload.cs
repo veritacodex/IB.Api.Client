@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using IB.Api.Client.Model;
 using IB.Api.Client.Helper;
 using IBApi;
@@ -18,7 +17,7 @@ namespace IB.Api.Client.Examples
         public static void RunBasicDownload(ConnectionDetails connectionDetails)
         {
             var ibClient = new IBClient();
-            ibClient.NotificationReceived += new EventHandler<Notification>(Common.NotificationReceived);
+            ibClient.NotificationReceived += new EventHandler<Notification>(ConnectionHelper.NotificationReceived);
             ibClient.HistoricalDataUpdateReceived += new EventHandler<BarUpdate>(HistoricalDataUpdateEndReceived);
             ConnectionHelper.StartIbClient(ibClient, connectionDetails);
 
@@ -29,7 +28,7 @@ namespace IB.Api.Client.Examples
         public static void RunDownloadWithUpdates(ConnectionDetails connectionDetails)
         {
             var ibClient = new IBClient();
-            ibClient.NotificationReceived += new EventHandler<Notification>(Common.NotificationReceived);
+            ibClient.NotificationReceived += new EventHandler<Notification>(ConnectionHelper.NotificationReceived);
             ibClient.HistoricalDataUpdateReceived += new EventHandler<BarUpdate>(HistoricalDataUpdateEndReceived);
             ibClient.BarUpdateReceived += new EventHandler<RealTimeBarUpdate>(BarUpdateReceived);
             ConnectionHelper.StartIbClient(ibClient, connectionDetails);
@@ -42,14 +41,14 @@ namespace IB.Api.Client.Examples
         public static void RunGetTimeAndSales(ConnectionDetails connectionDetails)
         {
             var ibClient = new IBClient();
-            ibClient.NotificationReceived += new EventHandler<Notification>(Common.NotificationReceived);
+            ibClient.NotificationReceived += new EventHandler<Notification>(ConnectionHelper.NotificationReceived);
             ConnectionHelper.StartIbClient(ibClient, connectionDetails);
             ibClient.GetLatestHistoricalTimeAndSales(1005, _contract, WhatToShow.TRADES);
         }
         public static void RunGetNews(ConnectionDetails connectionDetails)
         {
             var ibClient = new IBClient();
-            ibClient.NotificationReceived += new EventHandler<Notification>(Common.NotificationReceived);
+            ibClient.NotificationReceived += new EventHandler<Notification>(ConnectionHelper.NotificationReceived);
             ConnectionHelper.StartIbClient(ibClient, connectionDetails);
         }
         private static void BarUpdateReceived(object sender, RealTimeBarUpdate barUpdate)

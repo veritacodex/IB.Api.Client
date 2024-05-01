@@ -9,12 +9,8 @@ namespace IB.Api.Client.Examples
         public static void Run(ConnectionDetails connectionDetails)
         {
             var ibClient = new IBClient();
-            ibClient.NotificationReceived += new EventHandler<Notification>(NotificationReceived);
+            ibClient.NotificationReceived += new EventHandler<Notification>(ConnectionHelper.NotificationReceived);
             ConnectionHelper.StartIbClient(ibClient, connectionDetails);
-        }
-        private static void NotificationReceived(object sender, Notification notification)
-        {
-            Console.WriteLine($"Type:{notification.NotificationType} Code:{notification.Code} Id:{notification.Id} Message:{notification.Message}");
         }
     }
 }
