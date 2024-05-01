@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace IB.Api.Client.Helper
 {
-    public static class DateHelper
+    public static partial class DateHelper
     {
         public const string EuropeanDateFormat = "dd/MM/yyyy HH:mm:ss";
         public const string AmericanDateFormat = "yyyyMMdd HH:mm:ss";
@@ -23,7 +23,10 @@ namespace IB.Api.Client.Helper
         }
         public static DateTime ApiToDate(string date)
         {
-            return DateTime.ParseExact(Regex.Replace(date, @"\s+", " "), AmericanDateFormat, CultureInfo.InvariantCulture);
+            return DateTime.ParseExact(SearchString().Replace(date, " "), AmericanDateFormat, CultureInfo.InvariantCulture);
         }
+
+        [GeneratedRegex(@"\s+")]
+        private static partial Regex SearchString();
     }
 }
