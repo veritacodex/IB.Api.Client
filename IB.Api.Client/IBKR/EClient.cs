@@ -134,10 +134,7 @@ namespace IBApi
                 }
                 else
                 {
-                    List<byte> buf = new List<byte>();
-
-                    buf.AddRange(Encoding.UTF8.GetBytes(Constants.ClientVersion.ToString()));
-                    buf.Add(Constants.EOL);
+                    List<byte> buf = [.. Encoding.UTF8.GetBytes(Constants.ClientVersion.ToString()), Constants.EOL];
                     socketTransport.Send(new EMessage(buf.ToArray()));
                 }
             }

@@ -81,18 +81,6 @@ namespace IB.Api.Client
             };
             UiNotificationReceived?.Invoke(this, uiNotification);
         }
-        public void NotifyError(string message)
-        {
-            var notification = new Notification
-            {
-                At = DateTime.Now,
-                Id = 0,
-                Code = 0,
-                Message = message,
-                NotificationType = GetNotificationType(message)
-            };
-            NotificationReceived?.Invoke(this, notification);
-        }
         public void ConnectAck()
         {
             Notify("Connection Acknowledged");

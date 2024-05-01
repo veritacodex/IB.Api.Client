@@ -550,7 +550,7 @@ namespace IBApi
          * @param count the number of trades during the bar's timespan (only available for TRADES).
          * @sa EClientSocket::reqRealTimeBars
          */
-        void RealtimeBar(int reqId, long date, double open, double high, double low, double close, decimal volume, decimal WAP, int count);
+        void RealtimeBar(int reqId, long date, double open, double high, double low, double close, decimal volume, decimal wap, int count);
 
         /**
          * @brief provides the xml-formatted parameters available from TWS market scanners (not all available in API).

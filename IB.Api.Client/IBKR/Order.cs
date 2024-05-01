@@ -640,12 +640,12 @@ namespace IBApi
         /**
         * @brief List of Per-leg price following the same sequence combo legs are added. The combo price must be left unspecified when using per-leg prices.
         */
-        public List<OrderComboLeg> OrderComboLegs { get; set; } = new List<OrderComboLeg>();
+        public List<OrderComboLeg> OrderComboLegs { get; set; } = [];
 
         /**
          * @brief <i>For internal use only. Use the default value XYZ.</i>
          */
-        public List<TagValue> OrderMiscOptions { get; set; } = new List<TagValue>();
+        public List<TagValue> OrderMiscOptions { get; set; } = [];
 
         /**
          * @brief Defines the start time of GTC orders.
@@ -828,7 +828,7 @@ namespace IBApi
             ScaleTable = EMPTY_STR;
             WhatIf = false;
             NotHeld = false;
-            Conditions = new List<OrderCondition>();
+            Conditions = [];
             TriggerPrice = double.MaxValue;
             LmtPriceOffset = double.MaxValue;
             AdjustedStopPrice = double.MaxValue;

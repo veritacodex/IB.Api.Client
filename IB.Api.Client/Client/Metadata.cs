@@ -12,7 +12,7 @@ namespace IB.Api.Client
         public event EventHandler<List<ContractDetails>> ContractDetailsReceived;
         public void GetContractDetails(string symbol, SecurityType securityType)
         {
-            _contracts = new List<ContractDetails>();
+            _contracts = [];
 
             ClientSocket.ReqContractDetails(1020, new Contract
             {
@@ -22,7 +22,7 @@ namespace IB.Api.Client
         }
         public void GetContractDetails(Contract contract)
         {
-            _contracts = new List<ContractDetails>();
+            _contracts = [];
             ClientSocket.ReqContractDetails(1021, contract);
         }
         public void ContractDetails(int reqId, ContractDetails contractDetails)

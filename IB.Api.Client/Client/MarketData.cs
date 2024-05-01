@@ -10,8 +10,8 @@ namespace IB.Api.Client
     //MarketData
     public partial class IBClient
     {
-        private readonly Dictionary<int, PriceUpdate> _priceUpdates = new Dictionary<int, PriceUpdate>();
-        private readonly Dictionary<int, OrderBookUpdate> _orderBookUpdates = new Dictionary<int, OrderBookUpdate>();
+        private readonly Dictionary<int, PriceUpdate> _priceUpdates = [];
+        private readonly Dictionary<int, OrderBookUpdate> _orderBookUpdates = [];
         private List<OptionParameterDefinition> _optionParameterDefinitions;
         public event EventHandler<OrderBookUpdate> OrderBookUpdateReceived;
         public event EventHandler<PriceUpdate> PriceUpdateReceived;
@@ -71,7 +71,7 @@ namespace IB.Api.Client
         }
         public void ReqOptionParameters(int reqId, ContractDetails contractDetails)
         {
-            _optionParameterDefinitions = new List<OptionParameterDefinition>();
+            _optionParameterDefinitions = [];
             Notify($"Derivatives parameters for symbol {contractDetails.Contract.Symbol} requested");
 
             if (contractDetails.Contract.SecType == SecurityType.FUT.ToString())

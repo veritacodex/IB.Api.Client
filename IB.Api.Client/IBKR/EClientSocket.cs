@@ -46,10 +46,7 @@ namespace IBApi
             {
                 if (serverVersion < MinServerVer.LINKING)
                 {
-                    List<byte> buf = new List<byte>();
-
-                    buf.AddRange(Encoding.UTF8.GetBytes(clientId.ToString()));
-                    buf.Add(Constants.EOL);
+                    List<byte> buf = [.. Encoding.UTF8.GetBytes(clientId.ToString()), Constants.EOL];
                     socketTransport.Send(new EMessage(buf.ToArray()));
                 }
             }

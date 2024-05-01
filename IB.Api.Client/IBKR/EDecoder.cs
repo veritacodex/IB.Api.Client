@@ -966,8 +966,8 @@ namespace IBApi
             string tradingClass = ReadString();
             string multiplier = ReadString();
             int expirationsSize = ReadInt();
-            HashSet<string> expirations = new HashSet<string>();
-            HashSet<double> strikes = new HashSet<double>();
+            HashSet<string> expirations = [];
+            HashSet<double> strikes = [];
 
             for (int i = 0; i < expirationsSize; i++)
             {
@@ -1371,7 +1371,7 @@ namespace IBApi
                 int secIdListCount = ReadInt();
                 if (secIdListCount > 0)
                 {
-                    contract.SecIdList = new List<TagValue>();
+                    contract.SecIdList = [];
                     for (int i = 0; i < secIdListCount; ++i)
                     {
                         TagValue tagValue = new TagValue
