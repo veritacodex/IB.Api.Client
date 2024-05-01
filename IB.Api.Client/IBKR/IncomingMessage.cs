@@ -3,7 +3,7 @@
 
 namespace IBApi
 {
-    public class IncomingMessage
+    public static class IncomingMessage
     {
         public const int NotValid = -1;
         public const int TickPrice = 1;

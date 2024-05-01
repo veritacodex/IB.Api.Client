@@ -8,7 +8,7 @@
   </ItemGroup>
   <ItemGroup>
     <SonarQubeSetting Include="sonar.exclusions">
-      <Value><EClient class="cs"></EClient></Value>
+      <Value>EClient.cs</Value>
     </SonarQubeSetting>
   </ItemGroup>
 </Project>
