@@ -174,7 +174,7 @@ namespace IBApi
         {
         }
 
-        public virtual void RealtimeBar(int reqId, long date, double open, double high, double low, double close, decimal volume, decimal WAP, int count)
+        public virtual void RealtimeBar(int reqId, long date, double open, double high, double low, double close, decimal volume, decimal wap, int count)
         {
         }
 
