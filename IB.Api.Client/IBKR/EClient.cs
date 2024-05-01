@@ -4106,12 +4106,12 @@ namespace IBApi
             return true;
         }
 
-        private bool IsEmpty(string str)
+        private static bool IsEmpty(string str)
         {
             return Util.StringIsEmpty(str);
         }
 
-        private bool StringsAreEqual(string a, string b)
+        private static bool StringsAreEqual(string a, string b)
         {
             return string.Compare(a, b, true) == 0;
         }

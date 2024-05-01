@@ -90,7 +90,7 @@ namespace IB.Api.Client
             Notify("Connection Closed");
         }
 
-        public NotificationType GetNotificationType(string message)
+        public static NotificationType GetNotificationType(string message)
         {
             if (message.Contains("data farm connection is OK"))
                 return NotificationType.OK;
