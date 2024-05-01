@@ -44,8 +44,8 @@ namespace IBApi
 
                 IsMore = cond.StartsWith(">=");
 
-                if (base.TryParse(cond[cond.LastIndexOf(" ")..]))
-                    cond = cond[..cond.LastIndexOf(" ")];
+                if (base.TryParse(cond[cond.LastIndexOf(' ')..]))
+                    cond = cond[..cond.LastIndexOf(' ')];
 
                 Value = cond[3..];
             }
