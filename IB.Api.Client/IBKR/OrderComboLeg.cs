@@ -27,7 +27,7 @@ namespace IBApi
 
         public override bool Equals(object other)
         {
-            if (!(other is OrderComboLeg theOther))
+            if (other is not OrderComboLeg theOther)
             {
                 return false;
             }

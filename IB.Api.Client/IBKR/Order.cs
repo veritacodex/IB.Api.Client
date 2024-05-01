@@ -868,7 +868,7 @@ namespace IBApi
             if (this == p_other)
                 return true;
 
-            if (!(p_other is Order l_theOther))
+            if (p_other is not Order l_theOther)
                 return false;
 
             if (PermId == l_theOther.PermId)

@@ -31,7 +31,7 @@ namespace IBApi
             if (this == other)
                 return true;
 
-            if (!(other is TagValue l_theOther))
+            if (other is not TagValue l_theOther)
                 return false;
 
             if (Util.StringCompare(Tag, l_theOther.Tag) != 0 ||

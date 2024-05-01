@@ -52,7 +52,7 @@ namespace IBApi
         {
             bool l_bRetVal;
 
-            if (!(obj is CommissionReport l_theOther))
+            if (obj is not CommissionReport l_theOther)
             {
                 l_bRetVal = false;
             }

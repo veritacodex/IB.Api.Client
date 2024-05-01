@@ -4119,7 +4119,7 @@ namespace IBApi
         public bool IsDataAvailable()
         {
             if (!isConnected) return false;
-            return !(tcpStream is NetworkStream networkStream) || networkStream.DataAvailable;
+            return tcpStream is not NetworkStream networkStream || networkStream.DataAvailable;
         }
 
         public int ReadInt()

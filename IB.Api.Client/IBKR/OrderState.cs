@@ -145,7 +145,7 @@ namespace IBApi
             if (this == other)
                 return true;
 
-            if (!(other is OrderState state))
+            if (other is not OrderState state)
                 return false;
 
             if (Commission != state.Commission ||

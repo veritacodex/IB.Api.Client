@@ -189,7 +189,7 @@ namespace IBApi
         public override bool Equals(object p_other)
         {
             bool l_bRetVal;
-            if (!(p_other is Execution l_theOther))
+            if (p_other is not Execution l_theOther)
             {
                 l_bRetVal = false;
             }

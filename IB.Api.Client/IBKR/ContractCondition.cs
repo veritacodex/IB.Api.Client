@@ -5,7 +5,7 @@ using System;
 
 namespace IBApi
 {
-	public abstract class ContractCondition : OperatorCondition
+    public abstract class ContractCondition : OperatorCondition
     {
         public int ConId { get; set; }
         public string Exchange { get; set; }
@@ -26,7 +26,7 @@ namespace IBApi
 
         public override bool Equals(object obj)
         {
-            if (!(obj is ContractCondition other))
+            if (obj is not ContractCondition other)
                 return false;
 
             return base.Equals(obj)

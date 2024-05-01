@@ -17,7 +17,7 @@ namespace IBApi
 
         public override bool Equals(object obj)
         {
-            if (!(obj is OperatorCondition other))
+            if (obj is not OperatorCondition other)
                 return false;
 
             return base.Equals(obj)

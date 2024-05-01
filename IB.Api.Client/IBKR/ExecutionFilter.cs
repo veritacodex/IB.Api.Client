@@ -68,7 +68,7 @@ namespace IBApi
         public override bool Equals(object other)
         {
             bool l_bRetVal;
-            if (!(other is ExecutionFilter l_theOther))
+            if (other is not ExecutionFilter l_theOther)
             {
                 l_bRetVal = false;
             }
