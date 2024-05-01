@@ -7,29 +7,22 @@ namespace IBApi
      * @class SoftDollarTier
      * @brief A container for storing Soft Dollar Tier information
      */
-    public class SoftDollarTier
+    public class SoftDollarTier(string name, string value, string displayName)
     {
         /**
          * @brief The name of the Soft Dollar Tier
          */
-        public string Name { get; set; }
+        public string Name { get; set; } = name;
 
         /**
          * @brief The value of the Soft Dollar Tier
          */
-        public string Value { get; set; }
+        public string Value { get; set; } = value;
 
         /**
          * @brief The display name of the Soft Dollar Tier
          */
-        public string DisplayName { get; set; }
-
-        public SoftDollarTier(string name, string value, string displayName)
-        {
-            Name = name;
-            Value = value;
-            DisplayName = displayName;
-        }
+        public string DisplayName { get; set; } = displayName;
 
         public SoftDollarTier()
             : this(null, null, null)

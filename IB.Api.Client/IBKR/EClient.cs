@@ -15,38 +15,23 @@ namespace IBApi
      * @brief TWS/Gateway client class
      * This client class contains all the available methods to communicate with IB. Up to thirty-two clients can be connected to a single instance of the TWS/Gateway simultaneously. From herein, the TWS/Gateway will be referred to as the Host.
      */
-    public abstract class EClient
+    public abstract class EClient(IEWrapper wrapper)
     {
         protected int serverVersion;
 
         protected IETransport socketTransport;
 
-        protected IEWrapper wrapper;
+        protected IEWrapper wrapper = wrapper;
 
-        protected bool isConnected;
-        protected int clientId;
-        protected bool extraAuth;
+        protected bool isConnected = false;
+        protected int clientId = -1;
+        protected bool extraAuth = false;
         protected bool useV100Plus = true;
 
         internal bool UseV100Plus { get { return useV100Plus; } }
 
         private string connectOptions = "";
         protected bool allowRedirect;
-
-        /**
-         * @brief Constructor
-         * @param wrapper EWrapper's implementing class instance. Every message being delivered by IB to the API client will be forwarded to the EWrapper's implementing class.
-         * @sa EWrapper
-         */
-        protected EClient(IEWrapper wrapper)
-        {
-            this.wrapper = wrapper;
-            clientId = -1;
-            extraAuth = false;
-            isConnected = false;
-            OptionalCapabilities = "";
-            AsyncEConnect = false;
-        }
 
         /**
          * @brief Ignore. Used for IB's internal purposes.
@@ -168,7 +153,7 @@ namespace IBApi
         }
 
 
-        public string OptionalCapabilities { get; set; }
+        public string OptionalCapabilities { get; set; } = "";
 
         /**
          * @brief Terminates the connection and notifies the EWrapper implementing class.
@@ -4139,6 +4124,6 @@ namespace IBApi
             return new BinaryReader(tcpStream).ReadBytes(msgSize);
         }
 
-        public bool AsyncEConnect { get; set; }
+        public bool AsyncEConnect { get; set; } = false;
     }
 }

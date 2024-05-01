@@ -5,24 +5,14 @@ using System.Collections.Generic;
 
 namespace IBApi
 {
-    class EOrderDecoder
+    class EOrderDecoder(EDecoder eDecoder, Contract contract, Order order, OrderState orderState, int msgVersion, int serverVersion)
     {
-        private readonly EDecoder eDecoder;
-        private readonly Contract contract;
-        private readonly Order order;
-        private readonly OrderState orderState;
-        private readonly int msgVersion;
-        private readonly int serverVersion;
-
-        public EOrderDecoder(EDecoder eDecoder, Contract contract, Order order, OrderState orderState, int msgVersion, int serverVersion)
-        {
-            this.eDecoder = eDecoder;
-            this.contract = contract;
-            this.order = order;
-            this.orderState = orderState;
-            this.msgVersion = msgVersion;
-            this.serverVersion = serverVersion;
-        }
+        private readonly EDecoder eDecoder = eDecoder;
+        private readonly Contract contract = contract;
+        private readonly Order order = order;
+        private readonly OrderState orderState = orderState;
+        private readonly int msgVersion = msgVersion;
+        private readonly int serverVersion = serverVersion;
 
         public void ReadOrderId()
         {

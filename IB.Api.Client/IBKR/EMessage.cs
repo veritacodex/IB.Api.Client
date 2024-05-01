@@ -3,14 +3,9 @@
 
 namespace IBApi
 {
-    public class EMessage
+    public class EMessage(byte[] buf)
     {
-        readonly byte[] buf;
-
-        public EMessage(byte[] buf)
-        {
-            this.buf = buf;
-        }
+        readonly byte[] buf = buf;
 
         public byte[] GetBuf()
         {

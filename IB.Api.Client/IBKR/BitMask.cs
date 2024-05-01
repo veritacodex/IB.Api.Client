@@ -5,14 +5,9 @@ using System;
 
 namespace IBApi
 {
-    class BitMask
+    class BitMask(int p)
     {
-        private int m_mask;
-
-        public BitMask(int p)
-        {
-            m_mask = p;
-        }
+        private int m_mask = p;
 
         public int GetMask()
         {

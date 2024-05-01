@@ -9,20 +9,13 @@ using System.Text.RegularExpressions;
 
 namespace IBApi
 {
-    class EDecoder : IDecoder
+    class EDecoder(int serverVersion, IEWrapper callback, IEClientMsgSink sink = null) : IDecoder
     {
-        private readonly IEClientMsgSink eClientMsgSink;
-        private readonly IEWrapper eWrapper;
-        private int serverVersion;
+        private readonly IEClientMsgSink eClientMsgSink = sink;
+        private readonly IEWrapper eWrapper = callback;
+        private int serverVersion = serverVersion;
         private BinaryReader dataReader;
         private int nDecodedLen;
-
-        public EDecoder(int serverVersion, IEWrapper callback, IEClientMsgSink sink = null)
-        {
-            this.serverVersion = serverVersion;
-            eWrapper = callback;
-            eClientMsgSink = sink;
-        }
 
         public int ParseAndProcessMsg(byte[] buf)
         {

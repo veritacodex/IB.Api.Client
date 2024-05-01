@@ -5,15 +5,10 @@ using System.IO;
 
 namespace IBApi
 {
-    class ESocket : IETransport, IDisposable
+    class ESocket(Stream socketStream) : IETransport, IDisposable
     {
-        readonly BinaryWriter tcpWriter;
+        readonly BinaryWriter tcpWriter = new BinaryWriter(socketStream);
         readonly object tcpWriterLock = new object();
-
-        public ESocket(Stream socketStream)
-        {
-            tcpWriter = new BinaryWriter(socketStream);
-        }
 
         public void Send(EMessage msg)
         {

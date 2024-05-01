@@ -11,7 +11,7 @@ namespace IBApi
      * @brief Class describing the liquidity type of an execution.
      * @sa Execution
      */
-    public class Liquidity
+    public class Liquidity(int p)
     {
         /**
          * @brief The enum of available liquidity flag types. 
@@ -26,15 +26,10 @@ namespace IBApi
             {3, "Liquidity Routed Out" }
         };
 
-        public Liquidity(int p)
-        {
-            Value = Values.ContainsKey(p) ? p : 0;
-        }
-
         /**
          * @brief The value of the liquidity type.
          */
-        public int Value { get; set; }
+        public int Value { get; set; } = Values.ContainsKey(p) ? p : 0;
 
         public override string ToString()
         {

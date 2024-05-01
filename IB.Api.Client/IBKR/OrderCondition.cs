@@ -98,13 +98,8 @@ namespace IBApi
         }
     }
 
-    class StringSuffixParser
+    class StringSuffixParser(string str)
     {
-        public StringSuffixParser(string str)
-        {
-            Rest = str;
-        }
-
         string SkipSuffix(string perfix)
         {
             return Rest[(Rest.IndexOf(perfix) + perfix.Length)..];
@@ -118,6 +113,6 @@ namespace IBApi
             return rval;
         }
 
-        public string Rest { get; private set; }
+        public string Rest { get; private set; } = str;
     }
 }

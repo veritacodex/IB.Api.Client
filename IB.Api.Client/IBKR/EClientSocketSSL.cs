@@ -8,12 +8,8 @@ namespace IBApi
     /**
     * @brief Implements a Secure Socket Layer (SSL) on top of the EClientSocket class.
     */
-    public class EClientSocketSSL : EClientSocket
+    public class EClientSocketSSL(IEWrapper wrapper, IEReaderSignal signal) : EClientSocket(wrapper, signal)
     {
-        public EClientSocketSSL(IEWrapper wrapper, IEReaderSignal signal) :
-            base(wrapper, signal)
-        { }
-
         protected override Stream CreateClientStream(string host, int port)
         {
             var rval = new SslStream(base.CreateClientStream(host, port), false, (_, __, ___, ____) => true);

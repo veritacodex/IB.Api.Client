@@ -106,17 +106,11 @@ namespace IBApi
 /**
   * @brief associates error code and error message as a pair. 
   */
-    public class CodeMsgPair
+    public class CodeMsgPair(int code, string message)
     {
-        public CodeMsgPair(int code, string message)
-        {
-            Code = code;
-            Message = message;
-        }
+        public int Code { get; } = code;
 
-        public int Code { get; }
-
-        public string Message { get; }
+        public string Message { get; } = message;
     }
 
 }
