@@ -4,8 +4,7 @@
 namespace IBApi
 {
     public class MinServerVer
-    {
-        
+    {        
         public const int MIN_VERSION = 38;
 
         //shouldn't these all be deprecated?
