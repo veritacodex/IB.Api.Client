@@ -6,9 +6,4 @@
     <PackageReference Include="Microsoft.Bcl.HashCode" Version="1.1.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
-  <ItemGroup>
-    <SonarQubeSetting Include="sonar.exclusions">
-      <Value>EClient.cs</Value>
-    </SonarQubeSetting>
-  </ItemGroup>
 </Project>
