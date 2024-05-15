@@ -4,10 +4,15 @@ using System;
 
 namespace IBApi
 {
-    public class EClientException(CodeMsgPair err) : Exception
+    public class EClientException : Exception
     {
-        public CodeMsgPair Err { get; private set; } = err;
+        public CodeMsgPair Err { get; private set; }
         public string Text { get; private set; }
+
+        public EClientException(CodeMsgPair err)
+        {
+            Err = err;
+        }
 
         public EClientException(CodeMsgPair err, string text) : this(err)
         {

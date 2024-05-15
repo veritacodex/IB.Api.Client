@@ -7,7 +7,7 @@ namespace IBApi
     * @brief Contains all possible errors occurring on the client side. This errors are not sent by the TWS but rather generated as the result of malfunction within the
     * TWS API client.
     */
-    public static class EClientErrors
+    public class EClientErrors
     {
         public static readonly CodeMsgPair AlreadyConnected = new CodeMsgPair(501, "Already Connected.");
         public static readonly CodeMsgPair CONNECT_FAIL = new CodeMsgPair(502, @"Couldn't connect to TWS. Confirm that ""Enable ActiveX and Socket Clients"" 
@@ -106,11 +106,17 @@ namespace IBApi
 /**
   * @brief associates error code and error message as a pair. 
   */
-    public class CodeMsgPair(int code, string message)
+    public class CodeMsgPair
     {
-        public int Code { get; } = code;
+        public CodeMsgPair(int code, string message)
+        {
+            Code = code;
+            Message = message;
+        }
 
-        public string Message { get; } = message;
+        public int Code { get; }
+
+        public string Message { get; }
     }
 
 }
