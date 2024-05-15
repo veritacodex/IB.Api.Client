@@ -44,16 +44,6 @@ namespace IBApi
             return (Name ?? "").GetHashCode() + (Value ?? "").GetHashCode();
         }
 
-        public static bool operator ==(SoftDollarTier left, SoftDollarTier right)
-        {
-            return left.Equals(right);
-        }
-
-        public static bool operator !=(SoftDollarTier left, SoftDollarTier right)
-        {
-            return !left.Equals(right);
-        }
-
         public override string ToString()
         {
             return DisplayName;
