@@ -539,6 +539,31 @@ namespace IBApi
             MinSize = decimal.MaxValue;
             SizeIncrement = decimal.MaxValue;
             SuggestedSizeIncrement = decimal.MaxValue;
-        }        
+        }
+
+        public ContractDetails(Contract summary, string marketName,
+                double minTick, string orderTypes, string validExchanges, int underConId, string longName,
+                string contractMonth, string industry, string category, string subcategory,
+                string timeZoneId, string tradingHours, string liquidHours,
+                string evRule, double evMultiplier, int aggGroup)
+        {
+            Contract = summary;
+            MarketName = marketName;
+            MinTick = minTick;
+            OrderTypes = orderTypes;
+            ValidExchanges = validExchanges;
+            UnderConId = underConId;
+            LongName = longName;
+            ContractMonth = contractMonth;
+            Industry = industry;
+            Category = category;
+            Subcategory = subcategory;
+            TimeZoneId = timeZoneId;
+            TradingHours = tradingHours;
+            LiquidHours = liquidHours;
+            EvRule = evRule;
+            EvMultiplier = evMultiplier;
+            AggGroup = aggGroup;
+        }
     }
 }
