@@ -196,7 +196,7 @@ namespace IB.Api.Client
         public virtual void TickGeneric(int tickerId, int field, double value)
         {
         }
-        public void RealtimeBar(int reqId, long date, double open, double high, double low, double close, decimal volume, decimal wap, int count)
+        public void RealtimeBar(int reqId, long date, double open, double high, double low, double close, decimal volume, decimal WAP, int count)
         {
             _ = reqId;
             var realtimeBarUpdate = new RealTimeBarUpdate
@@ -208,7 +208,7 @@ namespace IB.Api.Client
                 Close = close,
                 Volume = volume,
                 Count = count,
-                Vwap = wap
+                Vwap = WAP
             };
             BarUpdateReceived?.Invoke(this, realtimeBarUpdate);
         }

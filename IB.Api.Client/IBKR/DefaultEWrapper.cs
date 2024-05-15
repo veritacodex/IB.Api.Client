@@ -174,7 +174,7 @@ namespace IBApi
         {
         }
 
-        public virtual void RealtimeBar(int reqId, long time, double open, double high, double low, double close, decimal volume, decimal WAP, int count)
+        public virtual void RealtimeBar(int reqId, long date, double open, double high, double low, double close, decimal volume, decimal WAP, int count)
         {
         }
 
@@ -259,7 +259,7 @@ namespace IBApi
         {
         }
 
-        public virtual void MktDepthExchanges(DepthMktDataDescription[] descriptions)
+        public virtual void MktDepthExchanges(DepthMktDataDescription[] depthMktDataDescriptions)
         {
         }
 
@@ -322,7 +322,7 @@ namespace IBApi
 
         }
 
-        public virtual void PnlSingle(int reqId, decimal pos, double dailyPnL, double realizedPnL, double value, double unrealizedPnL)
+        public virtual void PnlSingle(int reqId, decimal pos, double dailyPnL, double unrealizedPnL, double realizedPNL, double value)
         {
 
         }

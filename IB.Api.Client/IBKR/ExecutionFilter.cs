@@ -1,8 +1,6 @@
 ﻿/* Copyright (C) 2019 Interactive Brokers LLC. All rights reserved. This code is subject to the terms
  * and conditions of the IB API Non-Commercial License or the IB API Commercial License, as applicable. */
 
-using System.Collections.Generic;
-
 namespace IBApi
 {
     /**
@@ -65,14 +63,14 @@ namespace IBApi
             Side = side;
         }
 
-        public override bool Equals(object other)
+        public override bool Equals(object obj)
         {
             bool l_bRetVal;
-            if (other is not ExecutionFilter l_theOther)
+            if (obj is not ExecutionFilter l_theOther)
             {
                 l_bRetVal = false;
             }
-            else if (this == other)
+            else if (this == obj)
             {
                 l_bRetVal = true;
             }

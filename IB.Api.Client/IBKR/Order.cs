@@ -13,20 +13,20 @@ namespace IBApi
      */
     public class Order
     {
-        public static int CUSTOMER = 0;
-        public static int FIRM = 1;
-        public static char OPT_UNKNOWN = '?';
-        public static char OPT_BROKER_DEALER = 'b';
-        public static char OPT_CUSTOMER = 'c';
-        public static char OPT_FIRM = 'f';
-        public static char OPT_ISEMM = 'm';
-        public static char OPT_FARMM = 'n';
-        public static char OPT_SPECIALIST = 'y';
-        public static int AUCTION_MATCH = 1;
-        public static int AUCTION_IMPROVEMENT = 2;
-        public static int AUCTION_TRANSPARENT = 3;
-        public static string EMPTY_STR = "";
-        public static double COMPETE_AGAINST_BEST_OFFSET_UP_TO_MID = double.PositiveInfinity;
+        public const int CUSTOMER = 0;
+        public const int FIRM = 1;
+        public const char OPT_UNKNOWN = '?';
+        public const char OPT_BROKER_DEALER = 'b';
+        public const char OPT_CUSTOMER = 'c';
+        public const char OPT_FIRM = 'f';
+        public const char OPT_ISEMM = 'm';
+        public const char OPT_FARMM = 'n';
+        public const char OPT_SPECIALIST = 'y';
+        public const int AUCTION_MATCH = 1;
+        public const int AUCTION_IMPROVEMENT = 2;
+        public const int AUCTION_TRANSPARENT = 3;
+        public const string EMPTY_STR = "";
+        public const double COMPETE_AGAINST_BEST_OFFSET_UP_TO_MID = double.PositiveInfinity;
 
         // main order fields
         // extended order fields
@@ -863,12 +863,12 @@ namespace IBApi
     }
 
         // Note: Two orders can be 'equivalent' even if all fields do not match. This function is not intended to be used with Order objects returned from TWS.
-        public override bool Equals(object p_other)
+        public override bool Equals(object obj)
         {
-            if (this == p_other)
+            if (this == obj)
                 return true;
 
-            if (p_other is not Order l_theOther)
+            if (obj is not Order l_theOther)
                 return false;
 
             if (PermId == l_theOther.PermId)

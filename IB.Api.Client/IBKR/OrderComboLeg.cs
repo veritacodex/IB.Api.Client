@@ -25,14 +25,14 @@ namespace IBApi
             Price = p_price;
         }
 
-        public override bool Equals(object other)
+        public override bool Equals(object obj)
         {
-            if (other is not OrderComboLeg theOther)
+            if (obj is not OrderComboLeg theOther)
             {
                 return false;
             }
 
-            if (this == other)
+            if (this == obj)
             {
                 return true;
             }

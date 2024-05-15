@@ -140,12 +140,12 @@ namespace IBApi
             CompletedStatus = completedStatus;
         }
 
-        public override bool Equals(object other)
+        public override bool Equals(object obj)
         {
-            if (this == other)
+            if (this == obj)
                 return true;
 
-            if (other is not OrderState state)
+            if (obj is not OrderState state)
                 return false;
 
             if (Commission != state.Commission ||
