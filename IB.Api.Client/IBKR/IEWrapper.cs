@@ -969,6 +969,5 @@ namespace IBApi
          * @sa EClient::reqUserInfo
          */
         void UserInfo(int reqId, string whiteBrandingId);
-        void error(int reqId, int code, string v1, string v2);
     }
 }
