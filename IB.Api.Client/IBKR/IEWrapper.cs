@@ -19,13 +19,13 @@ namespace IBApi
          * @param e the thrown exception.
          */
         void Error(Exception e);
-
+        
         /**
          * @param str The error message received.
          * 
          */
         void Error(string str);
-
+        
         /**
          * @brief Errors sent by the TWS are received here.
          * @param id the request identifier which generated the error. Note: -1 will indicate a notification and not true error condition.
@@ -92,7 +92,7 @@ namespace IBApi
          * @param dividendImpact The dividend impact upon the annualized basis points interest rate.
          * @param dividendsToLastTradeDate The dividends expected until the expiration of the single stock future.
          */
-        void TickEFP(int tickerId, int tickType, double basisPoints, string formattedBasisPoints, double impliedFuture, int holdDays, string futureLastTradeDate, double dividendImpact, double dividendsToLastTradeDate);
+        void TickEFP(int tickerId, int tickType, double basisPoints, string formattedBasisPoints, double impliedFuture, int holdDays,  string futureLastTradeDate, double dividendImpact, double dividendsToLastTradeDate);
 
         /**
          * @brief -
@@ -455,8 +455,8 @@ namespace IBApi
          * @sa EClientSocket::reqHistoricalData
          */
         void HistoricalData(int reqId, Bar bar);
-
-        /**
+        
+		/**
          * @brief Receives bars in real time if keepUpToDate is set as True in reqHistoricalData. Similar to realTimeBars function, except returned data is a composite of historical data and real time data that is equivalent to TWS chart functionality to keep charts up to date. Returned bars are successfully updated using real time data.
 		 * @param reqId the requests identifier
 		 * @param bar the OHLC historical data Bar. The time zone of the bar is the time zone chosen on the TWS login screen. Smallest bar size is 1 second. 
@@ -550,7 +550,7 @@ namespace IBApi
          * @param count the number of trades during the bar's timespan (only available for TRADES).
          * @sa EClientSocket::reqRealTimeBars
          */
-        void RealtimeBar(int reqId, long date, double open, double high, double low, double close, decimal volume, decimal wap, int count);
+        void RealtimeBar(int reqId, long date, double open, double high, double low, double close, decimal volume, decimal WAP, int count);
 
         /**
          * @brief provides the xml-formatted parameters available from TWS market scanners (not all available in API).
@@ -668,7 +668,7 @@ namespace IBApi
          */
         void AccountUpdateMultiEnd(int requestId);
 
-        /**
+		/**
 		* @brief returns the option chain for an underlying on an exchange specified in reqSecDefOptParams
 		* There will be multiple callbacks to securityDefinitionOptionParameter if multiple exchanges are specified in reqSecDefOptParams
 		* @param reqId ID of the request initiating the callback
@@ -680,8 +680,8 @@ namespace IBApi
 		* @sa EClient::reqSecDefOptParams
 		*/
         void SecurityDefinitionOptionParameter(int reqId, string exchange, int underlyingConId, string tradingClass, string multiplier, HashSet<string> expirations, HashSet<double> strikes);
-
-        /**
+		
+		/**
 		* @brief called when all callbacks to securityDefinitionOptionParameter are complete
 		* @param reqId the ID used in the call to securityDefinitionOptionParameter
 		* @sa securityDefinitionOptionParameter, EClient::reqSecDefOptParams
@@ -782,7 +782,7 @@ namespace IBApi
         */
         void HistoricalNewsEnd(int requestId, bool hasMore);
 
-        /**
+		/**
         * @brief - returns beginning of data for contract for specified data type
         * @param requestId 
         * @param headTimestamp - string identifying earliest data date
@@ -790,7 +790,7 @@ namespace IBApi
         */
         void HeadTimestamp(int reqId, string headTimestamp);
 
-        /**
+		/**
         * @brief returns data histogram
         * @param requestId
         * @param data - returned Tuple of histogram data, number of trades at specified price level
@@ -822,8 +822,8 @@ namespace IBApi
         * @sa EClient::reqMarketRule
         */
         void MarketRule(int marketRuleId, PriceIncrement[] priceIncrements);
-
-        /**
+		
+		/**
 		* @brief receives PnL updates in real time for the daily PnL and the total unrealized PnL for an account 
 		* @param reqId
 		* @param dailyPnL dailyPnL updates for the account in real time
@@ -831,8 +831,8 @@ namespace IBApi
         * @sa EClient::reqPnL
 		*/
         void Pnl(int reqId, double dailyPnL, double unrealizedPnL, double realizedPnL);
-
-        /** 
+		
+		/** 
 		* @brief receives real time updates for single position daily PnL values
 		* @param reqId
 		* @param pos current size of the position
@@ -842,24 +842,24 @@ namespace IBApi
 		* @sa EClient::reqSinglePnL
 		*/
         void PnlSingle(int reqId, decimal pos, double dailyPnL, double unrealizedPnL, double realizedPnL, double value);
-
-        /**
+			
+		/**
 		* @brief
 		* @param reqId
 		* @param ticks list of HistoricalTick data
 		* @param done flag to indicate if all historical tick data has been received
 		*/
         void HistoricalTicks(int reqId, HistoricalTick[] ticks, bool done);
-
-        /**
+		
+		/**
 		* @brief
 		* @param reqId
 		* @param ticks list of HistoricalBidAsk data
 		* @param done flag to indicate if all historical tick data has been received
 		*/
         void HistoricalTicksBidAsk(int reqId, HistoricalTickBidAsk[] ticks, bool done);
-
-        /**
+		
+		/**
 		* @brief
 		* @param reqId
 		* @param ticks list of HistoricalTickLast data
@@ -935,15 +935,15 @@ namespace IBApi
          */
         void ReplaceFAEnd(int reqId, string text);
 
-        /**
+		/**
          * @brief returns meta data from the WSH calendar
          * @param reqId the id of request
          * @param dataJson metadata in json format
          * @sa EClient::reqWshMetaData
          */
         void WshMetaData(int reqId, string dataJson);
-
-        /**
+		
+		/**
          * @brief returns calendar events from the WSH
          * @param reqId the id of request
          * @param dataJson event data in json format
@@ -969,5 +969,6 @@ namespace IBApi
          * @sa EClient::reqUserInfo
          */
         void UserInfo(int reqId, string whiteBrandingId);
+        void error(int reqId, int code, string v1, string v2);
     }
 }
