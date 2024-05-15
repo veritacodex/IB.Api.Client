@@ -322,7 +322,7 @@ namespace IBApi
 
         }
 
-        public virtual void PnlSingle(int reqId, decimal pos, double dailyPnL, double unrealizedPnL, double realizedPnl, double value)
+        public virtual void PnlSingle(int reqId, decimal pos, double dailyPnL, double unrealizedPnL, double realizedPnL, double value)
         {
 
         }
