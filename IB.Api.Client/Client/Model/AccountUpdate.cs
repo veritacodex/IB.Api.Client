@@ -29,23 +29,20 @@ namespace IB.Api.Client.Model
         [JsonProperty("buyingPower")]
         public double BuyingPower { get; set; }
 
+        [JsonProperty("cashEuro")]
+        public double CashEuro { get; set; }
+
         [JsonProperty("cashUsd")]
         public double CashUsd { get; set; }
 
+        [JsonProperty("accruedCash")]
+        public double AccruedCash { get; set; }
+
+        [JsonProperty("baseNetLiquidation")]
+        public double BaseNetLiquidation { get; set; }
+
         [JsonProperty("excessLiquidity")]
         public double ExcessLiquidity { get; set; }
-
-        [JsonProperty("side")]
-        public string Side { get; set; }
-
-        [JsonProperty("pnl")]
-        public string Pnl { get; set; }
-
-        [JsonProperty("cashUsdStart")]
-        public double CashUsdStart { get; set; }
-
-        [JsonProperty("cashUsdNet")]
-        public double CashUsdNet { get; set; }
 
         public void SetValue(string key, string value, string currency)
         {
@@ -53,8 +50,11 @@ namespace IB.Api.Client.Model
             AccountType = key == "AccountType" ? value : AccountType;
             AvailableFunds = key == "AvailableFunds" ? double.Parse(value) : AvailableFunds;
             BuyingPower = key == "BuyingPower" ? double.Parse(value) : BuyingPower;
+            CashEuro = key == "CashBalance" && currency == "EUR" ? double.Parse(value) : CashEuro;
             CashUsd = key == "CashBalance" && currency == "USD" ? double.Parse(value) : CashUsd;
             ExcessLiquidity = key == "ExcessLiquidity" ? double.Parse(value) : ExcessLiquidity;
+            AccruedCash = key == "AccruedCash" && currency == "EUR" ? double.Parse(value) : AccruedCash;
+            BaseNetLiquidation = key == "NetLiquidationByCurrency" && currency == "BASE" ? double.Parse(value) : BaseNetLiquidation;
         }
     }
 }
