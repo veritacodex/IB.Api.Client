@@ -83,9 +83,9 @@ namespace IBApi
          */
         public int OrderId { get; set; }
 
-	/**
-         * @brief The Solicited field should be used for orders initiated or recommended by the broker or adviser that were approved by the client (by phone, email, chat, 	verbally, etc.) prior to entry. Please note that orders that the adviser or broker placed without specifically discussing with the client are discretionary orders, not	solicited.
-         */
+        /**
+             * @brief The Solicited field should be used for orders initiated or recommended by the broker or adviser that were approved by the client (by phone, email, chat, 	verbally, etc.) prior to entry. Please note that orders that the adviser or broker placed without specifically discussing with the client are discretionary orders, not	solicited.
+             */
         public bool Solicited { get; set; }
 
         /**
@@ -680,22 +680,22 @@ namespace IBApi
         /**
          * @brief Identifies a person as the responsible party for investment decisions within the firm. Orders covered by MiFID 2 (Markets in Financial Instruments Directive 2) must include either Mifid2DecisionMaker or Mifid2DecisionAlgo field (but not both). <i>Requires TWS 969+.</i>
          */
-		    public string Mifid2DecisionMaker { get; set; }
+        public string Mifid2DecisionMaker { get; set; }
 
-		    /**
-         * @brief Identifies the algorithm responsible for investment decisions within the firm. Orders covered under MiFID 2 must include either Mifid2DecisionMaker or Mifid2DecisionAlgo, but cannot have both. <i>Requires TWS 969+.</i>
-         */
-		    public string Mifid2DecisionAlgo { get; set; }
+        /**
+     * @brief Identifies the algorithm responsible for investment decisions within the firm. Orders covered under MiFID 2 must include either Mifid2DecisionMaker or Mifid2DecisionAlgo, but cannot have both. <i>Requires TWS 969+.</i>
+     */
+        public string Mifid2DecisionAlgo { get; set; }
 
-		    /**
-         * @brief For MiFID 2 reporting; identifies a person as the responsible party for the execution of a transaction within the firm. <i>Requires TWS 969+.</i>
-         */
-		    public string Mifid2ExecutionTrader { get; set; }
+        /**
+     * @brief For MiFID 2 reporting; identifies a person as the responsible party for the execution of a transaction within the firm. <i>Requires TWS 969+.</i>
+     */
+        public string Mifid2ExecutionTrader { get; set; }
 
-		    /**
-         * @brief For MiFID 2 reporting; identifies the algorithm responsible for the execution of a transaction within the firm. <i>Requires TWS 969+.</i>
-         */
-		    public string Mifid2ExecutionAlgo { get; set; }
+        /**
+     * @brief For MiFID 2 reporting; identifies the algorithm responsible for the execution of a transaction within the firm. <i>Requires TWS 969+.</i>
+     */
+        public string Mifid2ExecutionAlgo { get; set; }
 
         /**
          * @brief Don't use auto price for hedge
@@ -860,7 +860,7 @@ namespace IBApi
             CompeteAgainstBestOffset = double.MaxValue;
             MidOffsetAtWhole = double.MaxValue;
             MidOffsetAtHalf = double.MaxValue;
-    }
+        }
 
         // Note: Two orders can be 'equivalent' even if all fields do not match. This function is not intended to be used with Order objects returned from TWS.
         public override bool Equals(object obj)
@@ -879,8 +879,8 @@ namespace IBApi
             if (OrderId != l_theOther.OrderId ||
                 ClientId != l_theOther.ClientId ||
                 TotalQuantity != l_theOther.TotalQuantity ||
-                LmtPrice != l_theOther.LmtPrice ||
-                AuxPrice != l_theOther.AuxPrice ||
+                !Util.AboutEqual(LmtPrice, l_theOther.LmtPrice) ||
+                !Util.AboutEqual(AuxPrice, l_theOther.AuxPrice) ||
                 OcaType != l_theOther.OcaType ||
                 Transmit != l_theOther.Transmit ||
                 ParentId != l_theOther.ParentId ||
@@ -893,35 +893,35 @@ namespace IBApi
                 OverridePercentageConstraints != l_theOther.OverridePercentageConstraints ||
                 AllOrNone != l_theOther.AllOrNone ||
                 MinQty != l_theOther.MinQty ||
-                PercentOffset != l_theOther.PercentOffset ||
-                TrailStopPrice != l_theOther.TrailStopPrice ||
-                TrailingPercent != l_theOther.TrailingPercent ||
+                !Util.AboutEqual(PercentOffset, l_theOther.PercentOffset) ||
+                !Util.AboutEqual(TrailStopPrice, l_theOther.TrailStopPrice) ||
+                !Util.AboutEqual(TrailingPercent, l_theOther.TrailingPercent) ||
                 Origin != l_theOther.Origin ||
                 ShortSaleSlot != l_theOther.ShortSaleSlot ||
-                DiscretionaryAmt != l_theOther.DiscretionaryAmt ||
+                !Util.AboutEqual(DiscretionaryAmt, l_theOther.DiscretionaryAmt) ||
                 OptOutSmartRouting != l_theOther.OptOutSmartRouting ||
                 AuctionStrategy != l_theOther.AuctionStrategy ||
-                StartingPrice != l_theOther.StartingPrice ||
-                StockRefPrice != l_theOther.StockRefPrice ||
-                Delta != l_theOther.Delta ||
-                StockRangeLower != l_theOther.StockRangeLower ||
-                StockRangeUpper != l_theOther.StockRangeUpper ||
-                Volatility != l_theOther.Volatility ||
+                !Util.AboutEqual(StartingPrice, l_theOther.StartingPrice) ||
+                !Util.AboutEqual(StockRefPrice, l_theOther.StockRefPrice) ||
+                !Util.AboutEqual(Delta, l_theOther.Delta) ||
+                !Util.AboutEqual(StockRangeLower, l_theOther.StockRangeLower) ||
+                !Util.AboutEqual(StockRangeUpper, l_theOther.StockRangeUpper) ||
+                !Util.AboutEqual(Volatility, l_theOther.Volatility) ||
                 VolatilityType != l_theOther.VolatilityType ||
                 ContinuousUpdate != l_theOther.ContinuousUpdate ||
                 ReferencePriceType != l_theOther.ReferencePriceType ||
-                DeltaNeutralAuxPrice != l_theOther.DeltaNeutralAuxPrice ||
+                !Util.AboutEqual(DeltaNeutralAuxPrice, l_theOther.DeltaNeutralAuxPrice) ||
                 DeltaNeutralConId != l_theOther.DeltaNeutralConId ||
                 DeltaNeutralShortSale != l_theOther.DeltaNeutralShortSale ||
                 DeltaNeutralShortSaleSlot != l_theOther.DeltaNeutralShortSaleSlot ||
-                BasisPoints != l_theOther.BasisPoints ||
+                !Util.AboutEqual(BasisPoints, l_theOther.BasisPoints) ||
                 BasisPointsType != l_theOther.BasisPointsType ||
                 ScaleInitLevelSize != l_theOther.ScaleInitLevelSize ||
                 ScaleSubsLevelSize != l_theOther.ScaleSubsLevelSize ||
-                ScalePriceIncrement != l_theOther.ScalePriceIncrement ||
-                ScalePriceAdjustValue != l_theOther.ScalePriceAdjustValue ||
+                !Util.AboutEqual(ScalePriceIncrement, l_theOther.ScalePriceIncrement) ||
+                !Util.AboutEqual(ScalePriceAdjustValue, l_theOther.ScalePriceAdjustValue) ||
                 ScalePriceAdjustInterval != l_theOther.ScalePriceAdjustInterval ||
-                ScaleProfitOffset != l_theOther.ScaleProfitOffset ||
+                !Util.AboutEqual(ScaleProfitOffset, l_theOther.ScaleProfitOffset) ||
                 ScaleAutoReset != l_theOther.ScaleAutoReset ||
                 ScaleInitPosition != l_theOther.ScaleInitPosition ||
                 ScaleInitFillQty != l_theOther.ScaleInitFillQty ||
@@ -935,7 +935,7 @@ namespace IBApi
                 ConditionsIgnoreRth != l_theOther.ConditionsIgnoreRth ||
                 ConditionsCancelOrder != l_theOther.ConditionsCancelOrder ||
                 Tier != l_theOther.Tier ||
-                CashQty != l_theOther.CashQty ||
+                !Util.AboutEqual(CashQty, l_theOther.CashQty) ||
                 DontUseAutoPriceForHedge != l_theOther.DontUseAutoPriceForHedge ||
                 IsOmsContainer != l_theOther.IsOmsContainer ||
                 UsePriceMgmtAlgo != l_theOther.UsePriceMgmtAlgo ||
@@ -949,9 +949,9 @@ namespace IBApi
                 PostToAts != l_theOther.PostToAts ||
                 MinTradeQty != l_theOther.MinTradeQty ||
                 MinCompeteSize != l_theOther.MinCompeteSize ||
-                CompeteAgainstBestOffset != l_theOther.CompeteAgainstBestOffset ||
-                MidOffsetAtWhole != l_theOther.MidOffsetAtWhole ||
-                MidOffsetAtHalf != l_theOther.MidOffsetAtHalf)
+                !Util.AboutEqual(CompeteAgainstBestOffset, l_theOther.CompeteAgainstBestOffset) ||
+                !Util.AboutEqual(MidOffsetAtWhole, l_theOther.MidOffsetAtWhole) ||
+                !Util.AboutEqual(MidOffsetAtHalf, l_theOther.MidOffsetAtHalf))
             {
                 return false;
             }
@@ -1247,9 +1247,9 @@ namespace IBApi
         */
         public SoftDollarTier Tier { get; set; }
 
-		    /**
-		    * @brief Set to true to create tickets from API orders when TWS is used as an OMS
-		    */
+        /**
+        * @brief Set to true to create tickets from API orders when TWS is used as an OMS
+        */
         public bool IsOmsContainer { get; set; }
 
         /**
