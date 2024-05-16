@@ -114,7 +114,5 @@ namespace IBApi
         {
             return ch >= 32 && ch < 127;
         }
-
-
     }
 }
