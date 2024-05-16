@@ -627,7 +627,7 @@ namespace IBApi
         private void MarketRuleEvent()
         {
             int marketRuleId = ReadInt();
-            PriceIncrement[] priceIncrements = new PriceIncrement[0];
+            PriceIncrement[] priceIncrements = [];
             int nPriceIncrements = ReadInt();
 
             if (nPriceIncrements > 0)
@@ -784,7 +784,7 @@ namespace IBApi
 
         private void NewsProvidersEvent()
         {
-            NewsProvider[] newsProviders = new NewsProvider[0];
+            NewsProvider[] newsProviders = [];
             int nNewsProviders = ReadInt();
 
             if (nNewsProviders > 0)
@@ -843,7 +843,7 @@ namespace IBApi
         private void SymbolSamplesEvent()
         {
             int reqId = ReadInt();
-            ContractDescription[] contractDescriptions = new ContractDescription[0];
+            ContractDescription[] contractDescriptions = [];
             int nContractDescriptions = ReadInt();
 
             if (nContractDescriptions > 0)
@@ -863,7 +863,7 @@ namespace IBApi
                     };
 
                     // read derivative sec types list
-                    string[] derivativeSecTypes = new string[0];
+                    string[] derivativeSecTypes = [];
                     int nDerivativeSecTypes = ReadInt();
                     if (nDerivativeSecTypes > 0)
                     {
@@ -889,7 +889,7 @@ namespace IBApi
 
         private void FamilyCodesEvent()
         {
-            FamilyCode[] familyCodes = new FamilyCode[0];
+            FamilyCode[] familyCodes = [];
             int nFamilyCodes = ReadInt();
 
             if (nFamilyCodes > 0)
@@ -907,7 +907,7 @@ namespace IBApi
 
         private void MktDepthExchangesEvent()
         {
-            DepthMktDataDescription[] depthMktDataDescriptions = new DepthMktDataDescription[0];
+            DepthMktDataDescription[] depthMktDataDescriptions = [];
             int nDescriptions = ReadInt();
 
             if (nDescriptions > 0)
@@ -2255,7 +2255,7 @@ namespace IBApi
             string lastTradeDateOrContractMonth = ReadString();
             if (lastTradeDateOrContractMonth != null)
             {
-                string[] splitted = lastTradeDateOrContractMonth.Contains("-") ? Regex.Split(lastTradeDateOrContractMonth, "-") : Regex.Split(lastTradeDateOrContractMonth, "\\s+");
+                string[] splitted = lastTradeDateOrContractMonth.Contains('-') ? Regex.Split(lastTradeDateOrContractMonth, "-") : Regex.Split(lastTradeDateOrContractMonth, "\\s+");
                 if (splitted.Length > 0)
                 {
                     if (isBond)
