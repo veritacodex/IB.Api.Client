@@ -107,8 +107,7 @@ namespace IBApi
             }
             catch (EClientException e)
             {
-                var cmp = (e as EClientException).Err;
-
+                var cmp = e.Err;
                 wrapper.Error(-1, cmp.Code, cmp.Message, "");
             }
             catch (Exception e)

@@ -19,5 +19,6 @@ namespace IBApi
         public const int MaxMsgSize = 0x00FFFFFF;
 
         public const string NoCalendarAPISupport = "It does not support WSHE Calendar API.";
+        public const string NoPnlRequestSupport = " It does not support PnL requests.";
     }
 }

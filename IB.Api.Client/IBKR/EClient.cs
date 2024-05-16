@@ -3264,8 +3264,7 @@ namespace IBApi
             if (!CheckConnection())
                 return;
 
-            if (!CheckServerVersion(MinServerVer.PNL,
-                    "  It does not support PnL requests."))
+            if (!CheckServerVersion(MinServerVer.PNL, Constants.NoPnlRequestSupport))
                 return;
 
             var paramsList = new BinaryWriter(new MemoryStream());
@@ -3297,8 +3296,7 @@ namespace IBApi
             if (!CheckConnection())
                 return;
 
-            if (!CheckServerVersion(MinServerVer.PNL,
-                    "  It does not support PnL requests."))
+            if (!CheckServerVersion(MinServerVer.PNL, Constants.NoPnlRequestSupport))
                 return;
 
             var paramsList = new BinaryWriter(new MemoryStream());
@@ -3324,8 +3322,7 @@ namespace IBApi
             if (!CheckConnection())
                 return;
 
-            if (!CheckServerVersion(MinServerVer.PNL,
-                    "  It does not support PnL requests."))
+            if (!CheckServerVersion(MinServerVer.PNL, Constants.NoPnlRequestSupport))
                 return;
 
             var paramsList = new BinaryWriter(new MemoryStream());
@@ -3358,8 +3355,7 @@ namespace IBApi
             if (!CheckConnection())
                 return;
 
-            if (!CheckServerVersion(MinServerVer.PNL,
-                    "  It does not support PnL requests."))
+            if (!CheckServerVersion(MinServerVer.PNL, Constants.NoPnlRequestSupport))
                 return;
 
             var paramsList = new BinaryWriter(new MemoryStream());
@@ -3643,7 +3639,7 @@ namespace IBApi
             }
 
             return true;
-        }        
+        }
 
         protected void ReportUpdateTWS(int reqId, string tail)
         {
