@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using IB.Api.Client.Model;
 
 namespace IB.Api.Client
@@ -14,6 +13,7 @@ namespace IB.Api.Client
         public void SubscribeToAccountUpdates(string accountId)
         {
             _accountUpdate = new AccountUpdate();
+            Notify($"Account:{accountId} updates requested");
             ClientSocket.ReqAccountUpdates(true, accountId);
         }
         public void SubscribeToDefaultAccountUpdates()
@@ -26,7 +26,7 @@ namespace IB.Api.Client
         }
         public void ManagedAccounts(string accountsList)
         {
-            AccountIds = accountsList.Split(',').ToList();
+            AccountIds = [.. accountsList.Split(',')];
             Notify($"Managed accounts ({accountsList})");
         }
         public void UpdateAccountTime(string timestamp)

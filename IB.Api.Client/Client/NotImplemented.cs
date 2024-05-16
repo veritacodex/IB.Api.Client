@@ -140,7 +140,6 @@ namespace IB.Api.Client
             throw new NotImplementedException();
         }
 
-
         public void TickSnapshotEnd(int tickerId)
         {
             throw new NotImplementedException();
