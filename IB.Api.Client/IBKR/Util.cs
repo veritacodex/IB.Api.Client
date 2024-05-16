@@ -108,7 +108,7 @@ namespace IBApi
 
         public static string UnixSecondsToString(long seconds, string format)
         {
-            return new DateTime(1970, 1, 1, 0, 0, 0).AddSeconds(Convert.ToDouble(seconds)).ToString(format);
+            return DateTime.UnixEpoch.AddSeconds(Convert.ToDouble(seconds)).ToString(format);
         }
 
         public static string FormatDoubleString(string str)

@@ -52,18 +52,18 @@ namespace IBApi
                 StartApi();
         }
 
+        protected virtual Stream CreateClientStream(string host, int port)
+        {
+            return new TcpClient(host, port).GetStream();
+        }
+
         /**
         * Creates socket connection to TWS/IBG. This earlier version of eConnect does not have extraAuth parameter.
         */
         public void EConnect(string host, int port, int clientId)
         {
             EConnect(host, port, clientId, false);
-        }
-
-        protected virtual Stream CreateClientStream(string host, int port)
-        {
-            return new TcpClient(host, port).GetStream();
-        }
+        }        
 
         /**
         * @brief Creates socket connection to TWS/IBG.
@@ -175,8 +175,6 @@ namespace IBApi
 
             EDisconnect(false);
             EConnect(srv[0], port, clientId, extraAuth);
-
-            return;
         }
 
         public override void EDisconnect(bool resetState = true)

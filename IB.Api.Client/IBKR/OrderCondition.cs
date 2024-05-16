@@ -81,7 +81,7 @@ namespace IBApi
         {
             var conditions = Enum.GetValues(typeof(OrderConditionType)).OfType<OrderConditionType>().Select(t => Create(t)).ToList();
 
-            return conditions.FirstOrDefault(c => c.TryParse(cond));
+            return conditions.Find(c => c.TryParse(cond));
         }
 
         public override bool Equals(object obj)

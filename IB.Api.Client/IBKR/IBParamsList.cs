@@ -102,7 +102,7 @@ namespace IBApi
             }
             for (int i = 0; i < str.Length; i++)
             {
-                if (IsAsciiPrintable(str[i]) == false)
+                if (!IsAsciiPrintable(str[i]))
                 {
                     return false;
                 }

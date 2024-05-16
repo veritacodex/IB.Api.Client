@@ -3430,8 +3430,7 @@ namespace IBApi
             if (!CheckConnection())
                 return;
 
-            if (!CheckServerVersion(MinServerVer.WSHE_CALENDAR,
-                    "  It does not support WSHE Calendar API."))
+            if (!CheckServerVersion(MinServerVer.WSHE_CALENDAR, Constants.NoCalendarAPISupport))
                 return;
 
             var paramsList = new BinaryWriter(new MemoryStream());
@@ -3461,8 +3460,7 @@ namespace IBApi
             if (!CheckConnection())
                 return;
 
-            if (!CheckServerVersion(MinServerVer.WSHE_CALENDAR,
-                    "  It does not support WSHE Calendar API."))
+            if (!CheckServerVersion(MinServerVer.WSHE_CALENDAR, Constants.NoCalendarAPISupport))
                 return;
 
             var paramsList = new BinaryWriter(new MemoryStream());
@@ -3485,7 +3483,7 @@ namespace IBApi
             if (!CheckConnection())
                 return;
 
-            if (!CheckServerVersion(MinServerVer.WSHE_CALENDAR, "  It does not support WSHE Calendar API."))
+            if (!CheckServerVersion(MinServerVer.WSHE_CALENDAR, Constants.NoCalendarAPISupport))
                 return;
 
             if (serverVersion < MinServerVer.MIN_SERVER_VER_WSH_EVENT_DATA_FILTERS)
@@ -3549,8 +3547,7 @@ namespace IBApi
             if (!CheckConnection())
                 return;
 
-            if (!CheckServerVersion(MinServerVer.WSHE_CALENDAR,
-                    "  It does not support WSHE Calendar API."))
+            if (!CheckServerVersion(MinServerVer.WSHE_CALENDAR, Constants.NoCalendarAPISupport))
                 return;
 
             var paramsList = new BinaryWriter(new MemoryStream());
@@ -3646,12 +3643,7 @@ namespace IBApi
             }
 
             return true;
-        }
-
-        protected void ReportError(int reqId, CodeMsgPair error, string tail)
-        {
-            ReportError(reqId, error.Code, error.Message + tail);
-        }
+        }        
 
         protected void ReportUpdateTWS(int reqId, string tail)
         {
@@ -3661,6 +3653,11 @@ namespace IBApi
         protected void ReportUpdateTWS(string tail)
         {
             ReportError(IncomingMessage.NotValid, EClientErrors.UPDATE_TWS.Code, EClientErrors.UPDATE_TWS.Message + tail);
+        }
+
+        protected void ReportError(int reqId, CodeMsgPair error, string tail)
+        {
+            ReportError(reqId, error.Code, error.Message + tail);
         }
 
         protected void ReportError(int reqId, int code, string message)
