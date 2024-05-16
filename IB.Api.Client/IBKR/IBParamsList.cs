@@ -77,9 +77,9 @@ namespace IBApi
 
         public static void AddParameterMax(this BinaryWriter source, double value)
         {
-            if (value == double.MaxValue)
+            if (Util.AboutEqual(value, double.MaxValue))
                 source.Write(Constants.EOL);
-            else if (value == double.PositiveInfinity)
+            else if (Util.AboutEqual(value, double.PositiveInfinity))
                 source.AddParameter(Constants.INFINITY_STR);
             else
                 source.AddParameter(value);

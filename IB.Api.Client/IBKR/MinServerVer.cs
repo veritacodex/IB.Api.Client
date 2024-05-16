@@ -3,7 +3,7 @@
 
 namespace IBApi
 {
-    public class MinServerVer
+    public static class MinServerVer
     {        
         public const int MIN_VERSION = 38;
 

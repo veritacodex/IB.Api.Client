@@ -148,9 +148,9 @@ namespace IBApi
             if (obj is not OrderState state)
                 return false;
 
-            if (Commission != state.Commission ||
-                MinCommission != state.MinCommission ||
-                MaxCommission != state.MaxCommission)
+            if (Util.AboutEqual(Commission, state.Commission) ||
+                Util.AboutEqual(MinCommission, state.MinCommission) ||
+                Util.AboutEqual(MaxCommission, state.MaxCommission))
             {
                 return false;
             }

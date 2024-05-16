@@ -3,7 +3,7 @@
 
 namespace IBApi
 {
-    public class TickType
+    public static class TickType
     {
         public const int BID_SIZE = 0;
         public const int BID = 1;

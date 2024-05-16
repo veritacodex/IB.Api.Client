@@ -19,7 +19,7 @@ namespace IBApi
             order.OrderId = eDecoder.ReadInt();
         }
 
-        public void ReadAction() 
+        public void ReadAction()
         {
             order.Action = eDecoder.ReadString();
         }
@@ -61,7 +61,7 @@ namespace IBApi
             order.OrderType = eDecoder.ReadString();
         }
 
-        public void ReadLmtPrice() 
+        public void ReadLmtPrice()
         {
             if (msgVersion < 29)
             {
@@ -73,7 +73,7 @@ namespace IBApi
             }
         }
 
-        public void ReadAuxPrice() 
+        public void ReadAuxPrice()
         {
             if (msgVersion < 30)
             {
@@ -85,37 +85,37 @@ namespace IBApi
             }
         }
 
-        public void ReadTIF() 
+        public void ReadTIF()
         {
             order.Tif = eDecoder.ReadString();
         }
 
-        public void ReadOcaGroup() 
+        public void ReadOcaGroup()
         {
             order.OcaGroup = eDecoder.ReadString();
         }
 
-        public void ReadAccount() 
+        public void ReadAccount()
         {
             order.Account = eDecoder.ReadString();
         }
 
-        public void ReadOpenClose() 
+        public void ReadOpenClose()
         {
             order.OpenClose = eDecoder.ReadString();
         }
 
-        public void ReadOrigin() 
+        public void ReadOrigin()
         {
             order.Origin = eDecoder.ReadInt();
         }
 
-        public void ReadOrderRef() 
+        public void ReadOrderRef()
         {
             order.OrderRef = eDecoder.ReadString();
         }
 
-        public void ReadClientId() 
+        public void ReadClientId()
         {
             if (msgVersion >= 3)
             {
@@ -123,7 +123,7 @@ namespace IBApi
             }
         }
 
-        public void ReadPermId() 
+        public void ReadPermId()
         {
             if (msgVersion >= 4)
             {
@@ -131,7 +131,7 @@ namespace IBApi
             }
         }
 
-        public void ReadOutsideRth() 
+        public void ReadOutsideRth()
         {
             if (msgVersion >= 4)
             {
@@ -148,7 +148,7 @@ namespace IBApi
             }
         }
 
-        public void ReadHidden() 
+        public void ReadHidden()
         {
             if (msgVersion >= 4)
             {
@@ -156,7 +156,7 @@ namespace IBApi
             }
         }
 
-        public void ReadDiscretionaryAmount() 
+        public void ReadDiscretionaryAmount()
         {
             if (msgVersion >= 4)
             {
@@ -164,7 +164,7 @@ namespace IBApi
             }
         }
 
-        public void ReadGoodAfterTime() 
+        public void ReadGoodAfterTime()
         {
             if (msgVersion >= 5)
             {
@@ -182,7 +182,7 @@ namespace IBApi
         }
 
 
-        public void ReadFAParams() 
+        public void ReadFAParams()
         {
             if (msgVersion >= 7)
             {
@@ -193,7 +193,7 @@ namespace IBApi
             }
         }
 
-        public void ReadModelCode() 
+        public void ReadModelCode()
         {
             if (serverVersion >= MinServerVer.MODELS_SUPPORT)
             {
@@ -201,7 +201,7 @@ namespace IBApi
             }
         }
 
-        public void ReadGoodTillDate() 
+        public void ReadGoodTillDate()
         {
             if (msgVersion >= 8)
             {
@@ -209,7 +209,7 @@ namespace IBApi
             }
         }
 
-        public void ReadRule80A() 
+        public void ReadRule80A()
         {
             if (msgVersion >= 9)
             {
@@ -217,7 +217,7 @@ namespace IBApi
             }
         }
 
-        public void ReadPercentOffset() 
+        public void ReadPercentOffset()
         {
             if (msgVersion >= 9)
             {
@@ -225,7 +225,7 @@ namespace IBApi
             }
         }
 
-        public void ReadSettlingFirm() 
+        public void ReadSettlingFirm()
         {
             if (msgVersion >= 9)
             {
@@ -233,7 +233,7 @@ namespace IBApi
             }
         }
 
-        public void ReadShortSaleParams() 
+        public void ReadShortSaleParams()
         {
             if (msgVersion >= 9)
             {
@@ -250,7 +250,7 @@ namespace IBApi
             }
         }
 
-        public void ReadAuctionStrategy() 
+        public void ReadAuctionStrategy()
         {
             if (msgVersion >= 9)
             {
@@ -258,7 +258,7 @@ namespace IBApi
             }
         }
 
-        public void ReadBoxOrderParams() 
+        public void ReadBoxOrderParams()
         {
             if (msgVersion >= 9)
             {
@@ -268,7 +268,7 @@ namespace IBApi
             }
         }
 
-        public void ReadPegToStkOrVolOrderParams() 
+        public void ReadPegToStkOrVolOrderParams()
         {
             if (msgVersion >= 9)
             {
@@ -277,7 +277,7 @@ namespace IBApi
             }
         }
 
-        public void ReadDisplaySize() 
+        public void ReadDisplaySize()
         {
             if (msgVersion >= 9)
             {
@@ -285,20 +285,17 @@ namespace IBApi
             }
         }
 
-        public void ReadOldStyleOutsideRth() 
+        public void ReadOldStyleOutsideRth()
         {
-            if (msgVersion >= 9)
+            if (msgVersion >= 9 && msgVersion < 18)
             {
-                if (msgVersion < 18)
-                {
-                    // will never happen
-                    /* order.rthOnly = */
-                    eDecoder.ReadBoolFromInt();
-                }
+                // will never happen
+                /* order.rthOnly = */
+                eDecoder.ReadBoolFromInt();
             }
         }
 
-        public void ReadBlockOrder() 
+        public void ReadBlockOrder()
         {
             if (msgVersion >= 9)
             {
@@ -306,7 +303,7 @@ namespace IBApi
             }
         }
 
-        public void ReadSweepToFill() 
+        public void ReadSweepToFill()
         {
             if (msgVersion >= 9)
             {
@@ -314,7 +311,7 @@ namespace IBApi
             }
         }
 
-        public void ReadAllOrNone() 
+        public void ReadAllOrNone()
         {
             if (msgVersion >= 9)
             {
@@ -322,7 +319,7 @@ namespace IBApi
             }
         }
 
-        public void ReadMinQty() 
+        public void ReadMinQty()
         {
             if (msgVersion >= 9)
             {
@@ -330,7 +327,7 @@ namespace IBApi
             }
         }
 
-        public void ReadOcaType() 
+        public void ReadOcaType()
         {
             if (msgVersion >= 9)
             {
@@ -338,7 +335,7 @@ namespace IBApi
             }
         }
 
-        public void SkipETradeOnly() 
+        public void SkipETradeOnly()
         {
             if (msgVersion >= 9)
             {
@@ -346,7 +343,7 @@ namespace IBApi
             }
         }
 
-        public void SkipFirmQuoteOnly() 
+        public void SkipFirmQuoteOnly()
         {
             if (msgVersion >= 9)
             {
@@ -354,7 +351,7 @@ namespace IBApi
             }
         }
 
-        public void SkipNbboPriceCap() 
+        public void SkipNbboPriceCap()
         {
             if (msgVersion >= 9)
             {
@@ -362,7 +359,7 @@ namespace IBApi
             }
         }
 
-        public void ReadParentId() 
+        public void ReadParentId()
         {
             if (msgVersion >= 10)
             {
@@ -370,7 +367,7 @@ namespace IBApi
             }
         }
 
-        public void ReadTriggerMethod() 
+        public void ReadTriggerMethod()
         {
             if (msgVersion >= 10)
             {
@@ -378,7 +375,7 @@ namespace IBApi
             }
         }
 
-        public void ReadVolOrderParams(bool readOpenOrderAttribs) 
+        public void ReadVolOrderParams(bool readOpenOrderAttribs)
         {
             if (msgVersion >= 11)
             {
@@ -426,7 +423,7 @@ namespace IBApi
             }
         }
 
-        public void ReadTrailParams() 
+        public void ReadTrailParams()
         {
             if (msgVersion >= 13)
             {
@@ -438,7 +435,7 @@ namespace IBApi
             }
         }
 
-        public void ReadBasisPoints() 
+        public void ReadBasisPoints()
         {
             if (msgVersion >= 14)
             {
@@ -446,8 +443,8 @@ namespace IBApi
                 order.BasisPointsType = eDecoder.ReadIntMax();
             }
         }
-   
-        public void ReadComboLegs() 
+
+        public void ReadComboLegs()
         {
             if (msgVersion >= 14)
             {
@@ -492,7 +489,7 @@ namespace IBApi
             }
         }
 
-        public void ReadSmartComboRoutingParams() 
+        public void ReadSmartComboRoutingParams()
         {
             if (msgVersion >= 26)
             {
@@ -513,7 +510,7 @@ namespace IBApi
             }
         }
 
-        public void ReadScaleOrderParams() 
+        public void ReadScaleOrderParams()
         {
             if (msgVersion >= 15)
             {
@@ -531,7 +528,7 @@ namespace IBApi
                 order.ScalePriceIncrement = eDecoder.ReadDoubleMax();
             }
 
-            if (msgVersion >= 28 && order.ScalePriceIncrement > 0.0 && order.ScalePriceIncrement != double.MaxValue)
+            if (msgVersion >= 28 && order.ScalePriceIncrement > 0.0 && !Util.AboutEqual(order.ScalePriceIncrement, double.MaxValue))
             {
                 order.ScalePriceAdjustValue = eDecoder.ReadDoubleMax();
                 order.ScalePriceAdjustInterval = eDecoder.ReadIntMax();
@@ -543,7 +540,7 @@ namespace IBApi
             }
         }
 
-        public void ReadHedgeParams() 
+        public void ReadHedgeParams()
         {
             if (msgVersion >= 24)
             {
@@ -555,7 +552,7 @@ namespace IBApi
             }
         }
 
-        public void ReadOptOutSmartRouting() 
+        public void ReadOptOutSmartRouting()
         {
             if (msgVersion >= 25)
             {
@@ -563,7 +560,7 @@ namespace IBApi
             }
         }
 
-        public void ReadClearingParams() 
+        public void ReadClearingParams()
         {
             if (msgVersion >= 19)
             {
@@ -572,7 +569,7 @@ namespace IBApi
             }
         }
 
-        public void ReadNotHeld() 
+        public void ReadNotHeld()
         {
             if (msgVersion >= 22)
             {
@@ -580,24 +577,21 @@ namespace IBApi
             }
         }
 
-        public void ReadDeltaNeutral() 
+        public void ReadDeltaNeutral()
         {
-            if (msgVersion >= 20)
+            if (msgVersion >= 20 && eDecoder.ReadBoolFromInt())
             {
-                if (eDecoder.ReadBoolFromInt())
+                DeltaNeutralContract deltaNeutralContract = new DeltaNeutralContract
                 {
-                    DeltaNeutralContract deltaNeutralContract = new DeltaNeutralContract
-                    {
-                        ConId = eDecoder.ReadInt(),
-                        Delta = eDecoder.ReadDouble(),
-                        Price = eDecoder.ReadDouble()
-                    };
-                    contract.DeltaNeutralContract = deltaNeutralContract;
-                }
+                    ConId = eDecoder.ReadInt(),
+                    Delta = eDecoder.ReadDouble(),
+                    Price = eDecoder.ReadDouble()
+                };
+                contract.DeltaNeutralContract = deltaNeutralContract;
             }
         }
 
-        public void ReadAlgoParams() 
+        public void ReadAlgoParams()
         {
             if (msgVersion >= 21)
             {
@@ -622,7 +616,7 @@ namespace IBApi
             }
         }
 
-        public void ReadSolicited() 
+        public void ReadSolicited()
         {
             if (msgVersion >= 33)
             {
@@ -630,7 +624,7 @@ namespace IBApi
             }
         }
 
-        public void ReadWhatIfInfoAndCommission() 
+        public void ReadWhatIfInfoAndCommission()
         {
             if (msgVersion >= 16)
             {
@@ -657,12 +651,12 @@ namespace IBApi
 
         }
 
-        public void ReadOrderStatus() 
+        public void ReadOrderStatus()
         {
             orderState.Status = eDecoder.ReadString();
         }
 
-        public void ReadVolRandomizeFlags() 
+        public void ReadVolRandomizeFlags()
         {
             if (msgVersion >= 34)
             {
@@ -671,22 +665,19 @@ namespace IBApi
             }
         }
 
-        public void ReadPegToBenchParams() 
+        public void ReadPegToBenchParams()
         {
-            if (serverVersion >= MinServerVer.PEGGED_TO_BENCHMARK)
+            if (serverVersion >= MinServerVer.PEGGED_TO_BENCHMARK && order.OrderType == "PEG BENCH")
             {
-                if (order.OrderType == "PEG BENCH")
-                {
-                    order.ReferenceContractId = eDecoder.ReadInt();
-                    order.IsPeggedChangeAmountDecrease = eDecoder.ReadBoolFromInt();
-                    order.PeggedChangeAmount = eDecoder.ReadDoubleMax();
-                    order.ReferenceChangeAmount = eDecoder.ReadDoubleMax();
-                    order.ReferenceExchange = eDecoder.ReadString();
-                }
+                order.ReferenceContractId = eDecoder.ReadInt();
+                order.IsPeggedChangeAmountDecrease = eDecoder.ReadBoolFromInt();
+                order.PeggedChangeAmount = eDecoder.ReadDoubleMax();
+                order.ReferenceChangeAmount = eDecoder.ReadDoubleMax();
+                order.ReferenceExchange = eDecoder.ReadString();
             }
         }
 
-        public void ReadConditions() 
+        public void ReadConditions()
         {
             if (serverVersion >= MinServerVer.PEGGED_TO_BENCHMARK)
             {
@@ -710,7 +701,7 @@ namespace IBApi
 
         }
 
-        public void ReadAdjustedOrderParams() 
+        public void ReadAdjustedOrderParams()
         {
             if (serverVersion >= MinServerVer.PEGGED_TO_BENCHMARK)
             {
@@ -724,13 +715,13 @@ namespace IBApi
             }
         }
 
-        public void ReadStopPriceAndLmtPriceOffset() 
+        public void ReadStopPriceAndLmtPriceOffset()
         {
             order.TrailStopPrice = eDecoder.ReadDoubleMax();
             order.LmtPriceOffset = eDecoder.ReadDoubleMax();
         }
 
-        public void ReadSoftDollarTier() 
+        public void ReadSoftDollarTier()
         {
             if (serverVersion >= MinServerVer.SOFT_DOLLAR_TIER)
             {
@@ -738,7 +729,7 @@ namespace IBApi
             }
         }
 
-        public void ReadCashQty() 
+        public void ReadCashQty()
         {
             if (serverVersion >= MinServerVer.CASH_QTY)
             {
@@ -746,7 +737,7 @@ namespace IBApi
             }
         }
 
-        public void ReadDontUseAutoPriceForHedge() 
+        public void ReadDontUseAutoPriceForHedge()
         {
             if (serverVersion >= MinServerVer.AUTO_PRICE_FOR_HEDGE)
             {
@@ -754,7 +745,7 @@ namespace IBApi
             }
         }
 
-        public void ReadIsOmsContainer() 
+        public void ReadIsOmsContainer()
         {
             if (serverVersion >= MinServerVer.ORDER_CONTAINER)
             {
@@ -762,7 +753,7 @@ namespace IBApi
             }
         }
 
-        public void ReadDiscretionaryUpToLimitPrice() 
+        public void ReadDiscretionaryUpToLimitPrice()
         {
             if (serverVersion >= MinServerVer.D_PEG_ORDERS)
             {
@@ -770,22 +761,22 @@ namespace IBApi
             }
         }
 
-        public void ReadAutoCancelDate() 
+        public void ReadAutoCancelDate()
         {
             order.AutoCancelDate = eDecoder.ReadString();
         }
 
-        public void ReadFilledQuantity() 
+        public void ReadFilledQuantity()
         {
             order.FilledQuantity = eDecoder.ReadDecimal();
         }
 
-        public void ReadRefFuturesConId() 
+        public void ReadRefFuturesConId()
         {
             order.RefFuturesConId = eDecoder.ReadInt();
         }
 
-        public void ReadAutoCancelParent() 
+        public void ReadAutoCancelParent()
         {
             ReadAutoCancelParent(Constants.MinVersion);
         }
@@ -798,36 +789,36 @@ namespace IBApi
             }
         }
 
-        public void ReadShareholder() 
+        public void ReadShareholder()
         {
             order.Shareholder = eDecoder.ReadString();
         }
 
-        public void ReadImbalanceOnly() 
+        public void ReadImbalanceOnly()
         {
             order.ImbalanceOnly = eDecoder.ReadBoolFromInt();
         }
 
-        public void ReadRouteMarketableToBbo() 
+        public void ReadRouteMarketableToBbo()
         {
             order.RouteMarketableToBbo = eDecoder.ReadBoolFromInt();
         }
 
-        public void ReadParentPermId() 
+        public void ReadParentPermId()
         {
             order.ParentPermId = eDecoder.ReadLong();
         }
 
-        public void ReadCompletedTime() 
+        public void ReadCompletedTime()
         {
             orderState.CompletedTime = eDecoder.ReadString();
         }
 
-        public void ReadCompletedStatus() 
+        public void ReadCompletedStatus()
         {
             orderState.CompletedStatus = eDecoder.ReadString();
         }
-        
+
         public void ReadUsePriceMgmtAlgo()
         {
             if (serverVersion >= MinServerVer.PRICE_MGMT_ALGO)

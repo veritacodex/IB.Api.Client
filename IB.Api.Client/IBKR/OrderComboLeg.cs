@@ -37,7 +37,7 @@ namespace IBApi
                 return true;
             }
 
-            return Price == theOther.Price;
+            return Util.AboutEqual(Price, theOther.Price);
         }
 
         public override int GetHashCode()

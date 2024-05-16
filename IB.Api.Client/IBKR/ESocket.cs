@@ -7,8 +7,8 @@ namespace IBApi
 {
     class ESocket(Stream socketStream) : IETransport, IDisposable
     {
-        readonly BinaryWriter tcpWriter = new BinaryWriter(socketStream);
-        readonly object tcpWriterLock = new object();
+        readonly BinaryWriter tcpWriter = new(socketStream);
+        readonly object tcpWriterLock = new();
 
         public void Send(EMessage msg)
         {
