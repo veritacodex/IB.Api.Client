@@ -767,9 +767,10 @@ namespace IBApi
                     paramsList.AddParameter((int)order.TotalQuantity);
 
                 paramsList.AddParameter(order.OrderType);
+
                 if (serverVersion < MinServerVer.ORDER_COMBO_LEGS_PRICE)
                 {
-                    paramsList.AddParameter(order.LmtPrice == double.MaxValue ? 0 : order.LmtPrice);
+                    paramsList.AddParameter(Util.AboutEqual(order.LmtPrice, double.MaxValue) ? 0 : order.LmtPrice);
                 }
                 else
                 {
@@ -777,7 +778,7 @@ namespace IBApi
                 }
                 if (serverVersion < MinServerVer.TRAILING_PERCENT)
                 {
-                    paramsList.AddParameter(order.AuxPrice == double.MaxValue ? 0 : order.AuxPrice);
+                    paramsList.AddParameter(Util.AboutEqual(order.AuxPrice, double.MaxValue) ? 0 : order.AuxPrice);
                 }
                 else
                 {
@@ -1036,7 +1037,7 @@ namespace IBApi
                     paramsList.AddParameterMax(order.ScalePriceIncrement);
                 }
 
-                if (serverVersion >= MinServerVer.SCALE_ORDERS3 && order.ScalePriceIncrement > 0.0 && order.ScalePriceIncrement != double.MaxValue)
+                if (serverVersion >= MinServerVer.SCALE_ORDERS3 && order.ScalePriceIncrement > 0.0 && !Util.AboutEqual(order.ScalePriceIncrement, double.MaxValue))
                 {
                     paramsList.AddParameterMax(order.ScalePriceAdjustValue);
                     paramsList.AddParameterMax(order.ScalePriceAdjustInterval);
@@ -1259,7 +1260,7 @@ namespace IBApi
                     {
                         paramsList.AddParameterMax(order.MinCompeteSize);
                         paramsList.AddParameterMax(order.CompeteAgainstBestOffset);
-                        if (order.CompeteAgainstBestOffset == Order.COMPETE_AGAINST_BEST_OFFSET_UP_TO_MID)
+                        if (Util.AboutEqual(order.CompeteAgainstBestOffset, Order.COMPETE_AGAINST_BEST_OFFSET_UP_TO_MID))
                         {
                             sendMidOffsets = true;
                         }
@@ -1500,16 +1501,14 @@ namespace IBApi
             if (!CheckConnection())
                 return;
 
-            if (!IsEmpty(contract.SecIdType) || !IsEmpty(contract.SecId))
+            if ((!IsEmpty(contract.SecIdType) || !IsEmpty(contract.SecId)) && !CheckServerVersion(reqId, MinServerVer.SEC_ID_TYPE, " It does not support secIdType not secId attributes"))
             {
-                if (!CheckServerVersion(reqId, MinServerVer.SEC_ID_TYPE, " It does not support secIdType not secId attributes"))
-                    return;
+                return;
             }
 
-            if (!IsEmpty(contract.TradingClass))
+            if (!IsEmpty(contract.TradingClass) && !CheckServerVersion(reqId, MinServerVer.TRADING_CLASS, " It does not support the TradingClass parameter when requesting contract details."))
             {
-                if (!CheckServerVersion(reqId, MinServerVer.TRADING_CLASS, " It does not support the TradingClass parameter when requesting contract details."))
-                    return;
+                return;
             }
 
             if (!IsEmpty(contract.PrimaryExch) && !CheckServerVersion(reqId, MinServerVer.LINKING,
@@ -1685,10 +1684,10 @@ namespace IBApi
                 return;
             if (!CheckServerVersion(reqId, MinServerVer.FUNDAMENTAL_DATA, " It does not support Fundamental Data requests."))
                 return;
-            if (!IsEmpty(contract.TradingClass) || contract.ConId > 0 || !IsEmpty(contract.Multiplier))
+            if ((!IsEmpty(contract.TradingClass) || contract.ConId > 0 || !IsEmpty(contract.Multiplier)) &&
+                !CheckServerVersion(reqId, MinServerVer.TRADING_CLASS, ""))
             {
-                if (!CheckServerVersion(reqId, MinServerVer.TRADING_CLASS, ""))
-                    return;
+                return;
             }
 
             const int VERSION = 3;
@@ -1804,16 +1803,16 @@ namespace IBApi
             if (!CheckServerVersion(tickerId, 16))
                 return;
 
-            if (!IsEmpty(contract.TradingClass) || contract.ConId > 0)
+            if ((!IsEmpty(contract.TradingClass) || contract.ConId > 0) &&
+                !CheckServerVersion(tickerId, MinServerVer.TRADING_CLASS, " It does not support conId nor trading class parameters when requesting historical data.")
+                )
             {
-                if (!CheckServerVersion(tickerId, MinServerVer.TRADING_CLASS, " It does not support conId nor trading class parameters when requesting historical data."))
-                    return;
+                return;
             }
 
-            if (!IsEmpty(whatToShow) && whatToShow.Equals("SCHEDULE"))
+            if (!IsEmpty(whatToShow) && whatToShow.Equals("SCHEDULE") && !CheckServerVersion(tickerId, MinServerVer.HISTORICAL_SCHEDULE, " It does not support requesting of historical schedule."))
             {
-                if (!CheckServerVersion(tickerId, MinServerVer.HISTORICAL_SCHEDULE, " It does not support requesting of historical schedule."))
-                    return;
+                return;
             }
 
             const int VERSION = 6;
@@ -2136,22 +2135,19 @@ namespace IBApi
             if (!CheckConnection())
                 return;
 
-            if (!IsEmpty(contract.TradingClass) || contract.ConId > 0)
+            if ((!IsEmpty(contract.TradingClass) || contract.ConId > 0) && !CheckServerVersion(tickerId, MinServerVer.TRADING_CLASS, " It does not support ConId nor TradingClass parameters in reqMktDepth."))
             {
-                if (!CheckServerVersion(tickerId, MinServerVer.TRADING_CLASS, " It does not support ConId nor TradingClass parameters in reqMktDepth."))
-                    return;
+                return;
             }
 
-            if (isSmartDepth)
+            if (isSmartDepth && !CheckServerVersion(tickerId, MinServerVer.SMART_DEPTH, " It does not support SMART depth request."))
             {
-                if (!CheckServerVersion(tickerId, MinServerVer.SMART_DEPTH, " It does not support SMART depth request."))
-                    return;
+                return;
             }
 
-            if (!IsEmpty(contract.PrimaryExch))
+            if (!IsEmpty(contract.PrimaryExch) && !CheckServerVersion(tickerId, MinServerVer.MKT_DEPTH_PRIM_EXCHANGE, " It does not support PrimaryExch parameter in reqMktDepth."))
             {
-                if (!CheckServerVersion(tickerId, MinServerVer.MKT_DEPTH_PRIM_EXCHANGE, " It does not support PrimaryExch parameter in reqMktDepth."))
-                    return;
+                return;
             }
 
             const int VERSION = 5;
@@ -2298,10 +2294,9 @@ namespace IBApi
             if (!CheckServerVersion(tickerId, MinServerVer.REAL_TIME_BARS, " It does not support real time bars."))
                 return;
 
-            if (!IsEmpty(contract.TradingClass) || contract.ConId > 0)
+            if ((!IsEmpty(contract.TradingClass) || contract.ConId > 0) && !CheckServerVersion(tickerId, MinServerVer.TRADING_CLASS, " It does not support ConId nor TradingClass parameters in reqRealTimeBars."))
             {
-                if (!CheckServerVersion(tickerId, MinServerVer.TRADING_CLASS, " It does not support ConId nor TradingClass parameters in reqRealTimeBars."))
-                    return;
+                return;
             }
 
             const int VERSION = 3;
@@ -3482,22 +3477,16 @@ namespace IBApi
             if (!CheckServerVersion(MinServerVer.WSHE_CALENDAR, Constants.NoCalendarAPISupport))
                 return;
 
-            if (serverVersion < MinServerVer.MIN_SERVER_VER_WSH_EVENT_DATA_FILTERS)
+            if (serverVersion < MinServerVer.MIN_SERVER_VER_WSH_EVENT_DATA_FILTERS && (!IsEmpty(wshEventData.Filter) || wshEventData.FillWatchlist || wshEventData.FillPortfolio || wshEventData.FillCompetitors))
             {
-                if (!IsEmpty(wshEventData.Filter) || wshEventData.FillWatchlist || wshEventData.FillPortfolio || wshEventData.FillCompetitors)
-                {
-                    ReportError(reqId, EClientErrors.UPDATE_TWS, "  It does not support WSH event data filters.");
-                    return;
-                }
+                ReportError(reqId, EClientErrors.UPDATE_TWS, "  It does not support WSH event data filters.");
+                return;
             }
 
-            if (serverVersion < MinServerVer.MIN_SERVER_VER_WSH_EVENT_DATA_FILTERS_DATE)
+            if (serverVersion < MinServerVer.MIN_SERVER_VER_WSH_EVENT_DATA_FILTERS_DATE && (!IsEmpty(wshEventData.StartDate) || !IsEmpty(wshEventData.EndDate) || wshEventData.TotalLimit != int.MaxValue))
             {
-                if (!IsEmpty(wshEventData.StartDate) || !IsEmpty(wshEventData.EndDate) || wshEventData.TotalLimit != int.MaxValue)
-                {
-                    ReportError(reqId, EClientErrors.UPDATE_TWS, "  It does not support WSH event data date filters.");
-                    return;
-                }
+                ReportError(reqId, EClientErrors.UPDATE_TWS, "  It does not support WSH event data date filters.");
+                return;
             }
 
             var paramsList = new BinaryWriter(new MemoryStream());
@@ -3718,303 +3707,222 @@ namespace IBApi
 
         protected bool VerifyOrderContract(Contract contract, int id)
         {
-            if (serverVersion < MinServerVer.SSHORT_COMBO_LEGS)
+            if (serverVersion < MinServerVer.SSHORT_COMBO_LEGS && contract.ComboLegs.Count > 0)
             {
-                if (contract.ComboLegs.Count > 0)
+                ComboLeg comboLeg;
+                for (int i = 0; i < contract.ComboLegs.Count; ++i)
                 {
-                    ComboLeg comboLeg;
-                    for (int i = 0; i < contract.ComboLegs.Count; ++i)
+                    comboLeg = contract.ComboLegs[i];
+                    if (comboLeg.ShortSaleSlot != 0 ||
+                        !IsEmpty(comboLeg.DesignatedLocation))
                     {
-                        comboLeg = contract.ComboLegs[i];
-                        if (comboLeg.ShortSaleSlot != 0 ||
-                            !IsEmpty(comboLeg.DesignatedLocation))
-                        {
-                            ReportError(id, EClientErrors.UPDATE_TWS,
-                                "  It does not support SSHORT flag for combo legs.");
-                            return false;
-                        }
+                        ReportError(id, EClientErrors.UPDATE_TWS,
+                            "  It does not support SSHORT flag for combo legs.");
+                        return false;
                     }
                 }
             }
 
-            if (serverVersion < MinServerVer.DELTA_NEUTRAL)
+            if (serverVersion < MinServerVer.DELTA_NEUTRAL && contract.DeltaNeutralContract != null)
             {
-                if (contract.DeltaNeutralContract != null)
-                {
-                    ReportError(id, EClientErrors.UPDATE_TWS,
-                        "  It does not support delta-neutral orders.");
-                    return false;
-                }
+                ReportError(id, EClientErrors.UPDATE_TWS, "  It does not support delta-neutral orders.");
+                return false;
             }
 
-            if (serverVersion < MinServerVer.PLACE_ORDER_CONID)
+            if (serverVersion < MinServerVer.PLACE_ORDER_CONID && contract.ConId > 0)
             {
-                if (contract.ConId > 0)
-                {
-                    ReportError(id, EClientErrors.UPDATE_TWS,
-                        "  It does not support conId parameter.");
-                    return false;
-                }
+                ReportError(id, EClientErrors.UPDATE_TWS, "  It does not support conId parameter.");
+                return false;
             }
 
-            if (serverVersion < MinServerVer.SEC_ID_TYPE)
+            if (serverVersion < MinServerVer.SEC_ID_TYPE && !IsEmpty(contract.SecIdType) || !IsEmpty(contract.SecId))
             {
-                if (!IsEmpty(contract.SecIdType) || !IsEmpty(contract.SecId))
-                {
-                    ReportError(id, EClientErrors.UPDATE_TWS,
-                        "  It does not support secIdType and secId parameters.");
-                    return false;
-                }
+                ReportError(id, EClientErrors.UPDATE_TWS, "  It does not support secIdType and secId parameters.");
+                return false;
             }
-            if (serverVersion < MinServerVer.SSHORTX)
+            if (serverVersion < MinServerVer.SSHORTX && contract.ComboLegs.Count > 0)
             {
-                if (contract.ComboLegs.Count > 0)
+                ComboLeg comboLeg;
+                for (int i = 0; i < contract.ComboLegs.Count; ++i)
                 {
-                    ComboLeg comboLeg;
-                    for (int i = 0; i < contract.ComboLegs.Count; ++i)
+                    comboLeg = contract.ComboLegs[i];
+                    if (comboLeg.ExemptCode != -1)
                     {
-                        comboLeg = contract.ComboLegs[i];
-                        if (comboLeg.ExemptCode != -1)
-                        {
-                            ReportError(id, EClientErrors.UPDATE_TWS,
-                                "  It does not support exemptCode parameter.");
-                            return false;
-                        }
+                        ReportError(id, EClientErrors.UPDATE_TWS, "  It does not support exemptCode parameter.");
+                        return false;
                     }
                 }
             }
-            if (serverVersion < MinServerVer.TRADING_CLASS)
+            if (serverVersion < MinServerVer.TRADING_CLASS && !IsEmpty(contract.TradingClass))
             {
-                if (!IsEmpty(contract.TradingClass))
-                {
-                    ReportError(id, EClientErrors.UPDATE_TWS,
-                        "  It does not support tradingClass parameters in placeOrder.");
-                    return false;
-                }
+                ReportError(id, EClientErrors.UPDATE_TWS, "  It does not support tradingClass parameters in placeOrder.");
+                return false;
             }
             return true;
         }
 
         protected bool VerifyOrder(Order order, int id, bool isBagOrder)
         {
-            if (serverVersion < MinServerVer.SCALE_ORDERS)
+            if (serverVersion < MinServerVer.SCALE_ORDERS && (order.ScaleInitLevelSize != int.MaxValue || !Util.AboutEqual(order.ScalePriceIncrement, double.MaxValue)))
             {
-                if (order.ScaleInitLevelSize != int.MaxValue ||
-                    order.ScalePriceIncrement != double.MaxValue)
-                {
-                    ReportError(id, EClientErrors.UPDATE_TWS,
+                ReportError(id, EClientErrors.UPDATE_TWS,
                         "  It does not support Scale orders.");
-                    return false;
-                }
+                return false;
             }
-            if (serverVersion < MinServerVer.WHAT_IF_ORDERS)
+            if (serverVersion < MinServerVer.WHAT_IF_ORDERS && order.WhatIf)
             {
-                if (order.WhatIf)
-                {
-                    ReportError(id, EClientErrors.UPDATE_TWS,
-                        "  It does not support what-if orders.");
-                    return false;
-                }
+                ReportError(id, EClientErrors.UPDATE_TWS,
+                    "  It does not support what-if orders.");
+                return false;
             }
 
-            if (serverVersion < MinServerVer.SCALE_ORDERS2)
+            if (serverVersion < MinServerVer.SCALE_ORDERS2 && order.ScaleSubsLevelSize != int.MaxValue)
             {
-                if (order.ScaleSubsLevelSize != int.MaxValue)
-                {
-                    ReportError(id, EClientErrors.UPDATE_TWS,
-                        "  It does not support Subsequent Level Size for Scale orders.");
-                    return false;
-                }
+                ReportError(id, EClientErrors.UPDATE_TWS,
+                    "  It does not support Subsequent Level Size for Scale orders.");
+                return false;
             }
 
-            if (serverVersion < MinServerVer.ALGO_ORDERS)
+            if (serverVersion < MinServerVer.ALGO_ORDERS && !IsEmpty(order.AlgoStrategy))
             {
-                if (!IsEmpty(order.AlgoStrategy))
-                {
-                    ReportError(id, EClientErrors.UPDATE_TWS,
-                        "  It does not support algo orders.");
-                    return false;
-                }
+                ReportError(id, EClientErrors.UPDATE_TWS,
+                    "  It does not support algo orders.");
+                return false;
             }
 
-            if (serverVersion < MinServerVer.NOT_HELD)
+            if (serverVersion < MinServerVer.NOT_HELD && order.NotHeld)
             {
-                if (order.NotHeld)
-                {
-                    ReportError(id, EClientErrors.UPDATE_TWS,
-                        "  It does not support notHeld parameter.");
-                    return false;
-                }
+                ReportError(id, EClientErrors.UPDATE_TWS,
+                    "  It does not support notHeld parameter.");
+                return false;
             }
 
-            if (serverVersion < MinServerVer.SSHORTX)
+            if (serverVersion < MinServerVer.SSHORTX && order.ExemptCode != -1)
             {
-                if (order.ExemptCode != -1)
-                {
-                    ReportError(id, EClientErrors.UPDATE_TWS,
-                        "  It does not support exemptCode parameter.");
-                    return false;
-                }
+                ReportError(id, EClientErrors.UPDATE_TWS,
+                    "  It does not support exemptCode parameter.");
+                return false;
             }
 
 
-
-            if (serverVersion < MinServerVer.HEDGE_ORDERS)
+            if (serverVersion < MinServerVer.HEDGE_ORDERS && !IsEmpty(order.HedgeType))
             {
-                if (!IsEmpty(order.HedgeType))
-                {
-                    ReportError(id, EClientErrors.UPDATE_TWS,
-                        "  It does not support hedge orders.");
-                    return false;
-                }
+                ReportError(id, EClientErrors.UPDATE_TWS,
+                    "  It does not support hedge orders.");
+                return false;
             }
 
-            if (serverVersion < MinServerVer.OPT_OUT_SMART_ROUTING)
+            if (serverVersion < MinServerVer.OPT_OUT_SMART_ROUTING && order.OptOutSmartRouting)
             {
-                if (order.OptOutSmartRouting)
-                {
-                    ReportError(id, EClientErrors.UPDATE_TWS,
-                        "  It does not support optOutSmartRouting parameter.");
-                    return false;
-                }
+                ReportError(id, EClientErrors.UPDATE_TWS,
+                    "  It does not support optOutSmartRouting parameter.");
+                return false;
             }
 
-            if (serverVersion < MinServerVer.DELTA_NEUTRAL_CONID)
-            {
-                if (order.DeltaNeutralConId > 0
+            if ((serverVersion < MinServerVer.DELTA_NEUTRAL_CONID) && (order.DeltaNeutralConId > 0
                         || !IsEmpty(order.DeltaNeutralSettlingFirm)
                         || !IsEmpty(order.DeltaNeutralClearingAccount)
-                        || !IsEmpty(order.DeltaNeutralClearingIntent))
-                {
-                    ReportError(id, EClientErrors.UPDATE_TWS,
-                        "  It does not support deltaNeutral parameters: ConId, SettlingFirm, ClearingAccount, ClearingIntent");
-                    return false;
-                }
+                        || !IsEmpty(order.DeltaNeutralClearingIntent)))
+            {
+                ReportError(id, EClientErrors.UPDATE_TWS,
+                    "  It does not support deltaNeutral parameters: ConId, SettlingFirm, ClearingAccount, ClearingIntent");
+                return false;
             }
 
-            if (serverVersion < MinServerVer.DELTA_NEUTRAL_OPEN_CLOSE)
-            {
-                if (!IsEmpty(order.DeltaNeutralOpenClose)
+            if ((serverVersion < MinServerVer.DELTA_NEUTRAL_OPEN_CLOSE) && (!IsEmpty(order.DeltaNeutralOpenClose)
                         || order.DeltaNeutralShortSale
                         || order.DeltaNeutralShortSaleSlot > 0
                         || !IsEmpty(order.DeltaNeutralDesignatedLocation)
-                        )
-                {
-                    ReportError(id, EClientErrors.UPDATE_TWS,
-                        "  It does not support deltaNeutral parameters: OpenClose, ShortSale, ShortSaleSlot, DesignatedLocation");
-                    return false;
-                }
+                        ))
+            {
+                ReportError(id, EClientErrors.UPDATE_TWS,
+                    "  It does not support deltaNeutral parameters: OpenClose, ShortSale, ShortSaleSlot, DesignatedLocation");
+                return false;
             }
 
-            if (serverVersion < MinServerVer.SCALE_ORDERS3)
+            if (serverVersion < MinServerVer.SCALE_ORDERS3 &&
+                order.ScalePriceIncrement > 0 &&
+                !Util.AboutEqual(order.ScalePriceIncrement, double.MaxValue) &&
+                (!Util.AboutEqual(order.ScalePriceAdjustValue, double.MaxValue) ||
+                    order.ScalePriceAdjustInterval != int.MaxValue ||
+                    !Util.AboutEqual(order.ScaleProfitOffset, double.MaxValue) ||
+                    order.ScaleAutoReset ||
+                    order.ScaleInitPosition != int.MaxValue ||
+                    order.ScaleInitFillQty != int.MaxValue ||
+                    order.ScaleRandomPercent)
+                )
             {
-                if (order.ScalePriceIncrement > 0 && order.ScalePriceIncrement != double.MaxValue)
+                ReportError(id, EClientErrors.UPDATE_TWS,
+                    "  It does not support Scale order parameters: PriceAdjustValue, PriceAdjustInterval, " +
+                    "ProfitOffset, AutoReset, InitPosition, InitFillQty and RandomPercent");
+                return false;
+            }
+
+            if (serverVersion < MinServerVer.ORDER_COMBO_LEGS_PRICE && isBagOrder && order.OrderComboLegs.Count > 0)
+            {
+                OrderComboLeg orderComboLeg;
+                for (int i = 0; i < order.OrderComboLegs.Count; ++i)
                 {
-                    if (order.ScalePriceAdjustValue != double.MaxValue ||
-                        order.ScalePriceAdjustInterval != int.MaxValue ||
-                        order.ScaleProfitOffset != double.MaxValue ||
-                        order.ScaleAutoReset ||
-                        order.ScaleInitPosition != int.MaxValue ||
-                        order.ScaleInitFillQty != int.MaxValue ||
-                        order.ScaleRandomPercent)
+                    orderComboLeg = order.OrderComboLegs[i];
+                    if (!Util.AboutEqual(orderComboLeg.Price, double.MaxValue))
                     {
-                        ReportError(id, EClientErrors.UPDATE_TWS,
-                            "  It does not support Scale order parameters: PriceAdjustValue, PriceAdjustInterval, " +
-                            "ProfitOffset, AutoReset, InitPosition, InitFillQty and RandomPercent");
+                        ReportError(id, EClientErrors.UPDATE_TWS, "  It does not support per-leg prices for order combo legs.");
                         return false;
                     }
                 }
             }
 
-            if (serverVersion < MinServerVer.ORDER_COMBO_LEGS_PRICE && isBagOrder)
+            if (serverVersion < MinServerVer.TRAILING_PERCENT && Util.AboutEqual(order.TrailingPercent, double.MaxValue))
             {
-                if (order.OrderComboLegs.Count > 0)
-                {
-                    OrderComboLeg orderComboLeg;
-                    for (int i = 0; i < order.OrderComboLegs.Count; ++i)
-                    {
-                        orderComboLeg = order.OrderComboLegs[i];
-                        if (orderComboLeg.Price != double.MaxValue)
-                        {
-                            ReportError(id, EClientErrors.UPDATE_TWS,
-                                "  It does not support per-leg prices for order combo legs.");
-                            return false;
-                        }
-                    }
-                }
-            }
-
-            if (serverVersion < MinServerVer.TRAILING_PERCENT)
-            {
-                if (order.TrailingPercent != double.MaxValue)
-                {
-                    ReportError(id, EClientErrors.UPDATE_TWS,
-                        "  It does not support trailing percent parameter.");
-                    return false;
-                }
+                ReportError(id, EClientErrors.UPDATE_TWS, "  It does not support trailing percent parameter.");
+                return false;
             }
 
             if (serverVersion < MinServerVer.ALGO_ID && !IsEmpty(order.AlgoId))
             {
                 ReportError(id, EClientErrors.UPDATE_TWS, " It does not support algoId parameter");
-
                 return false;
             }
 
-            if (serverVersion < MinServerVer.SCALE_TABLE)
+            if (serverVersion < MinServerVer.SCALE_TABLE && (!IsEmpty(order.ScaleTable) || !IsEmpty(order.ActiveStartTime) || !IsEmpty(order.ActiveStopTime)))
             {
-                if (!IsEmpty(order.ScaleTable) || !IsEmpty(order.ActiveStartTime) || !IsEmpty(order.ActiveStopTime))
-                {
-                    ReportError(id, EClientErrors.UPDATE_TWS,
-                        "  It does not support scaleTable, activeStartTime nor activeStopTime parameters.");
-                    return false;
-                }
+                ReportError(id, EClientErrors.UPDATE_TWS, "  It does not support scaleTable, activeStartTime nor activeStopTime parameters.");
+                return false;
             }
 
             if (serverVersion < MinServerVer.EXT_OPERATOR && !IsEmpty(order.ExtOperator))
             {
                 ReportError(id, EClientErrors.UPDATE_TWS, " It does not support extOperator parameter");
-
                 return false;
             }
 
-            if (serverVersion < MinServerVer.CASH_QTY && order.CashQty != double.MaxValue)
+            if (serverVersion < MinServerVer.CASH_QTY && !Util.AboutEqual(order.CashQty, double.MaxValue))
             {
                 ReportError(id, EClientErrors.UPDATE_TWS, " It does not support cashQty parameter");
-
                 return false;
             }
 
-            if (serverVersion < MinServerVer.DECISION_MAKER
-                && (!IsEmpty(order.Mifid2DecisionMaker)
-                    || !IsEmpty(order.Mifid2DecisionAlgo)))
+            if (serverVersion < MinServerVer.DECISION_MAKER && (!IsEmpty(order.Mifid2DecisionMaker) || !IsEmpty(order.Mifid2DecisionAlgo)))
             {
                 ReportError(id, EClientErrors.UPDATE_TWS, " It does not support MIFID II decision maker parameters");
-
                 return false;
             }
 
-            if (serverVersion < MinServerVer.DECISION_MAKER
-                && (!IsEmpty(order.Mifid2ExecutionTrader)
-                    || !IsEmpty(order.Mifid2ExecutionAlgo)))
+            if (serverVersion < MinServerVer.DECISION_MAKER && (!IsEmpty(order.Mifid2ExecutionTrader) || !IsEmpty(order.Mifid2ExecutionAlgo)))
             {
                 ReportError(id, EClientErrors.UPDATE_TWS, " It does not support MIFID II execution parameters");
-
                 return false;
             }
 
-            if (serverVersion < MinServerVer.AUTO_PRICE_FOR_HEDGE
-                && order.DontUseAutoPriceForHedge)
+            if (serverVersion < MinServerVer.AUTO_PRICE_FOR_HEDGE && order.DontUseAutoPriceForHedge)
             {
                 ReportError(id, EClientErrors.UPDATE_TWS, " It does not support don't use auto price for hedge parameter");
-
                 return false;
             }
 
             if (serverVersion < MinServerVer.ORDER_CONTAINER && order.IsOmsContainer)
             {
                 ReportError(id, EClientErrors.UPDATE_TWS, " It does not support oms container parameter.");
-
                 return false;
             }
 
@@ -4067,18 +3975,15 @@ namespace IBApi
                 return false;
             }
 
-            if (serverVersion < MinServerVer.PEGBEST_PEGMID_OFFSETS)
-            {
-                if (order.MinTradeQty != int.MaxValue ||
+            if ((serverVersion < MinServerVer.PEGBEST_PEGMID_OFFSETS) &&
+            (order.MinTradeQty != int.MaxValue ||
                     order.MinCompeteSize != int.MaxValue ||
-                    order.CompeteAgainstBestOffset != double.MaxValue ||
-                    order.MidOffsetAtWhole != double.MaxValue ||
-                    order.MidOffsetAtHalf != double.MaxValue)
-                {
-                    ReportError(id, EClientErrors.UPDATE_TWS,
-                        "  It does not support PEG BEST / PEG MID order parameters: minTradeQty, minCompeteSize, competeAgainstBestOffset, midOffsetAtWhole and midOffsetAtHalf");
-                    return false;
-                }
+                    !Util.AboutEqual(order.CompeteAgainstBestOffset, double.MaxValue) ||
+                    !Util.AboutEqual(order.MidOffsetAtWhole, double.MaxValue) ||
+                    !Util.AboutEqual(order.MidOffsetAtHalf, double.MaxValue)))
+            {
+                ReportError(id, EClientErrors.UPDATE_TWS, "  It does not support PEG BEST / PEG MID order parameters: minTradeQty, minCompeteSize, competeAgainstBestOffset, midOffsetAtWhole and midOffsetAtHalf");
+                return false;
             }
 
             return true;

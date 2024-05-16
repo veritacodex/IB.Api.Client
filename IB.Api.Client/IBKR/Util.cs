@@ -30,7 +30,7 @@ namespace IBApi
         {
             string normalisedLhs = NormalizeString(lhs);
             string normalisedRhs = NormalizeString(rhs);
-            return string.Compare(normalisedLhs, normalisedRhs, true); 
+            return string.Compare(normalisedLhs, normalisedRhs, true);
         }
 
         public static bool VectorEqualsUnordered<T>(List<T> lhs, List<T> rhs)
@@ -93,7 +93,7 @@ namespace IBApi
 
         public static string DoubleMaxString(double d, String def)
         {
-            return d != double.MaxValue ? d.ToString("0.########") : def;
+            return !AboutEqual(d, double.MaxValue) ? d.ToString("0.########") : def;
         }
 
         public static string DecimalMaxString(decimal value)
@@ -137,6 +137,12 @@ namespace IBApi
         public static decimal GetDecimal(object value)
         {
             return Convert.ToDecimal(((IEnumerable)value).Cast<object>().ToArray()[0]);
+        }
+
+        public static bool AboutEqual(double x, double y)
+        {
+            double epsilon = Math.Max(Math.Abs(x), Math.Abs(y)) * 1E-15;
+            return Math.Abs(x - y) <= epsilon;
         }
 
     }

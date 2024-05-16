@@ -2167,7 +2167,8 @@ namespace IBApi
         public double ReadDoubleMax()
         {
             string str = ReadString();
-            return string.IsNullOrEmpty(str) ? double.MaxValue : str == Constants.INFINITY_STR ? double.PositiveInfinity : double.Parse(str, System.Globalization.NumberFormatInfo.InvariantInfo);
+            var isInfinity = str == Constants.INFINITY_STR ? double.PositiveInfinity : double.Parse(str, System.Globalization.NumberFormatInfo.InvariantInfo);
+            return string.IsNullOrEmpty(str) ? double.MaxValue : isInfinity;
         }
 
         public decimal ReadDecimal()

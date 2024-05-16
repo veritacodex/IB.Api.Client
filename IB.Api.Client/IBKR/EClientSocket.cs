@@ -14,7 +14,7 @@ namespace IBApi
      * @brief TWS/Gateway client class
      * This client class contains all the available methods to communicate with IB. Up to 32 clients can be connected to a single instance of the TWS/Gateway simultaneously. From herein, the TWS/Gateway will be referred to as the Host.
      */
-    public class EClientSocket(IEWrapper wrapper, IEReaderSignal eReaderSignal) : EClient(wrapper),  IEClientMsgSink
+    public class EClientSocket(IEWrapper wrapper, IEReaderSignal eReaderSignal) : EClient(wrapper), IEClientMsgSink
     {
         private int port;
 
@@ -36,13 +36,10 @@ namespace IBApi
                 return;
             }
 
-            if (serverVersion >= 3)
+            if (serverVersion >= 3 && serverVersion < MinServerVer.LINKING)
             {
-                if (serverVersion < MinServerVer.LINKING)
-                {
-                    List<byte> buf = [.. Encoding.UTF8.GetBytes(clientId.ToString()), Constants.EOL];
-                    socketTransport.Send(new EMessage(buf.ToArray()));
-                }
+                List<byte> buf = [.. Encoding.UTF8.GetBytes(clientId.ToString()), Constants.EOL];
+                socketTransport.Send(new EMessage(buf.ToArray()));
             }
 
             ServerTime = time;
@@ -63,7 +60,7 @@ namespace IBApi
         public void EConnect(string host, int port, int clientId)
         {
             EConnect(host, port, clientId, false);
-        }        
+        }
 
         /**
         * @brief Creates socket connection to TWS/IBG.
@@ -140,7 +137,7 @@ namespace IBApi
             request.Seek(0, SeekOrigin.Begin);
 
             var buf = new MemoryStream();
-            
+
             request.BaseStream.CopyTo(buf);
             socketTransport.Send(new EMessage(buf.ToArray()));
         }
@@ -158,9 +155,8 @@ namespace IBApi
 
             var srv = host.Split(':');
 
-            if (srv.Length > 1)
-                if (!int.TryParse(srv[1], out port))
-                    throw new EClientException(EClientErrors.BAD_MESSAGE);
+            if (srv.Length > 1 && !int.TryParse(srv[1], out port))
+                throw new EClientException(EClientErrors.BAD_MESSAGE);
 
 
             ++redirectCount;
@@ -182,7 +178,7 @@ namespace IBApi
             {
                 redirectCount = 0;
             }
-            base.EDisconnect(resetState);            
+            base.EDisconnect(resetState);
         }
     }
 }
