@@ -70,7 +70,7 @@ class Table
 
     public override string ToString()
     {
-        StringBuilder tableString = new StringBuilder();
+        StringBuilder tableString = new();
         List<int> columnsLength = GetColumnsMaximumStringLengths();
 
         var rowStringFormat = Enumerable
