@@ -70,19 +70,7 @@ namespace IB.Api.Client
         public void RerouteMktDepthReq(int reqId, int conId, string exchange)
         {
             throw new NotImplementedException();
-        }
-        public void ScannerData(int reqId, int rank, ContractDetails contractDetails, string distance, string benchmark, string projection, string legsStr)
-        {
-            throw new NotImplementedException();
-        }
-        public void ScannerDataEnd(int reqId)
-        {
-            throw new NotImplementedException();
-        }
-        public void ScannerParameters(string xml)
-        {
-            throw new NotImplementedException();
-        }
+        }        
         public void SmartComponents(int reqId, Dictionary<int, KeyValuePair<string, char>> theMap)
         {
             throw new NotImplementedException();
