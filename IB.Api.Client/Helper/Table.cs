@@ -8,13 +8,13 @@ namespace IB.Api.Client;
 class Table
 {
     private readonly List<object> _columns;
-    private List<object[]> _rows;
+    private readonly List<object[]> _rows;
 
     public Table(params string[] columns)
     {
         if (columns == null || columns.Length == 0)
         {
-            throw new System.ArgumentException("Parameter cannot be null nor empty", "columns");
+            throw new System.ArgumentException("Parameter cannot be null nor empty", nameof(columns));
         }
 
         _columns = new List<object>(columns);
@@ -81,7 +81,7 @@ class Table
         string columnHeaders = string.Format(rowStringFormat, _columns.ToArray());
         List<string> results = _rows.Select(row => string.Format(rowStringFormat, row)).ToList();
 
-        int maximumRowLength = Math.Max(0, _rows.Any() ? _rows.Max(row => string.Format(rowStringFormat, row).Length) : 0);
+        int maximumRowLength = Math.Max(0, _rows.Count != 0 ? _rows.Max(row => string.Format(rowStringFormat, row).Length) : 0);
         int maximumLineLength = Math.Max(maximumRowLength, columnHeaders.Length);
 
         string dividerLine = string.Join("", Enumerable.Repeat("-", maximumLineLength - 1));
