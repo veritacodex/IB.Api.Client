@@ -28,12 +28,12 @@ namespace IB.Api.Client.Examples
 
         private static void PortfolioUpdateReceived(object sender, PortfolioUpdate portfolioUpdate)
         {
-            Console.WriteLine(portfolioUpdate.ToRefString());
+            Console.WriteLine(portfolioUpdate.GetAsTable());
         }
 
         private static void AccountUpdateReceived(object sender, AccountUpdate accountUpdate)
         {
-            Console.WriteLine(accountUpdate.ToRefString());
+            Console.WriteLine(accountUpdate.GetAsTable());
         }
     }
 }

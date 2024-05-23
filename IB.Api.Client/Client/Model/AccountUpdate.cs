@@ -56,5 +56,12 @@ namespace IB.Api.Client.Model
             AccruedCash = key == "AccruedCash" && currency == "EUR" ? double.Parse(value) : AccruedCash;
             BaseNetLiquidation = key == "NetLiquidationByCurrency" && currency == "BASE" ? double.Parse(value) : BaseNetLiquidation;
         }
+
+        public string GetAsTable()
+        {
+            var table = new Table("Account", "Code", "Funds", "BuyingPower", "CashBalance", "Liquidation");
+            table.AddRow(Updated, AccountCode, AvailableFunds, BuyingPower, CashEuro + "/" + CashUsd, BaseNetLiquidation);
+            return table.ToString();
+        }
     }
 }

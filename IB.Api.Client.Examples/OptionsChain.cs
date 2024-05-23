@@ -33,6 +33,6 @@ public static class OptionsChain
 
     private static void AccountUpdateReceived(object sender, AccountUpdate accountUpdate)
     {
-        Console.WriteLine(accountUpdate.ToRefString());
+        Console.WriteLine(accountUpdate.GetAsTable());
     }
 }
