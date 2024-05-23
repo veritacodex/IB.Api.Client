@@ -7,7 +7,7 @@ namespace IB.Api.Client.Model
     {
         [JsonProperty("tickerId")]
         public int TickerId { get; internal set; }
-        
+
         [JsonProperty("time")]
         public long Time { get; set; }
 
@@ -56,19 +56,22 @@ namespace IB.Api.Client.Model
         [JsonProperty("volume")]
         public decimal Volume { get; set; }
 
-        [JsonProperty("ema1")]
-        public double Ema1 { get; set; }
-
-        [JsonProperty("ema2")]
-        public double Ema2 { get; set; }
-
-        [JsonProperty("ema3")]
-        public double Ema3 { get; set; }
-
         [JsonProperty("optionBid")]
         public double OptionBid { get; set; }
 
         [JsonProperty("optionAsk")]
         public double OptionAsk { get; set; }
+
+        [JsonProperty("gamma")]
+        public double Gamma { get; set; }
+
+        [JsonProperty("delta")]
+        public double Delta { get; internal set; }
+
+        [JsonProperty("vega")]
+        public double Vega { get; internal set; }
+
+        [JsonProperty("tetha")]
+        public double Theta { get; internal set; }
     }
 }

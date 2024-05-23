@@ -23,6 +23,15 @@ namespace IB.Api.Client
             ClientSocket.ReqTickByTickData(reqId, contract, "BidAsk", 0, true);
             Notify($"Time and sales for symbol {contract.Symbol} requested");
         }
+        public void SubscribeToRealTimePrice(int tickerId, Contract contract, string genericTickList)
+        {
+            _priceUpdates.Add(tickerId, new PriceUpdate
+            {
+                TickerId = tickerId
+            });
+            ClientSocket.ReqMktData(tickerId, contract, genericTickList, false, false, null);
+            Notify($"Real time data for symbol {contract.Symbol} requested");
+        }
         public void SubscribeToRealTimePrice(int tickerId, Contract contract)
         {
             _priceUpdates.Add(tickerId, new PriceUpdate
@@ -31,25 +40,6 @@ namespace IB.Api.Client
             });
             ClientSocket.ReqMktData(tickerId, contract, string.Empty, false, false, null);
             Notify($"Real time data for symbol {contract.Symbol} requested");
-        }
-        public void SubscribeToOptionsChainStrike(int tickerId, OptionParameterDefinition optionParameter, double strike, Right right)
-        {
-            _priceUpdates.Add(tickerId, new PriceUpdate
-            {
-                TickerId = tickerId
-            });
-            var contract = new Contract
-            {
-                Strike = strike,
-                Exchange = optionParameter.Exchange,
-                ConId = optionParameter.UnderlyingConId,
-                TradingClass = optionParameter.TradingClass,
-                Multiplier = optionParameter.Multiplier,
-                Right = right.ToString(),
-                SecType = SecurityType.FOP.ToString()
-            };
-            ClientSocket.ReqMktData(tickerId, contract, string.Empty, false, false, null);
-            Notify($"Real time options data for trading class {contract.TradingClass} requested");
         }
         public void SubscribeToDefaultBar(int tickerId, Contract contract)
         {
@@ -230,6 +220,10 @@ namespace IB.Api.Client
                         break;
                     }
             }
+            _priceUpdates[tickerId].Gamma = gamma;
+            _priceUpdates[tickerId].Delta = delta;
+            _priceUpdates[tickerId].Vega = vega;
+            _priceUpdates[tickerId].Theta = theta;
         }
         public void SecurityDefinitionOptionParameter(int reqId, string exchange, int underlyingConId, string tradingClass, string multiplier, HashSet<string> expirations, HashSet<double> strikes)
         {
