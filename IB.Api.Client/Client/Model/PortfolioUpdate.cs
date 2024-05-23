@@ -47,5 +47,12 @@ namespace IB.Api.Client.Model
 
         [JsonProperty("averageCost")]
         public double AverageCost { get; internal set; }
+
+        public string GetAsTable()
+        {
+            var table = new Table("Positions", "Symbol", "Size", "MarketPrice", "MarketValue", "AverageCost");
+            table.AddRow(UpdatedOn, Contract.Symbol, Position, MarketPrice, MarketValue, AverageCost);
+            return table.ToString();
+        }
     }
 }

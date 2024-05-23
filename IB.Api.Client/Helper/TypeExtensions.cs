@@ -2,11 +2,11 @@ using System.Text;
 
 namespace IB.Api.Client.Helper
 {
-    public static class TypeExtenstions
+    public static class TypeExtensions
     {
         public static string ToRefString(this object obj)
         {
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
             foreach (System.Reflection.PropertyInfo property in obj.GetType().GetProperties())
             {
 

@@ -76,6 +76,11 @@ namespace IB.Api.Client.Helper
             });
         }
 
+        public static void RequestStockContract(IBClient ibClient, string symbol)
+        {
+            ibClient.GetContractDetails(symbol, SecurityType.STK);
+        }
+
         public static void RequestFuturesContract(IBClient ibClient, string symbol)
         {
             ibClient.GetContractDetails(symbol, SecurityType.FUT);
