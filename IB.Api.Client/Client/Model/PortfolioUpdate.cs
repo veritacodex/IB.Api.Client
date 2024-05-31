@@ -50,8 +50,8 @@ namespace IB.Api.Client.Model
 
         public string GetAsTable()
         {
-            var table = new Table("Positions", "Symbol", "Size", "MarketPrice", "MarketValue", "AverageCost");
-            table.AddRow(UpdatedOn, Contract.Symbol, Position, MarketPrice, MarketValue, AverageCost);
+            var table = new Table("Positions", "Symbol", "Size", "MarketPrice", "MarketValue", "Cost/Premium", "Strike");
+            table.AddRow(UpdatedOn, Contract.Symbol, Position, MarketPrice, MarketValue, AverageCost, Contract.Strike);
             return table.ToString();
         }
     }
