@@ -5,9 +5,14 @@ using System;
 
 namespace IBApi
 {
-    class BitMask(int p)
+    class BitMask
     {
-        private int m_mask = p;
+        private int m_mask;
+
+        public BitMask(int p)
+        {
+            m_mask = p;
+        }
 
         public int GetMask()
         {
@@ -23,10 +28,20 @@ namespace IBApi
         {
             get
             {
+                if (index >= 32)
+                {
+                    throw new IndexOutOfRangeException();
+                }
+
                 return (m_mask & (1 << index)) != 0;
             }
             set
             {
+                if (index >= 32)
+                {
+                    throw new IndexOutOfRangeException();
+                }
+
                 if (value)
                 {
                     m_mask |= 1 << index;

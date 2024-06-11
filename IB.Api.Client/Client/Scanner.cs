@@ -13,18 +13,18 @@ public partial class IBClient
     {
         _xmlFilePath = xmlFilePath;
         Notify("Scanner parameters requested");
-        ClientSocket.ReqScannerParameters();
+        ClientSocket.reqScannerParameters();
     }
 
-    public void ScannerData(int reqId, int rank, ContractDetails contractDetails, string distance, string benchmark, string projection, string legsStr)
+    public void scannerData(int reqId, int rank, ContractDetails contractDetails, string distance, string benchmark, string projection, string legsStr)
     {
         throw new NotImplementedException();
     }
-    public void ScannerDataEnd(int reqId)
+    public void scannerDataEnd(int reqId)
     {
         throw new NotImplementedException();
     }
-    public void ScannerParameters(string xml)
+    public void scannerParameters(string xml)
     {
         File.WriteAllText(_xmlFilePath, xml);
         Notify($"Scanner parameters saved to {_xmlFilePath}");

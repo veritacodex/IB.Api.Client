@@ -7,22 +7,29 @@ namespace IBApi
      * @class SoftDollarTier
      * @brief A container for storing Soft Dollar Tier information
      */
-    public class SoftDollarTier(string name, string value, string displayName)
+    public class SoftDollarTier
     {
         /**
          * @brief The name of the Soft Dollar Tier
          */
-        public string Name { get; set; } = name;
+        public string Name { get; set; }
 
         /**
          * @brief The value of the Soft Dollar Tier
          */
-        public string Value { get; set; } = value;
+        public string Value { get; set; }
 
         /**
          * @brief The display name of the Soft Dollar Tier
          */
-        public string DisplayName { get; set; } = displayName;
+        public string DisplayName { get; set; }
+
+        public SoftDollarTier(string name, string value, string displayName)
+        {
+            Name = name;
+            Value = value;
+            DisplayName = displayName;
+        }
 
         public SoftDollarTier()
             : this(null, null, null)
@@ -42,6 +49,16 @@ namespace IBApi
         public override int GetHashCode()
         {
             return (Name ?? "").GetHashCode() + (Value ?? "").GetHashCode();
+        }
+
+        public static bool operator ==(SoftDollarTier left, SoftDollarTier right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(SoftDollarTier left, SoftDollarTier right)
+        {
+            return !left.Equals(right);
         }
 
         public override string ToString()

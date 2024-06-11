@@ -13,45 +13,45 @@ namespace IB.Api.Client
         public event EventHandler<OpenOrderUpdate> OpenOrderUpdateReceived;
         public event EventHandler<OpenOrderUpdate> WhatIfOpenOrderUpdateReceived;
         public int NextOrderId { get; set; }
-        public void NextValidId(int orderId)
+        public void nextValidId(int orderId)
         {
             NextOrderId = orderId;
             Notify($"Next valid Order Id ({orderId})");
         }
         public void RequestOrders()
         {
-            ClientSocket.ReqAllOpenOrders();
+            ClientSocket.reqAllOpenOrders();
         }
         public void PlaceOrder(int orderId, Contract contract, Order order)
         {
-            ClientSocket.PlaceOrder(orderId, contract, order);
+            ClientSocket.placeOrder(orderId, contract, order);
         }
         public void WhatIf(int orderId, Contract contract, Order order)
         {
             order.WhatIf = true;
-            ClientSocket.PlaceOrder(orderId, contract, order);
+            ClientSocket.placeOrder(orderId, contract, order);
         }
         public void CancelOrder(int orderId)
         {
-            ClientSocket.CancelOrder(orderId, string.Empty);
+            ClientSocket.cancelOrder(orderId, string.Empty);
         }
         public void CancellAllOrders()
         {
-            ClientSocket.ReqGlobalCancel();
+            ClientSocket.reqGlobalCancel();
         }
         public void RequestExecutions(int reqId)
         {
-            ClientSocket.ReqExecutions(reqId, new ExecutionFilter());
+            ClientSocket.reqExecutions(reqId, new ExecutionFilter());
         }
-        public void CompletedOrder(Contract contract, Order order, OrderState orderState)
+        public void completedOrder(Contract contract, Order order, OrderState orderState)
         {
             throw new NotImplementedException();
         }
-        public void CompletedOrdersEnd()
+        public void completedOrdersEnd()
         {
             throw new NotImplementedException();
         }
-        public void ExecDetails(int reqId, Contract contract, Execution execution)
+        public void execDetails(int reqId, Contract contract, Execution execution)
         {
             ExecutionUpdateReceived?.Invoke(this, new ExecutionUpdate
             {
@@ -64,13 +64,15 @@ namespace IB.Api.Client
                 AvgPrice = execution.AvgPrice
             });
         }
-        public void ExecDetailsEnd(int reqId)
+        public void execDetailsEnd(int reqId)
         {
+            _ = string.Empty;
         }
-        public void OpenOrderEnd()
+        public void openOrderEnd()
         {
+            _ = string.Empty;
         }
-        public void OrderStatus(int orderId, string status, decimal filled, decimal remaining, double avgFillPrice,
+        public void orderStatus(int orderId, string status, decimal filled, decimal remaining, double avgFillPrice,
             int permId, int parentId, double lastFillPrice, int clientId, string whyHeld, double mktCapPrice)
         {
             var orderUpdate = new OrderUpdate
@@ -89,7 +91,7 @@ namespace IB.Api.Client
             };
             OrderUpdateReceived?.Invoke(this, orderUpdate);
         }
-        public void CommissionReport(CommissionReport commissionReport)
+        public void commissionReport(CommissionReport commissionReport)
         {
             CommissionUpdateReceived?.Invoke(this, new CommissionUpdate
             {
@@ -97,7 +99,7 @@ namespace IB.Api.Client
                 Commission = commissionReport.Commission
             });
         }
-        public void OpenOrder(int orderId, Contract contract, Order order, OrderState orderState)
+        public void openOrder(int orderId, Contract contract, Order order, OrderState orderState)
         {
             if (order.WhatIf)
                 WhatIfOpenOrderUpdateReceived?.Invoke(this, new OpenOrderUpdate

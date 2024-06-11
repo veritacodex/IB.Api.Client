@@ -7,180 +7,179 @@ namespace IB.Api.Client
     //Not implemented
     public partial class IBClient
     {
-        public void BondContractDetails(int reqId, ContractDetails contract)
+        public void bondContractDetails(int reqId, ContractDetails contract)
         {
             throw new NotImplementedException();
         }
-        public void CurrentTime(long time)
+        public void currentTime(long time)
         {
             throw new NotImplementedException();
         }
-        public void DeltaNeutralValidation(int reqId, DeltaNeutralContract deltaNeutralContract)
+        public void deltaNeutralValidation(int reqId, DeltaNeutralContract deltaNeutralContract)
         {
             throw new NotImplementedException();
         }
-        public void DisplayGroupList(int reqId, string groups)
+        public void displayGroupList(int reqId, string groups)
         {
             throw new NotImplementedException();
         }
-        public void DisplayGroupUpdated(int reqId, string contractInfo)
+        public void displayGroupUpdated(int reqId, string contractInfo)
         {
             throw new NotImplementedException();
         }
-        public void FamilyCodes(FamilyCode[] familyCodes)
+        public void familyCodes(FamilyCode[] familyCodes)
         {
             throw new NotImplementedException();
         }
-        public void FundamentalData(int reqId, string data)
+        public void fundamentalData(int reqId, string data)
         {
             throw new NotImplementedException();
         }
-        public void HeadTimestamp(int reqId, string headTimestamp)
+        public void headTimestamp(int reqId, string headTimestamp)
         {
             throw new NotImplementedException();
         }
-        public void HistogramData(int reqId, HistogramEntry[] data)
+        public void histogramData(int reqId, HistogramEntry[] data)
         {
             throw new NotImplementedException();
         }        
-        public void MktDepthExchanges(DepthMktDataDescription[] depthMktDataDescriptions)
+        public void mktDepthExchanges(DepthMktDataDescription[] depthMktDataDescriptions)
         {
             throw new NotImplementedException();
         }
-        public void Pnl(int reqId, double dailyPnL, double unrealizedPnL, double realizedPnL)
+        public void pnl(int reqId, double dailyPnL, double unrealizedPnL, double realizedPnL)
         {
             throw new NotImplementedException();
         }
-        public void PnlSingle(int reqId, decimal pos, double dailyPnL, double unrealizedPnL, double realizedPnL, double value)
+        public void pnlSingle(int reqId, decimal pos, double dailyPnL, double unrealizedPnL, double realizedPnL, double value)
         {
             throw new NotImplementedException();
         }
-        public void ReceiveFA(int faDataType, string faXmlData)
+        public void receiveFA(int faDataType, string faXmlData)
         {
             throw new NotImplementedException();
         }
-        public void RerouteMktDataReq(int reqId, int conId, string exchange)
+        public void rerouteMktDataReq(int reqId, int conId, string exchange)
         {
             throw new NotImplementedException();
         }
-        public void RerouteMktDepthReq(int reqId, int conId, string exchange)
+        public void rerouteMktDepthReq(int reqId, int conId, string exchange)
         {
             throw new NotImplementedException();
         }        
-        public void SmartComponents(int reqId, Dictionary<int, KeyValuePair<string, char>> theMap)
+        public void smartComponents(int reqId, Dictionary<int, KeyValuePair<string, char>> theMap)
         {
             throw new NotImplementedException();
         }
-        public void SoftDollarTiers(int reqId, SoftDollarTier[] tiers)
+        public void softDollarTiers(int reqId, SoftDollarTier[] tiers)
         {
             throw new NotImplementedException();
         }
-        public void SymbolSamples(int reqId, ContractDescription[] contractDescriptions)
+        public void symbolSamples(int reqId, ContractDescription[] contractDescriptions)
         {
             throw new NotImplementedException();
         }
-        public void VerifyAndAuthCompleted(bool isSuccessful, string errorText)
+        public void verifyAndAuthCompleted(bool isSuccessful, string errorText)
         {
             throw new NotImplementedException();
         }
-        public void VerifyAndAuthMessageAPI(string apiData, string xyzChallenge)
+        public void verifyAndAuthMessageAPI(string apiData, string xyzChallenge)
         {
             throw new NotImplementedException();
         }
-        public void VerifyCompleted(bool isSuccessful, string errorText)
+        public void verifyCompleted(bool isSuccessful, string errorText)
         {
             throw new NotImplementedException();
         }
-        public void VerifyMessageAPI(string apiData)
+        public void verifyMessageAPI(string apiData)
         {
             throw new NotImplementedException();
         }
-        public void AccountSummaryEnd(int reqId)
+        public void accountSummaryEnd(int reqId)
         {
             throw new NotImplementedException();
         }
-        public void AccountUpdateMulti(int requestId, string account, string modelCode, string key, string value, string currency)
+        public void accountUpdateMulti(int requestId, string account, string modelCode, string key, string value, string currency)
         {
             throw new NotImplementedException();
         }
-        public void AccountSummary(int reqId, string account, string tag, string value, string currency)
+        public void accountSummary(int reqId, string account, string tag, string value, string currency)
         {
             throw new NotImplementedException();
         }
-        public void AccountUpdateMultiEnd(int requestId)
+        public void accountUpdateMultiEnd(int requestId)
         {
             throw new NotImplementedException();
         }
-        public void TickByTickAllLast(int reqId, int tickType, long time, double price, decimal size, TickAttribLast tickAttribLast, string exchange, string specialConditions)
+        public void tickByTickAllLast(int reqId, int tickType, long time, double price, decimal size, TickAttribLast tickAttribLast, string exchange, string specialConditions)
         {
             throw new NotImplementedException();
         }
-        public void TickByTickMidPoint(int reqId, long time, double midPoint)
+        public void tickByTickMidPoint(int reqId, long time, double midPoint)
         {
             throw new NotImplementedException();
         }
-        public void TickEFP(int tickerId, int tickType, double basisPoints, string formattedBasisPoints, double impliedFuture, int holdDays, string futureLastTradeDate, double dividendImpact, double dividendsToLastTradeDate)
+        public void tickEFP(int tickerId, int tickType, double basisPoints, string formattedBasisPoints, double impliedFuture, int holdDays, string futureLastTradeDate, double dividendImpact, double dividendsToLastTradeDate)
         {
             throw new NotImplementedException();
         }
-
-        public void TickSnapshotEnd(int tickerId)
+        public void tickSnapshotEnd(int tickerId)
         {
             throw new NotImplementedException();
         }
-        public void UpdateMktDepthL2(int tickerId, int position, string marketMaker, int operation, int side, double price, decimal size, bool isSmartDepth)
+        public void updateMktDepthL2(int tickerId, int position, string marketMaker, int operation, int side, double price, decimal size, bool isSmartDepth)
         {
             throw new NotImplementedException();
         }
-        public void Position(string account, Contract contract, decimal pos, double avgCost)
+        public void position(string account, Contract contract, decimal pos, double avgCost)
         {
             throw new NotImplementedException();
         }
-        public void PositionEnd()
+        public void positionEnd()
         {
             throw new NotImplementedException();
         }
-        public void PositionMulti(int requestId, string account, string modelCode, Contract contract, decimal pos, double avgCost)
+        public void positionMulti(int requestId, string account, string modelCode, Contract contract, decimal pos, double avgCost)
         {
             throw new NotImplementedException();
         }
-        public void PositionMultiEnd(int requestId)
+        public void positionMultiEnd(int requestId)
         {
             throw new NotImplementedException();
         }
-        public void OrderBound(long orderId, int apiClientId, int apiOrderId)
+        public void orderBound(long orderId, int apiClientId, int apiOrderId)
         {
             throw new NotImplementedException();
         }
-        public void HistoricalNews(int requestId, string time, string providerCode, string articleId, string headline)
+        public void historicalNews(int requestId, string time, string providerCode, string articleId, string headline)
         {
             throw new NotImplementedException();
         }
-        public void HistoricalNewsEnd(int requestId, bool hasMore)
+        public void historicalNewsEnd(int requestId, bool hasMore)
         {
             throw new NotImplementedException();
         }
-        public void NewsArticle(int requestId, int articleType, string articleText)
+        public void newsArticle(int requestId, int articleType, string articleText)
         {
             throw new NotImplementedException();
         }
-        public void ReplaceFAEnd(int reqId, string text)
+        public void replaceFAEnd(int reqId, string text)
         {
             throw new NotImplementedException();
         }
-        public void WshMetaData(int reqId, string dataJson)
+        public void wshMetaData(int reqId, string dataJson)
         {
             throw new NotImplementedException();
         }
-        public void WshEventData(int reqId, string dataJson)
+        public void wshEventData(int reqId, string dataJson)
         {
             throw new NotImplementedException();
         }
-        public void HistoricalSchedule(int reqId, string startDateTime, string endDateTime, string timeZone, HistoricalSession[] sessions)
+        public void historicalSchedule(int reqId, string startDateTime, string endDateTime, string timeZone, HistoricalSession[] sessions)
         {
             throw new NotImplementedException();
         }
-        public void UserInfo(int reqId, string whiteBrandingId)
+        public void userInfo(int reqId, string whiteBrandingId)
         {
             throw new NotImplementedException();
         }        

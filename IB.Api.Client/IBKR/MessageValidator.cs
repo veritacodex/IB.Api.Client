@@ -6,8 +6,13 @@
 //Hint. we could separate the message validation from the Socket client class...
 namespace IBApi
 {
-    public class MessageValidator(int serverVersion)
+    public class MessageValidator
     {
-        public int ServerVersion { get; set; } = serverVersion;
+        public int ServerVersion { get; set; }
+
+        public MessageValidator(int serverVersion)
+        {
+            ServerVersion = serverVersion;
+        }
     }
 }

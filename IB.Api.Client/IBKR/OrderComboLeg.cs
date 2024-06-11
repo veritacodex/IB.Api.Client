@@ -25,19 +25,20 @@ namespace IBApi
             Price = p_price;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object other)
         {
-            if (obj is not OrderComboLeg theOther)
+            OrderComboLeg theOther = other as OrderComboLeg;
+            if (theOther == null)
             {
                 return false;
             }
-
-            if (this == obj)
+            
+            if (this == other)
             {
                 return true;
             }
 
-            return Util.AboutEqual(Price, theOther.Price);
+            return Price == theOther.Price;
         }
 
         public override int GetHashCode()

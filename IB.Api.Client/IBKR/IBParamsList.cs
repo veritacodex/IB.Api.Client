@@ -45,7 +45,7 @@ namespace IBApi
 
         public static void AddParameter(this BinaryWriter source, string value)
         {
-            if (value != null && !IsAsciiPrintable(value))
+            if (value != null && !isAsciiPrintable(value))
                 throw new EClientException(EClientErrors.INVALID_SYMBOL, value);
 
             if (value != null)
@@ -77,9 +77,9 @@ namespace IBApi
 
         public static void AddParameterMax(this BinaryWriter source, double value)
         {
-            if (Util.AboutEqual(value, double.MaxValue))
+            if (value == double.MaxValue)
                 source.Write(Constants.EOL);
-            else if (Util.AboutEqual(value, double.PositiveInfinity))
+            else if (value == double.PositiveInfinity)
                 source.AddParameter(Constants.INFINITY_STR);
             else
                 source.AddParameter(value);
@@ -94,7 +94,7 @@ namespace IBApi
                 source.AddParameter(value);
         }
 
-        private static bool IsAsciiPrintable(string str)
+        private static bool isAsciiPrintable(string str)
         {
             if (str == null)
             {
@@ -102,7 +102,7 @@ namespace IBApi
             }
             for (int i = 0; i < str.Length; i++)
             {
-                if (!IsAsciiPrintable(str[i]))
+                if (isAsciiPrintable(str[i]) == false)
                 {
                     return false;
                 }
@@ -110,9 +110,11 @@ namespace IBApi
             return true;
         }
 
-        private static bool IsAsciiPrintable(char ch)
+        private static bool isAsciiPrintable(char ch)
         {
             return ch >= 32 && ch < 127;
         }
+
+
     }
 }

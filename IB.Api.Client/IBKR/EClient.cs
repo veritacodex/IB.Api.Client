@@ -15,17 +15,17 @@ namespace IBApi
      * @brief TWS/Gateway client class
      * This client class contains all the available methods to communicate with IB. Up to thirty-two clients can be connected to a single instance of the TWS/Gateway simultaneously. From herein, the TWS/Gateway will be referred to as the Host.
      */
-    public abstract class EClient(IEWrapper wrapper)
+    public abstract class EClient
     {
         protected int serverVersion;
 
-        protected IETransport socketTransport;
+        protected ETransport socketTransport;
 
-        protected IEWrapper wrapper = wrapper;
+        protected EWrapper wrapper;
 
-        protected bool isConnected = false;
-        protected int clientId = -1;
-        protected bool extraAuth = false;
+        protected bool isConnected;
+        protected int clientId;
+        protected bool extraAuth;
         protected bool useV100Plus = true;
 
         internal bool UseV100Plus { get { return useV100Plus; } }
@@ -34,13 +34,28 @@ namespace IBApi
         protected bool allowRedirect;
 
         /**
+         * @brief Constructor
+         * @param wrapper EWrapper's implementing class instance. Every message being delivered by IB to the API client will be forwarded to the EWrapper's implementing class.
+         * @sa EWrapper
+         */
+        public EClient(EWrapper wrapper)
+        {
+            this.wrapper = wrapper;
+            clientId = -1;
+            extraAuth = false;
+            isConnected = false;
+            optionalCapabilities = "";
+            AsyncEConnect = false;
+        }
+
+        /**
          * @brief Ignore. Used for IB's internal purposes.
          */
         public void SetConnectOptions(string connectOptions)
         {
             if (IsConnected())
             {
-                wrapper.Error(clientId, EClientErrors.AlreadyConnected.Code, EClientErrors.AlreadyConnected.Message, "");
+                wrapper.error(clientId, EClientErrors.AlreadyConnected.Code, EClientErrors.AlreadyConnected.Message, "");
 
                 return;
             }
@@ -60,12 +75,12 @@ namespace IBApi
         /**
          * @brief Reference to the EWrapper implementing object.
          */
-        public IEWrapper Wrapper
+        public EWrapper Wrapper
         {
             get { return wrapper; }
         }
 
-        public bool AllowRedirect { get; set; }
+        public bool AllowRedirect { get { return allowRedirect; } set { allowRedirect = value; } }
 
         /**
          * @brief returns the Host's version. Some of the API functionality might not be available in older Hosts and therefore it is essential to keep the TWS/Gateway as up to date as possible.
@@ -99,9 +114,9 @@ namespace IBApi
         private static readonly string encodedVersion = Constants.MinVersion.ToString() + (Constants.MaxVersion != Constants.MinVersion ? ".." + Constants.MaxVersion : string.Empty);
         protected Stream tcpStream;
 
-        protected abstract uint PrepareBuffer(BinaryWriter paramsList);
+        protected abstract uint prepareBuffer(BinaryWriter paramsList);
 
-        protected void SendConnectRequest()
+        protected void sendConnectRequest()
         {
             try
             {
@@ -111,7 +126,7 @@ namespace IBApi
 
                     paramsList.AddParameter("API");
 
-                    var lengthPos = PrepareBuffer(paramsList);
+                    var lengthPos = prepareBuffer(paramsList);
 
                     paramsList.Write(Encoding.ASCII.GetBytes("v" + encodedVersion + (IsEmpty(connectOptions) ? string.Empty : " " + connectOptions)));
 
@@ -119,13 +134,16 @@ namespace IBApi
                 }
                 else
                 {
-                    List<byte> buf = [.. Encoding.UTF8.GetBytes(Constants.ClientVersion.ToString()), Constants.EOL];
+                    List<byte> buf = new List<byte>();
+
+                    buf.AddRange(Encoding.UTF8.GetBytes(Constants.ClientVersion.ToString()));
+                    buf.Add(Constants.EOL);
                     socketTransport.Send(new EMessage(buf.ToArray()));
                 }
             }
             catch (IOException)
             {
-                wrapper.Error(clientId, EClientErrors.CONNECT_FAIL.Code, EClientErrors.CONNECT_FAIL.Message, "");
+                wrapper.error(clientId, EClientErrors.CONNECT_FAIL.Code, EClientErrors.CONNECT_FAIL.Message, "");
                 throw;
             }
         }
@@ -133,27 +151,27 @@ namespace IBApi
         /**
          * @brief Initiates the message exchange between the client application and the TWS/IB Gateway
          */
-        public void StartApi()
+        public void startApi()
         {
             if (!CheckConnection())
                 return;
 
             const int VERSION = 2;
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             paramsList.AddParameter(OutgoingMessages.StartApi);
             paramsList.AddParameter(VERSION);
             paramsList.AddParameter(clientId);
 
             if (serverVersion >= MinServerVer.OPTIONAL_CAPABILITIES)
-                paramsList.AddParameter(OptionalCapabilities);
+                paramsList.AddParameter(optionalCapabilities);
 
             CloseAndSend(paramsList, lengthPos);
         }
 
 
-        public string OptionalCapabilities { get; set; } = "";
+        public string optionalCapabilities { get; set; }
 
         /**
          * @brief Terminates the connection and notifies the EWrapper implementing class.
@@ -161,19 +179,20 @@ namespace IBApi
          */
         public void Close()
         {
-            EDisconnect();
-            wrapper.ConnectionClosed();
+            eDisconnect();
+            wrapper.connectionClosed();
         }
 
         /**
          * @brief Closes the socket connection and terminates its thread.
          */
-        public virtual void EDisconnect(bool resetState = true)
+        public virtual void eDisconnect(bool resetState = true)
         {
             if (socketTransport == null)
             {
                 return;
             }
+
 
             if (resetState)
             {
@@ -181,14 +200,16 @@ namespace IBApi
                 extraAuth = false;
                 clientId = -1;
                 serverVersion = 0;
-                OptionalCapabilities = "";
+                optionalCapabilities = "";
             }
 
-            tcpStream?.Close();
+
+            if (tcpStream != null)
+                tcpStream.Close();
 
             if (resetState)
             {
-                wrapper.ConnectionClosed();
+                wrapper.connectionClosed();
             }
         }
 
@@ -197,7 +218,7 @@ namespace IBApi
          * @param apiOnly - request only API orders.\n
          * @sa EWrapper::completedOrder, EWrapper::completedOrdersEnd
          */
-        public void ReqCompletedOrders(bool apiOnly)
+        public void reqCompletedOrders(bool apiOnly)
         {
             if (!CheckConnection())
                 return;
@@ -207,7 +228,7 @@ namespace IBApi
                 return;
 
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             paramsList.AddParameter(OutgoingMessages.ReqCompletedOrders);
             paramsList.AddParameter(apiOnly);
@@ -219,7 +240,7 @@ namespace IBApi
          * @brief Cancels tick-by-tick data.\n
          * @param reqId - unique identifier of the request.\n
          */
-        public void CancelTickByTickData(int requestId)
+        public void cancelTickByTickData(int requestId)
         {
             if (!CheckConnection())
                 return;
@@ -229,7 +250,7 @@ namespace IBApi
                 return;
 
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             paramsList.AddParameter(OutgoingMessages.CancelTickByTickData);
             paramsList.AddParameter(requestId);
@@ -246,7 +267,7 @@ namespace IBApi
          * @param ignoreSize - ignore size flag.\n
          * @sa EWrapper::tickByTickAllLast, EWrapper::tickByTickBidAsk, EWrapper::tickByTickMidPoint, Contract
          */
-        public void ReqTickByTickData(int requestId, Contract contract, string tickType, int numberOfTicks, bool ignoreSize)
+        public void reqTickByTickData(int requestId, Contract contract, string tickType, int numberOfTicks, bool ignoreSize)
         {
             if (!CheckConnection())
                 return;
@@ -260,7 +281,7 @@ namespace IBApi
                 return;
 
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             try
             {
@@ -288,7 +309,7 @@ namespace IBApi
             }
             catch (EClientException e)
             {
-                wrapper.Error(requestId, e.Err.Code, e.Err.Message + e.Text, "");
+                wrapper.error(requestId, e.Err.Code, e.Err.Message + e.Text, "");
                 return;
             }
 
@@ -300,7 +321,7 @@ namespace IBApi
         * @param reqId the request's identifier.
         * @sa reqHistoricalData
         */
-        public void CancelHistoricalData(int reqId)
+        public void cancelHistoricalData(int reqId)
         {
             if (!CheckConnection())
                 return;
@@ -320,7 +341,7 @@ namespace IBApi
          * @param underPrice hypothetical option's underlying price.\n
          * @sa EWrapper::tickOptionComputation, cancelCalculateImpliedVolatility, Contract
          */
-        public void CalculateImpliedVolatility(int reqId, Contract contract, double optionPrice, double underPrice,
+        public void calculateImpliedVolatility(int reqId, Contract contract, double optionPrice, double underPrice,
             //reserved for future use, must be blank
             List<TagValue> impliedVolatilityOptions)
         {
@@ -333,7 +354,7 @@ namespace IBApi
 
             const int version = 3;
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             try
             {
@@ -367,7 +388,7 @@ namespace IBApi
             }
             catch (EClientException e)
             {
-                wrapper.Error(reqId, e.Err.Code, e.Err.Message + e.Text, "");
+                wrapper.error(reqId, e.Err.Code, e.Err.Message + e.Text, "");
                 return;
             }
 
@@ -383,7 +404,7 @@ namespace IBApi
          * @param underPrice hypothetical underlying's price.\n
          * @sa EWrapper::tickOptionComputation, cancelCalculateOptionPrice, Contract
          */
-        public void CalculateOptionPrice(int reqId, Contract contract, double volatility, double underPrice,
+        public void calculateOptionPrice(int reqId, Contract contract, double volatility, double underPrice,
             //reserved for future use, must be blank
             List<TagValue> optionPriceOptions)
         {
@@ -398,7 +419,7 @@ namespace IBApi
 
             const int version = 3;
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             try
             {
@@ -432,7 +453,7 @@ namespace IBApi
             }
             catch (EClientException e)
             {
-                wrapper.Error(reqId, e.Err.Code, e.Err.Message + e.Text, "");
+                wrapper.error(reqId, e.Err.Code, e.Err.Message + e.Text, "");
                 return;
             }
 
@@ -445,7 +466,7 @@ namespace IBApi
          * @param reqId the identifier of the previously performed account request
          * @sa reqAccountSummary
          */
-        public void CancelAccountSummary(int reqId)
+        public void cancelAccountSummary(int reqId)
         {
             if (!CheckConnection())
                 return;
@@ -460,7 +481,7 @@ namespace IBApi
          * @param reqId the identifier of the implied volatility's calculation request.
          * @sa calculateImpliedVolatility
          */
-        public void CancelCalculateImpliedVolatility(int reqId)
+        public void cancelCalculateImpliedVolatility(int reqId)
         {
             if (!CheckConnection())
                 return;
@@ -475,7 +496,7 @@ namespace IBApi
          * @param reqId the identifier of the option's price's calculation request.
          * @sa calculateOptionPrice
          */
-        public void CancelCalculateOptionPrice(int reqId)
+        public void cancelCalculateOptionPrice(int reqId)
         {
             if (!CheckConnection())
                 return;
@@ -490,7 +511,7 @@ namespace IBApi
          * @param reqId the request's identifier.
          * @sa reqFundamentalData
          */
-        public void CancelFundamentalData(int reqId)
+        public void cancelFundamentalData(int reqId)
         {
             if (!CheckConnection())
                 return;
@@ -507,7 +528,7 @@ namespace IBApi
          * @param tickerId request's identifier
          * @sa reqMktData
          */
-        public void CancelMktData(int tickerId)
+        public void cancelMktData(int tickerId)
         {
             if (!CheckConnection())
                 return;
@@ -520,18 +541,20 @@ namespace IBApi
          * @param tickerId request's identifier.
          * @sa reqMarketDepth
          */
-        public void CancelMktDepth(int tickerId, bool isSmartDepth)
+        public void cancelMktDepth(int tickerId, bool isSmartDepth)
         {
             if (!CheckConnection())
                 return;
 
-            if (isSmartDepth && !CheckServerVersion(tickerId, MinServerVer.SMART_DEPTH, " It does not support SMART depth cancel."))
-                return;
-
+            if (isSmartDepth)
+            {
+                if (!CheckServerVersion(tickerId, MinServerVer.SMART_DEPTH, " It does not support SMART depth cancel."))
+                    return;
+            }
 
             const int VERSION = 1;
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             paramsList.AddParameter(OutgoingMessages.CancelMarketDepth);
             paramsList.AddParameter(VERSION);
@@ -549,7 +572,7 @@ namespace IBApi
          * @brief Cancels IB's news bulletin subscription
          * @sa reqNewsBulletins
          */
-        public void CancelNewsBulletin()
+        public void cancelNewsBulletin()
         {
             if (!CheckConnection())
                 return;
@@ -563,18 +586,20 @@ namespace IBApi
          * @param orderId the order's client id
          * @sa placeOrder, reqGlobalCancel
          */
-        public void CancelOrder(int orderId, string manualOrderCancelTime)
+        public void cancelOrder(int orderId, string manualOrderCancelTime)
         {
             if (!CheckConnection())
                 return;
 
-            if (!IsEmpty(manualOrderCancelTime) && !CheckServerVersion(orderId, MinServerVer.MANUAL_ORDER_TIME, " It does not support manual order cancel time attribute"))
-                return;
-
+            if (!IsEmpty(manualOrderCancelTime))
+            {
+                if (!CheckServerVersion(orderId, MinServerVer.MANUAL_ORDER_TIME, " It does not support manual order cancel time attribute"))
+                    return;
+            }
 
             const int VERSION = 1;
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             paramsList.AddParameter(OutgoingMessages.CancelOrder);
             paramsList.AddParameter(VERSION);
@@ -592,7 +617,7 @@ namespace IBApi
          * @brief Cancels a previous position subscription request made with reqPositions
          * @sa reqPositions
          */
-        public void CancelPositions()
+        public void cancelPositions()
         {
             if (!CheckConnection())
                 return;
@@ -609,7 +634,7 @@ namespace IBApi
          * @param tickerId the request's identifier.
          * @sa reqRealTimeBars
          */
-        public void CancelRealTimeBars(int tickerId)
+        public void cancelRealTimeBars(int tickerId)
         {
             if (!CheckConnection())
                 return;
@@ -622,7 +647,7 @@ namespace IBApi
          * @param tickerId the subscription's unique identifier.
          * @sa reqScannerSubscription, ScannerSubscription, reqScannerParameters
          */
-        public void CancelScannerSubscription(int tickerId)
+        public void cancelScannerSubscription(int tickerId)
         {
             if (!CheckConnection())
                 return;
@@ -640,7 +665,7 @@ namespace IBApi
          * @param account destination account
          * @param ovrd Specifies whether your setting will override the system's natural action. For example, if your action is "exercise" and the option is not in-the-money, by natural action the option would not exercise. If you have override set to "yes" the natural action would be overridden and the out-of-the money option would be exercised. Set to 1 to override, set to 0 not to.
          */
-        public void ExerciseOptions(int tickerId, Contract contract, int exerciseAction, int exerciseQuantity, string account, int ovrd)
+        public void exerciseOptions(int tickerId, Contract contract, int exerciseAction, int exerciseQuantity, string account, int ovrd)
         {
             //WARN needs to be tested!
             if (!CheckConnection())
@@ -654,7 +679,7 @@ namespace IBApi
             int VERSION = 2;
 
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             try
             {
@@ -686,7 +711,7 @@ namespace IBApi
             }
             catch (EClientException e)
             {
-                wrapper.Error(tickerId, e.Err.Code, e.Err.Message + e.Text, "");
+                wrapper.error(tickerId, e.Err.Code, e.Err.Message + e.Text, "");
                 return;
             }
 
@@ -700,7 +725,7 @@ namespace IBApi
          * @param order the order
          * @sa EWrapper::nextValidId, reqAllOpenOrders, reqAutoOpenOrders, reqOpenOrders, cancelOrder, reqGlobalCancel, EWrapper::openOrder, EWrapper::orderStatus, Order, Contract
          */
-        public void PlaceOrder(int id, Contract contract, Order order)
+        public void placeOrder(int id, Contract contract, Order order)
         {
             if (!CheckConnection())
                 return;
@@ -712,7 +737,7 @@ namespace IBApi
 
             int MsgVersion = (serverVersion < MinServerVer.NOT_HELD) ? 27 : 45;
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             try
             {
@@ -767,10 +792,9 @@ namespace IBApi
                     paramsList.AddParameter((int)order.TotalQuantity);
 
                 paramsList.AddParameter(order.OrderType);
-
                 if (serverVersion < MinServerVer.ORDER_COMBO_LEGS_PRICE)
                 {
-                    paramsList.AddParameter(Util.AboutEqual(order.LmtPrice, double.MaxValue) ? 0 : order.LmtPrice);
+                    paramsList.AddParameter(order.LmtPrice == double.MaxValue ? 0 : order.LmtPrice);
                 }
                 else
                 {
@@ -778,7 +802,7 @@ namespace IBApi
                 }
                 if (serverVersion < MinServerVer.TRAILING_PERCENT)
                 {
-                    paramsList.AddParameter(Util.AboutEqual(order.AuxPrice, double.MaxValue) ? 0 : order.AuxPrice);
+                    paramsList.AddParameter(order.AuxPrice == double.MaxValue ? 0 : order.AuxPrice);
                 }
                 else
                 {
@@ -1037,7 +1061,7 @@ namespace IBApi
                     paramsList.AddParameterMax(order.ScalePriceIncrement);
                 }
 
-                if (serverVersion >= MinServerVer.SCALE_ORDERS3 && order.ScalePriceIncrement > 0.0 && !Util.AboutEqual(order.ScalePriceIncrement, double.MaxValue))
+                if (serverVersion >= MinServerVer.SCALE_ORDERS3 && order.ScalePriceIncrement > 0.0 && order.ScalePriceIncrement != double.MaxValue)
                 {
                     paramsList.AddParameterMax(order.ScalePriceAdjustValue);
                     paramsList.AddParameterMax(order.ScalePriceAdjustInterval);
@@ -1260,7 +1284,7 @@ namespace IBApi
                     {
                         paramsList.AddParameterMax(order.MinCompeteSize);
                         paramsList.AddParameterMax(order.CompeteAgainstBestOffset);
-                        if (Util.AboutEqual(order.CompeteAgainstBestOffset, Order.COMPETE_AGAINST_BEST_OFFSET_UP_TO_MID))
+                        if (order.CompeteAgainstBestOffset == Order.COMPETE_AGAINST_BEST_OFFSET_UP_TO_MID)
                         {
                             sendMidOffsets = true;
                         }
@@ -1278,7 +1302,7 @@ namespace IBApi
             }
             catch (EClientException e)
             {
-                wrapper.Error(id, e.Err.Code, e.Err.Message + e.Text, "");
+                wrapper.error(id, e.Err.Code, e.Err.Message + e.Text, "");
                 return;
             }
 
@@ -1296,13 +1320,13 @@ namespace IBApi
          * @param xml the xml-formatted configuration string
          * @sa requestFA
          */
-        public void ReplaceFA(int reqId, int faDataType, string xml)
+        public void replaceFA(int reqId, int faDataType, string xml)
         {
             if (!CheckConnection())
                 return;
 
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             try
             {
@@ -1317,7 +1341,7 @@ namespace IBApi
             }
             catch (EClientException e)
             {
-                wrapper.Error(reqId, e.Err.Code, e.Err.Message + e.Text, "");
+                wrapper.error(reqId, e.Err.Code, e.Err.Message + e.Text, "");
                 return;
             }
 
@@ -1334,13 +1358,13 @@ namespace IBApi
          * @param faDataType the configuration to change. Set to 1, 2 or 3 as defined above.
          * @sa replaceFA
          */
-        public void RequestFA(int faDataType)
+        public void requestFA(int faDataType)
         {
             if (!CheckConnection())
                 return;
             const int VERSION = 1;
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             paramsList.AddParameter(OutgoingMessages.RequestFA);
             paramsList.AddParameter(VERSION);
@@ -1389,7 +1413,7 @@ namespace IBApi
          *      - $LEDGER:ALL — Single flag to relay all cash balance tags* in all currencies.
          * @sa cancelAccountSummary, EWrapper::accountSummary, EWrapper::accountSummaryEnd
          */
-        public void ReqAccountSummary(int reqId, string group, string tags)
+        public void reqAccountSummary(int reqId, string group, string tags)
         {
             int VERSION = 1;
             if (!CheckConnection())
@@ -1400,7 +1424,7 @@ namespace IBApi
                 return;
 
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             try
             {
@@ -1412,7 +1436,7 @@ namespace IBApi
             }
             catch (EClientException e)
             {
-                wrapper.Error(reqId, e.Err.Code, e.Err.Message + e.Text, "");
+                wrapper.error(reqId, e.Err.Code, e.Err.Message + e.Text, "");
                 return;
             }
 
@@ -1427,13 +1451,13 @@ namespace IBApi
          * @param acctCode the account id (i.e. U123456) for which the information is requested.
          * @sa reqPositions, EWrapper::updateAccountValue, EWrapper::updatePortfolio, EWrapper::updateAccountTime
          */
-        public void ReqAccountUpdates(bool subscribe, string acctCode)
+        public void reqAccountUpdates(bool subscribe, string acctCode)
         {
             int VERSION = 2;
             if (!CheckConnection())
                 return;
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             try
             {
@@ -1445,7 +1469,7 @@ namespace IBApi
             }
             catch (EClientException e)
             {
-                wrapper.Error(IncomingMessage.NotValid, e.Err.Code, e.Err.Message + e.Text, "");
+                wrapper.error(IncomingMessage.NotValid, e.Err.Code, e.Err.Message + e.Text, "");
                 return;
             }
 
@@ -1457,13 +1481,13 @@ namespace IBApi
          * Open orders are returned once; this function does not initiate a subscription
          * @sa reqAutoOpenOrders, reqOpenOrders, EWrapper::openOrder, EWrapper::orderStatus, EWrapper::openOrderEnd
          */
-        public void ReqAllOpenOrders()
+        public void reqAllOpenOrders()
         {
             int VERSION = 1;
             if (!CheckConnection())
                 return;
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             paramsList.AddParameter(OutgoingMessages.RequestAllOpenOrders);
             paramsList.AddParameter(VERSION);
@@ -1475,13 +1499,13 @@ namespace IBApi
          * @param autoBind if set to true, the newly created orders will be assigned an API order ID and implicitly associated with this client. If set to false, future orders will not be.
          * @sa reqAllOpenOrders, reqOpenOrders, cancelOrder, reqGlobalCancel, EWrapper::openOrder, EWrapper::orderStatus
          */
-        public void ReqAutoOpenOrders(bool autoBind)
+        public void reqAutoOpenOrders(bool autoBind)
         {
             int VERSION = 1;
             if (!CheckConnection())
                 return;
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             paramsList.AddParameter(OutgoingMessages.RequestAutoOpenOrders);
             paramsList.AddParameter(VERSION);
@@ -1496,19 +1520,21 @@ namespace IBApi
          * @param contract the contract used as sample to query the available contracts. Typically, it will contain the Contract::Symbol, Contract::Currency, Contract::SecType, Contract::Exchange\n
          * @sa EWrapper::contractDetails, EWrapper::contractDetailsEnd
          */
-        public void ReqContractDetails(int reqId, Contract contract)
+        public void reqContractDetails(int reqId, Contract contract)
         {
             if (!CheckConnection())
                 return;
 
-            if ((!IsEmpty(contract.SecIdType) || !IsEmpty(contract.SecId)) && !CheckServerVersion(reqId, MinServerVer.SEC_ID_TYPE, " It does not support secIdType not secId attributes"))
+            if (!IsEmpty(contract.SecIdType) || !IsEmpty(contract.SecId))
             {
-                return;
+                if (!CheckServerVersion(reqId, MinServerVer.SEC_ID_TYPE, " It does not support secIdType not secId attributes"))
+                    return;
             }
 
-            if (!IsEmpty(contract.TradingClass) && !CheckServerVersion(reqId, MinServerVer.TRADING_CLASS, " It does not support the TradingClass parameter when requesting contract details."))
+            if (!IsEmpty(contract.TradingClass))
             {
-                return;
+                if (!CheckServerVersion(reqId, MinServerVer.TRADING_CLASS, " It does not support the TradingClass parameter when requesting contract details."))
+                    return;
             }
 
             if (!IsEmpty(contract.PrimaryExch) && !CheckServerVersion(reqId, MinServerVer.LINKING,
@@ -1522,7 +1548,7 @@ namespace IBApi
             int VERSION = 8;
 
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             try
             {
@@ -1585,7 +1611,7 @@ namespace IBApi
             }
             catch (EClientException e)
             {
-                wrapper.Error(reqId, e.Err.Code, e.Err.Message + e.Text, "");
+                wrapper.error(reqId, e.Err.Code, e.Err.Message + e.Text, "");
                 return;
             }
 
@@ -1596,7 +1622,7 @@ namespace IBApi
          * @brief Requests TWS's current time.
          * @sa EWrapper::currentTime
          */
-        public void ReqCurrentTime()
+        public void reqCurrentTime()
         {
             int VERSION = 1;
             if (!CheckConnection())
@@ -1606,7 +1632,7 @@ namespace IBApi
                 return;
 
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             paramsList.AddParameter(OutgoingMessages.RequestCurrentTime);
             paramsList.AddParameter(VERSION);//version
@@ -1620,7 +1646,7 @@ namespace IBApi
          * @param filter the filter criteria used to determine which execution reports are returned.
          * @sa EWrapper::execDetails, EWrapper::commissionReport, ExecutionFilter
          */
-        public void ReqExecutions(int reqId, ExecutionFilter filter)
+        public void reqExecutions(int reqId, ExecutionFilter filter)
         {
             if (!CheckConnection())
                 return;
@@ -1628,7 +1654,7 @@ namespace IBApi
             int VERSION = 3;
 
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             try
             {
@@ -1656,7 +1682,7 @@ namespace IBApi
             }
             catch (EClientException e)
             {
-                wrapper.Error(reqId, e.Err.Code, e.Err.Message + e.Text, "");
+                wrapper.error(reqId, e.Err.Code, e.Err.Message + e.Text, "");
                 return;
             }
 
@@ -1676,7 +1702,7 @@ namespace IBApi
                 - RESC: Analyst estimates
          * @sa EWrapper::fundamentalData
          */
-        public void ReqFundamentalData(int reqId, Contract contract, string reportType,
+        public void reqFundamentalData(int reqId, Contract contract, string reportType,
             //reserved for future use, must be blank
             List<TagValue> fundamentalDataOptions)
         {
@@ -1684,15 +1710,15 @@ namespace IBApi
                 return;
             if (!CheckServerVersion(reqId, MinServerVer.FUNDAMENTAL_DATA, " It does not support Fundamental Data requests."))
                 return;
-            if ((!IsEmpty(contract.TradingClass) || contract.ConId > 0 || !IsEmpty(contract.Multiplier)) &&
-                !CheckServerVersion(reqId, MinServerVer.TRADING_CLASS, ""))
+            if (!IsEmpty(contract.TradingClass) || contract.ConId > 0 || !IsEmpty(contract.Multiplier))
             {
-                return;
+                if (!CheckServerVersion(reqId, MinServerVer.TRADING_CLASS, ""))
+                    return;
             }
 
             const int VERSION = 3;
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             try
             {
@@ -1721,7 +1747,7 @@ namespace IBApi
             }
             catch (EClientException e)
             {
-                wrapper.Error(reqId, e.Err.Code, e.Err.Message + e.Text, "");
+                wrapper.error(reqId, e.Err.Code, e.Err.Message + e.Text, "");
                 return;
             }
 
@@ -1733,7 +1759,7 @@ namespace IBApi
          * This method will cancel ALL open orders including those placed directly from TWS.
          * @sa cancelOrder
          */
-        public void ReqGlobalCancel()
+        public void reqGlobalCancel()
         {
             if (!CheckConnection())
                 return;
@@ -1744,7 +1770,7 @@ namespace IBApi
             const int VERSION = 1;
 
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             paramsList.AddParameter(OutgoingMessages.RequestGlobalCancel);
             paramsList.AddParameter(VERSION);
@@ -1794,7 +1820,7 @@ namespace IBApi
 		 * @param keepUpToDate set to True to received continuous updates on most recent bar data. If True, and endDateTime cannot be specified.
          * @sa EWrapper::historicalData
          */
-        public void ReqHistoricalData(int tickerId, Contract contract, string endDateTime,
+        public void reqHistoricalData(int tickerId, Contract contract, string endDateTime,
             string durationStr, string barSizeSetting, string whatToShow, int useRTH, int formatDate, bool keepUpToDate, List<TagValue> chartOptions)
         {
             if (!CheckConnection())
@@ -1803,21 +1829,21 @@ namespace IBApi
             if (!CheckServerVersion(tickerId, 16))
                 return;
 
-            if ((!IsEmpty(contract.TradingClass) || contract.ConId > 0) &&
-                !CheckServerVersion(tickerId, MinServerVer.TRADING_CLASS, " It does not support conId nor trading class parameters when requesting historical data.")
-                )
+            if (!IsEmpty(contract.TradingClass) || contract.ConId > 0)
             {
-                return;
+                if (!CheckServerVersion(tickerId, MinServerVer.TRADING_CLASS, " It does not support conId nor trading class parameters when requesting historical data."))
+                    return;
             }
 
-            if (!IsEmpty(whatToShow) && whatToShow.Equals("SCHEDULE") && !CheckServerVersion(tickerId, MinServerVer.HISTORICAL_SCHEDULE, " It does not support requesting of historical schedule."))
+            if (!IsEmpty(whatToShow) && whatToShow.Equals("SCHEDULE"))
             {
-                return;
+                if (!CheckServerVersion(tickerId, MinServerVer.HISTORICAL_SCHEDULE, " It does not support requesting of historical schedule."))
+                    return;
             }
 
             const int VERSION = 6;
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             try
             {
@@ -1897,7 +1923,7 @@ namespace IBApi
             }
             catch (EClientException e)
             {
-                wrapper.Error(tickerId, e.Err.Code, e.Err.Message + e.Text, "");
+                wrapper.error(tickerId, e.Err.Code, e.Err.Message + e.Text, "");
                 return;
             }
 
@@ -1909,14 +1935,14 @@ namespace IBApi
          * @param numIds deprecated- this parameter will not affect the value returned to nextValidId
          * @sa EWrapper::nextValidId
          */
-        public void ReqIds(int numIds)
+        public void reqIds(int numIds)
         {
             if (!CheckConnection())
                 return;
             const int VERSION = 1;
 
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             paramsList.AddParameter(OutgoingMessages.RequestIds);
             paramsList.AddParameter(VERSION);
@@ -1928,13 +1954,13 @@ namespace IBApi
          * @brief Requests the accounts to which the logged user has access to.
          * @sa EWrapper::managedAccounts
          */
-        public void ReqManagedAccts()
+        public void reqManagedAccts()
         {
             if (!CheckConnection())
                 return;
             const int VERSION = 1;
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             paramsList.AddParameter(OutgoingMessages.RequestManagedAccounts);
             paramsList.AddParameter(VERSION);
@@ -1966,7 +1992,7 @@ namespace IBApi
      * @param regulatory snapshot for US stocks requests NBBO snapshots for users which have "US Securities Snapshot Bundle" subscription but not corresponding Network A, B, or C subscription necessary for streaming 		 * market data. One-time snapshot of current market price that will incur a fee of 1 cent to the account per snapshot.
          * @sa cancelMktData, EWrapper::tickPrice, EWrapper::tickSize, EWrapper::tickString, EWrapper::tickEFP, EWrapper::tickGeneric, EWrapper::tickOptionComputation, EWrapper::tickSnapshotEnd
          */
-        public void ReqMktData(int tickerId, Contract contract, string genericTickList, bool snapshot, bool regulatorySnaphsot, List<TagValue> mktDataOptions)
+        public void reqMktData(int tickerId, Contract contract, string genericTickList, bool snapshot, bool regulatorySnaphsot, List<TagValue> mktDataOptions)
         {
             if (!CheckConnection())
                 return;
@@ -1989,7 +2015,7 @@ namespace IBApi
 
             int version = 11;
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             try
             {
@@ -2089,7 +2115,7 @@ namespace IBApi
             }
             catch (EClientException e)
             {
-                wrapper.Error(tickerId, e.Err.Code, e.Err.Message + e.Text, "");
+                wrapper.error(tickerId, e.Err.Code, e.Err.Message + e.Text, "");
                 return;
             }
 
@@ -2106,7 +2132,7 @@ namespace IBApi
          *      sending 3 (delayed) enables delayed and disables delayed-frozen market data
          *      sending 4 (delayed-frozen) enables delayed and delayed-frozen market data
          */
-        public void ReqMarketDataType(int marketDataType)
+        public void reqMarketDataType(int marketDataType)
         {
             if (!CheckConnection())
                 return;
@@ -2114,7 +2140,7 @@ namespace IBApi
                 return;
             const int VERSION = 1;
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             paramsList.AddParameter(OutgoingMessages.RequestMarketDataType);
             paramsList.AddParameter(VERSION);
@@ -2130,29 +2156,32 @@ namespace IBApi
          * @param isSmartDepth flag indicates that this is smart depth request
          * @sa cancelMktDepth, EWrapper::updateMktDepth, EWrapper::updateMktDepthL2
          */
-        public void ReqMarketDepth(int tickerId, Contract contract, int numRows, bool isSmartDepth, List<TagValue> mktDepthOptions)
+        public void reqMarketDepth(int tickerId, Contract contract, int numRows, bool isSmartDepth, List<TagValue> mktDepthOptions)
         {
             if (!CheckConnection())
                 return;
 
-            if ((!IsEmpty(contract.TradingClass) || contract.ConId > 0) && !CheckServerVersion(tickerId, MinServerVer.TRADING_CLASS, " It does not support ConId nor TradingClass parameters in reqMktDepth."))
+            if (!IsEmpty(contract.TradingClass) || contract.ConId > 0)
             {
-                return;
+                if (!CheckServerVersion(tickerId, MinServerVer.TRADING_CLASS, " It does not support ConId nor TradingClass parameters in reqMktDepth."))
+                    return;
             }
 
-            if (isSmartDepth && !CheckServerVersion(tickerId, MinServerVer.SMART_DEPTH, " It does not support SMART depth request."))
+            if (isSmartDepth)
             {
-                return;
+                if (!CheckServerVersion(tickerId, MinServerVer.SMART_DEPTH, " It does not support SMART depth request."))
+                    return;
             }
 
-            if (!IsEmpty(contract.PrimaryExch) && !CheckServerVersion(tickerId, MinServerVer.MKT_DEPTH_PRIM_EXCHANGE, " It does not support PrimaryExch parameter in reqMktDepth."))
+            if (!IsEmpty(contract.PrimaryExch))
             {
-                return;
+                if (!CheckServerVersion(tickerId, MinServerVer.MKT_DEPTH_PRIM_EXCHANGE, " It does not support PrimaryExch parameter in reqMktDepth."))
+                    return;
             }
 
             const int VERSION = 5;
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             try
             {
@@ -2209,7 +2238,7 @@ namespace IBApi
             }
             catch (EClientException e)
             {
-                wrapper.Error(tickerId, e.Err.Code, e.Err.Message + e.Text, "");
+                wrapper.error(tickerId, e.Err.Code, e.Err.Message + e.Text, "");
                 return;
             }
 
@@ -2221,14 +2250,14 @@ namespace IBApi
          * @param allMessages if set to true, will return all the existing bulletins for the current day, set to false to receive only the new bulletins.
          * @sa cancelNewsBulletin, EWrapper::updateNewsBulletin
          */
-        public void ReqNewsBulletins(bool allMessages)
+        public void reqNewsBulletins(bool allMessages)
         {
             if (!CheckConnection())
                 return;
 
             const int VERSION = 1;
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             paramsList.AddParameter(OutgoingMessages.RequestNewsBulletins);
             paramsList.AddParameter(VERSION);
@@ -2240,13 +2269,13 @@ namespace IBApi
          * @brief Requests all open orders places by this specific API client (identified by the API client id). For client ID 0, this will bind previous manual TWS orders.
          * @sa reqAllOpenOrders, reqAutoOpenOrders, placeOrder, cancelOrder, reqGlobalCancel, EWrapper::openOrder, EWrapper::orderStatus, EWrapper::openOrderEnd
          */
-        public void ReqOpenOrders()
+        public void reqOpenOrders()
         {
             int VERSION = 1;
             if (!CheckConnection())
                 return;
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             paramsList.AddParameter(OutgoingMessages.RequestOpenOrders);
             paramsList.AddParameter(VERSION);
@@ -2257,7 +2286,7 @@ namespace IBApi
          * @brief Subscribes to position updates for all accessible accounts. All positions sent initially, and then only updates as positions change.
          * @sa cancelPositions, EWrapper::position, EWrapper::positionEnd
          */
-        public void ReqPositions()
+        public void reqPositions()
         {
             if (!CheckConnection())
                 return;
@@ -2266,7 +2295,7 @@ namespace IBApi
 
             const int VERSION = 1;
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             paramsList.AddParameter(OutgoingMessages.RequestPositions);
             paramsList.AddParameter(VERSION);
@@ -2287,21 +2316,22 @@ namespace IBApi
          * @param useRTH set to 0 to obtain the data which was also generated ourside of the Regular Trading Hours, set to 1 to obtain only the RTH data
          * @sa cancelRealTimeBars, EWrapper::realtimeBar
          */
-        public void ReqRealTimeBars(int tickerId, Contract contract, int barSize, string whatToShow, bool useRTH, List<TagValue> realTimeBarsOptions)
+        public void reqRealTimeBars(int tickerId, Contract contract, int barSize, string whatToShow, bool useRTH, List<TagValue> realTimeBarsOptions)
         {
             if (!CheckConnection())
                 return;
             if (!CheckServerVersion(tickerId, MinServerVer.REAL_TIME_BARS, " It does not support real time bars."))
                 return;
 
-            if ((!IsEmpty(contract.TradingClass) || contract.ConId > 0) && !CheckServerVersion(tickerId, MinServerVer.TRADING_CLASS, " It does not support ConId nor TradingClass parameters in reqRealTimeBars."))
+            if (!IsEmpty(contract.TradingClass) || contract.ConId > 0)
             {
-                return;
+                if (!CheckServerVersion(tickerId, MinServerVer.TRADING_CLASS, " It does not support ConId nor TradingClass parameters in reqRealTimeBars."))
+                    return;
             }
 
             const int VERSION = 3;
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             try
             {
@@ -2342,7 +2372,7 @@ namespace IBApi
             }
             catch (EClientException e)
             {
-                wrapper.Error(tickerId, e.Err.Code, e.Err.Message + e.Text, "");
+                wrapper.error(tickerId, e.Err.Code, e.Err.Message + e.Text, "");
                 return;
             }
 
@@ -2354,13 +2384,13 @@ namespace IBApi
          * Not all parameters are valid from API scanner.
          * @sa reqScannerSubscription
          */
-        public void ReqScannerParameters()
+        public void reqScannerParameters()
         {
             if (!CheckConnection())
                 return;
             const int VERSION = 1;
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             paramsList.AddParameter(OutgoingMessages.RequestScannerParameters);
             paramsList.AddParameter(VERSION);
@@ -2373,12 +2403,12 @@ namespace IBApi
          * @param subscription summary of the scanner subscription including its filters.
          * @sa reqScannerParameters, ScannerSubscription, EWrapper::scannerData
          */
-        public void ReqScannerSubscription(int reqId, ScannerSubscription subscription, List<TagValue> scannerSubscriptionOptions, List<TagValue> scannerSubscriptionFilterOptions)
+        public void reqScannerSubscription(int reqId, ScannerSubscription subscription, List<TagValue> scannerSubscriptionOptions, List<TagValue> scannerSubscriptionFilterOptions)
         {
-            ReqScannerSubscription(reqId, subscription, Util.TagValueListToString(scannerSubscriptionOptions), Util.TagValueListToString(scannerSubscriptionFilterOptions));
+            reqScannerSubscription(reqId, subscription, Util.TagValueListToString(scannerSubscriptionOptions), Util.TagValueListToString(scannerSubscriptionFilterOptions));
         }
 
-        public void ReqScannerSubscription(int reqId, ScannerSubscription subscription, string scannerSubscriptionOptions, string scannerSubscriptionFilterOptions)
+        public void reqScannerSubscription(int reqId, ScannerSubscription subscription, string scannerSubscriptionOptions, string scannerSubscriptionFilterOptions)
         {
             if (!CheckConnection())
                 return;
@@ -2390,7 +2420,7 @@ namespace IBApi
 
             const int VERSION = 4;
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             try
             {
@@ -2445,7 +2475,7 @@ namespace IBApi
             }
             catch (EClientException e)
             {
-                wrapper.Error(reqId, e.Err.Code, e.Err.Message + e.Text, "");
+                wrapper.error(reqId, e.Err.Code, e.Err.Message + e.Text, "");
                 return;
             }
 
@@ -2463,14 +2493,14 @@ namespace IBApi
          * 4 = INFORMATION\n
          * 5 = DETAIL\n
          */
-        public void SetServerLogLevel(int logLevel)
+        public void setServerLogLevel(int logLevel)
         {
             if (!CheckConnection())
                 return;
             const int VERSION = 1;
 
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             paramsList.AddParameter(OutgoingMessages.ChangeServerLog);
             paramsList.AddParameter(VERSION);
@@ -2482,7 +2512,7 @@ namespace IBApi
         /**
          * @brief For IB's internal purpose. Allows to provide means of verification between the TWS and third party programs.
          */
-        public void VerifyRequest(string apiName, string apiVersion)
+        public void verifyRequest(string apiName, string apiVersion)
         {
             if (!CheckConnection())
                 return;
@@ -2496,7 +2526,7 @@ namespace IBApi
 
             const int VERSION = 1;
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             try
             {
@@ -2507,7 +2537,7 @@ namespace IBApi
             }
             catch (EClientException e)
             {
-                wrapper.Error(IncomingMessage.NotValid, e.Err.Code, e.Err.Message + e.Text, "");
+                wrapper.error(IncomingMessage.NotValid, e.Err.Code, e.Err.Message + e.Text, "");
                 return;
             }
 
@@ -2517,7 +2547,7 @@ namespace IBApi
         /**
          * @brief For IB's internal purpose. Allows to provide means of verification between the TWS and third party programs.
          */
-        public void VerifyMessage(string apiData)
+        public void verifyMessage(string apiData)
         {
             if (!CheckConnection())
                 return;
@@ -2525,7 +2555,7 @@ namespace IBApi
                 return;
             const int VERSION = 1;
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             try
             {
@@ -2535,7 +2565,7 @@ namespace IBApi
             }
             catch (EClientException e)
             {
-                wrapper.Error(IncomingMessage.NotValid, e.Err.Code, e.Err.Message + e.Text, "");
+                wrapper.error(IncomingMessage.NotValid, e.Err.Code, e.Err.Message + e.Text, "");
                 return;
             }
 
@@ -2545,7 +2575,7 @@ namespace IBApi
         /**
          * @brief For IB's internal purpose. Allows to provide means of verification between the TWS and third party programs.
          */
-        public void VerifyAndAuthRequest(string apiName, string apiVersion, string opaqueIsvKey)
+        public void verifyAndAuthRequest(string apiName, string apiVersion, string opaqueIsvKey)
         {
             if (!CheckConnection())
                 return;
@@ -2559,7 +2589,7 @@ namespace IBApi
 
             const int VERSION = 1;
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             try
             {
@@ -2571,7 +2601,7 @@ namespace IBApi
             }
             catch (EClientException e)
             {
-                wrapper.Error(IncomingMessage.NotValid, e.Err.Code, e.Err.Message + e.Text, "");
+                wrapper.error(IncomingMessage.NotValid, e.Err.Code, e.Err.Message + e.Text, "");
                 return;
             }
 
@@ -2581,7 +2611,7 @@ namespace IBApi
         /**
          * @brief For IB's internal purpose. Allows to provide means of verification between the TWS and third party programs.
          */
-        public void VerifyAndAuthMessage(string apiData, string xyzResponse)
+        public void verifyAndAuthMessage(string apiData, string xyzResponse)
         {
             if (!CheckConnection())
                 return;
@@ -2589,7 +2619,7 @@ namespace IBApi
                 return;
             const int VERSION = 1;
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             try
             {
@@ -2600,7 +2630,7 @@ namespace IBApi
             }
             catch (EClientException e)
             {
-                wrapper.Error(IncomingMessage.NotValid, e.Err.Code, e.Err.Message + e.Text, "");
+                wrapper.error(IncomingMessage.NotValid, e.Err.Code, e.Err.Message + e.Text, "");
                 return;
             }
 
@@ -2611,7 +2641,7 @@ namespace IBApi
          * @brief Requests all available Display Groups in TWS
          * @param requestId is the ID of this request
          */
-        public void QueryDisplayGroups(int requestId)
+        public void queryDisplayGroups(int requestId)
         {
             if (!CheckConnection())
                 return;
@@ -2619,7 +2649,7 @@ namespace IBApi
                 return;
             const int VERSION = 1;
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             paramsList.AddParameter(OutgoingMessages.QueryDisplayGroups);
             paramsList.AddParameter(VERSION);
@@ -2632,7 +2662,7 @@ namespace IBApi
          *@param requestId is the Id chosen for this subscription request
          * @param groupId is the display group for integration
          */
-        public void SubscribeToGroupEvents(int requestId, int groupId)
+        public void subscribeToGroupEvents(int requestId, int groupId)
         {
             if (!CheckConnection())
                 return;
@@ -2640,7 +2670,7 @@ namespace IBApi
                 return;
             const int VERSION = 1;
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             paramsList.AddParameter(OutgoingMessages.SubscribeToGroupEvents);
             paramsList.AddParameter(VERSION);
@@ -2658,7 +2688,7 @@ namespace IBApi
          * 3. combo= if any combo is selected
          * Note: This request from the API does not get a TWS response unless an error occurs.
          */
-        public void UpdateDisplayGroup(int requestId, string contractInfo)
+        public void updateDisplayGroup(int requestId, string contractInfo)
         {
             if (!CheckConnection())
                 return;
@@ -2666,7 +2696,7 @@ namespace IBApi
                 return;
             const int VERSION = 1;
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             try
             {
@@ -2677,7 +2707,7 @@ namespace IBApi
             }
             catch (EClientException e)
             {
-                wrapper.Error(requestId, e.Err.Code, e.Err.Message + e.Text, "");
+                wrapper.error(requestId, e.Err.Code, e.Err.Message + e.Text, "");
                 return;
             }
 
@@ -2687,7 +2717,7 @@ namespace IBApi
         /**
          * @brief Cancels a TWS Window Group subscription
          */
-        public void UnsubscribeFromGroupEvents(int requestId)
+        public void unsubscribeFromGroupEvents(int requestId)
         {
             if (!CheckConnection())
                 return;
@@ -2695,7 +2725,7 @@ namespace IBApi
                 return;
             const int VERSION = 1;
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             paramsList.AddParameter(OutgoingMessages.UnsubscribeFromGroupEvents);
             paramsList.AddParameter(VERSION);
@@ -2711,7 +2741,7 @@ namespace IBApi
          * @param modelCode - The code of the model's positions we are interested in.
          * @sa cancelPositionsMulti, EWrapper::positionMulti, EWrapper::positionMultiEnd
          */
-        public void ReqPositionsMulti(int requestId, string account, string modelCode)
+        public void reqPositionsMulti(int requestId, string account, string modelCode)
         {
             if (!CheckConnection())
                 return;
@@ -2720,7 +2750,7 @@ namespace IBApi
 
             const int VERSION = 1;
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             try
             {
@@ -2732,7 +2762,7 @@ namespace IBApi
             }
             catch (EClientException e)
             {
-                wrapper.Error(requestId, e.Err.Code, e.Err.Message + e.Text, "");
+                wrapper.error(requestId, e.Err.Code, e.Err.Message + e.Text, "");
                 return;
             }
 
@@ -2744,7 +2774,7 @@ namespace IBApi
          * @param requestId - the identifier of the request to be canceled.
          * @sa reqPositionsMulti
          */
-        public void CancelPositionsMulti(int requestId)
+        public void cancelPositionsMulti(int requestId)
         {
             if (!CheckConnection())
                 return;
@@ -2755,7 +2785,7 @@ namespace IBApi
 
             const int VERSION = 1;
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             paramsList.AddParameter(OutgoingMessages.CancelPositionsMulti);
             paramsList.AddParameter(VERSION);
@@ -2771,7 +2801,7 @@ namespace IBApi
 		 * @param ledgerAndNLV returns light-weight request; only currency positions as opposed to account values and currency positions
          * @sa cancelAccountUpdatesMulti, EWrapper::accountUpdateMulti, EWrapper::accountUpdateMultiEnd
          */
-        public void ReqAccountUpdatesMulti(int requestId, string account, string modelCode, bool ledgerAndNLV)
+        public void reqAccountUpdatesMulti(int requestId, string account, string modelCode, bool ledgerAndNLV)
         {
             if (!CheckConnection())
                 return;
@@ -2780,7 +2810,7 @@ namespace IBApi
 
             const int VERSION = 1;
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             try
             {
@@ -2793,7 +2823,7 @@ namespace IBApi
             }
             catch (EClientException e)
             {
-                wrapper.Error(requestId, e.Err.Code, e.Err.Message + e.Text, "");
+                wrapper.error(requestId, e.Err.Code, e.Err.Message + e.Text, "");
                 return;
             }
 
@@ -2805,7 +2835,7 @@ namespace IBApi
          * @param requestId account subscription to cancel
          * @sa reqAccountUpdatesMulti
          */
-        public void CancelAccountUpdatesMulti(int requestId)
+        public void cancelAccountUpdatesMulti(int requestId)
         {
             if (!CheckConnection())
                 return;
@@ -2816,7 +2846,7 @@ namespace IBApi
 
             const int VERSION = 1;
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             paramsList.AddParameter(OutgoingMessages.CancelAccountUpdatesMulti);
             paramsList.AddParameter(VERSION);
@@ -2833,7 +2863,7 @@ namespace IBApi
          * @param underlyingConId the contract ID of the underlying security
          * @sa EWrapper::securityDefinitionOptionParameter
          */
-        public void ReqSecDefOptParams(int reqId, string underlyingSymbol, string futFopExchange, string underlyingSecType, int underlyingConId)
+        public void reqSecDefOptParams(int reqId, string underlyingSymbol, string futFopExchange, string underlyingSecType, int underlyingConId)
         {
             if (!CheckConnection())
                 return;
@@ -2843,7 +2873,7 @@ namespace IBApi
                 return;
 
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             try
             {
@@ -2856,7 +2886,7 @@ namespace IBApi
             }
             catch (EClientException e)
             {
-                wrapper.Error(reqId, e.Err.Code, e.Err.Message + e.Text, "");
+                wrapper.error(reqId, e.Err.Code, e.Err.Message + e.Text, "");
                 return;
             }
 
@@ -2867,7 +2897,7 @@ namespace IBApi
          * @brief Requests pre-defined Soft Dollar Tiers. This is only supported for registered professional advisors and hedge and mutual funds who have configured Soft Dollar Tiers in Account Management. Refer to: https://www.interactivebrokers.com/en/software/am/am/manageaccount/requestsoftdollars.htm?Highlight=soft%20dollar%20tier
          * @sa EWrapper::softDollarTiers
          */
-        public void ReqSoftDollarTiers(int reqId)
+        public void reqSoftDollarTiers(int reqId)
         {
             if (!CheckConnection())
                 return;
@@ -2877,7 +2907,7 @@ namespace IBApi
                 return;
 
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             paramsList.AddParameter(OutgoingMessages.RequestSoftDollarTiers);
             paramsList.AddParameter(reqId);
@@ -2888,7 +2918,7 @@ namespace IBApi
         * @brief Requests family codes for an account, for instance if it is a FA, IBroker, or associated account.
         * @sa EWrapper::familyCodes
         */
-        public void ReqFamilyCodes()
+        public void reqFamilyCodes()
         {
             if (!CheckConnection())
                 return;
@@ -2898,7 +2928,7 @@ namespace IBApi
                 return;
 
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             paramsList.AddParameter(OutgoingMessages.RequestFamilyCodes);
             CloseAndSend(paramsList, lengthPos, EClientErrors.FAIL_SEND_REQFAMILYCODES);
@@ -2910,7 +2940,7 @@ namespace IBApi
         * @param pattern - either start of ticker symbol or (for larger strings) company name
         * @sa EWrapper::symbolSamples
         */
-        public void ReqMatchingSymbols(int reqId, string pattern)
+        public void reqMatchingSymbols(int reqId, string pattern)
         {
             if (!CheckConnection())
                 return;
@@ -2920,7 +2950,7 @@ namespace IBApi
                 return;
 
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             try
             {
@@ -2930,7 +2960,7 @@ namespace IBApi
             }
             catch (EClientException e)
             {
-                wrapper.Error(reqId, e.Err.Code, e.Err.Message + e.Text, "");
+                wrapper.error(reqId, e.Err.Code, e.Err.Message + e.Text, "");
                 return;
             }
 
@@ -2941,7 +2971,7 @@ namespace IBApi
          * @brief Requests venues for which market data is returned to updateMktDepthL2 (those with market makers)
          * @sa EWrapper::mktDepthExchanges
          */
-        public void ReqMktDepthExchanges()
+        public void reqMktDepthExchanges()
         {
             if (!CheckConnection())
                 return;
@@ -2951,7 +2981,7 @@ namespace IBApi
                 return;
 
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             paramsList.AddParameter(OutgoingMessages.RequestMktDepthExchanges);
             CloseAndSend(paramsList, lengthPos, EClientErrors.FAIL_SEND_REQMKTDEPTHEXCHANGES);
@@ -2963,7 +2993,7 @@ namespace IBApi
          * @param bboExchange mapping identifier received from EWrapper.tickReqParams
          * @sa EWrapper::smartComponents
              */
-        public void ReqSmartComponents(int reqId, string bboExchange)
+        public void reqSmartComponents(int reqId, string bboExchange)
         {
             if (!CheckConnection())
                 return;
@@ -2973,7 +3003,7 @@ namespace IBApi
                 return;
 
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             try
             {
@@ -2983,7 +3013,7 @@ namespace IBApi
             }
             catch (EClientException e)
             {
-                wrapper.Error(reqId, e.Err.Code, e.Err.Message + e.Text, "");
+                wrapper.error(reqId, e.Err.Code, e.Err.Message + e.Text, "");
                 return;
             }
 
@@ -2994,7 +3024,7 @@ namespace IBApi
         * @brief Requests news providers which the user has subscribed to.
         * @sa EWrapper::newsProviders
         */
-        public void ReqNewsProviders()
+        public void reqNewsProviders()
         {
             if (!CheckConnection())
                 return;
@@ -3004,7 +3034,7 @@ namespace IBApi
                 return;
 
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             paramsList.AddParameter(OutgoingMessages.RequestNewsProviders);
             CloseAndSend(paramsList, lengthPos, EClientErrors.FAIL_SEND_REQNEWSPROVIDERS);
@@ -3018,7 +3048,7 @@ namespace IBApi
          * @param newsArticleOptions reserved for internal use. Should be defined as null.
          * @sa EWrapper::newsArticle,
          */
-        public void ReqNewsArticle(int requestId, string providerCode, string articleId, List<TagValue> newsArticleOptions)
+        public void reqNewsArticle(int requestId, string providerCode, string articleId, List<TagValue> newsArticleOptions)
         {
             if (!CheckConnection())
                 return;
@@ -3028,7 +3058,7 @@ namespace IBApi
                 return;
 
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             try
             {
@@ -3044,7 +3074,7 @@ namespace IBApi
             }
             catch (EClientException e)
             {
-                wrapper.Error(requestId, e.Err.Code, e.Err.Message + e.Text, "");
+                wrapper.error(requestId, e.Err.Code, e.Err.Message + e.Text, "");
                 return;
             }
 
@@ -3062,7 +3092,7 @@ namespace IBApi
         * @param historicalNewsOptions reserved for internal use. Should be defined as null.
         * @sa EWrapper::historicalNews, EWrapper::historicalNewsEnd
         */
-        public void ReqHistoricalNews(int requestId, int conId, string providerCodes, string startDateTime, string endDateTime, int totalResults, List<TagValue> historicalNewsOptions)
+        public void reqHistoricalNews(int requestId, int conId, string providerCodes, string startDateTime, string endDateTime, int totalResults, List<TagValue> historicalNewsOptions)
         {
             if (!CheckConnection())
                 return;
@@ -3072,7 +3102,7 @@ namespace IBApi
                 return;
 
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             try
             {
@@ -3091,7 +3121,7 @@ namespace IBApi
             }
             catch (EClientException e)
             {
-                wrapper.Error(requestId, e.Err.Code, e.Err.Message + e.Text, "");
+                wrapper.error(requestId, e.Err.Code, e.Err.Message + e.Text, "");
                 return;
             }
 
@@ -3108,7 +3138,7 @@ namespace IBApi
         * @sa headTimeStamp
         */
 
-        public void ReqHeadTimestamp(int tickerId, Contract contract, string whatToShow, int useRTH, int formatDate)
+        public void reqHeadTimestamp(int tickerId, Contract contract, string whatToShow, int useRTH, int formatDate)
         {
             if (!CheckConnection())
                 return;
@@ -3118,7 +3148,7 @@ namespace IBApi
                 return;
 
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             try
             {
@@ -3131,7 +3161,7 @@ namespace IBApi
             }
             catch (EClientException e)
             {
-                wrapper.Error(tickerId, e.Err.Code, e.Err.Message + e.Text, "");
+                wrapper.error(tickerId, e.Err.Code, e.Err.Message + e.Text, "");
                 return;
             }
 
@@ -3143,7 +3173,7 @@ namespace IBApi
         * @param tickerId Id of the request
         */
 
-        public void CancelHeadTimestamp(int tickerId)
+        public void cancelHeadTimestamp(int tickerId)
         {
             if (!CheckConnection())
                 return;
@@ -3153,7 +3183,7 @@ namespace IBApi
                 return;
 
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             paramsList.AddParameter(OutgoingMessages.CancelHeadTimestamp);
             paramsList.AddParameter(tickerId);
@@ -3170,7 +3200,7 @@ namespace IBApi
         * @sa histogramData
         */
 
-        public void ReqHistogramData(int tickerId, Contract contract, bool useRTH, string period)
+        public void reqHistogramData(int tickerId, Contract contract, bool useRTH, string period)
         {
             if (!CheckConnection())
                 return;
@@ -3180,7 +3210,7 @@ namespace IBApi
                 return;
 
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             try
             {
@@ -3192,7 +3222,7 @@ namespace IBApi
             }
             catch (EClientException e)
             {
-                wrapper.Error(tickerId, e.Err.Code, e.Err.Message + e.Text, "");
+                wrapper.error(tickerId, e.Err.Code, e.Err.Message + e.Text, "");
                 return;
             }
 
@@ -3205,7 +3235,7 @@ namespace IBApi
         * @sa reqHistogramData, histogramData
         */
 
-        public void CancelHistogramData(int tickerId)
+        public void cancelHistogramData(int tickerId)
         {
             if (!CheckConnection())
                 return;
@@ -3215,7 +3245,7 @@ namespace IBApi
                 return;
 
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             paramsList.AddParameter(OutgoingMessages.CancelHistogramData);
             paramsList.AddParameter(tickerId);
@@ -3230,7 +3260,7 @@ namespace IBApi
         * @param marketRuleId - the id of market rule\n
         * @sa EWrapper::marketRule
         */
-        public void ReqMarketRule(int marketRuleId)
+        public void reqMarketRule(int marketRuleId)
         {
             if (!CheckConnection())
                 return;
@@ -3240,7 +3270,7 @@ namespace IBApi
                 return;
 
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             paramsList.AddParameter(OutgoingMessages.RequestMarketRule);
             paramsList.AddParameter(marketRuleId);
@@ -3254,16 +3284,17 @@ namespace IBApi
         * @param modelCode specify to request PnL updates for a specific model
         */
 
-        public void ReqPnL(int reqId, string account, string modelCode)
+        public void reqPnL(int reqId, string account, string modelCode)
         {
             if (!CheckConnection())
                 return;
 
-            if (!CheckServerVersion(MinServerVer.PNL, Constants.NoPnlRequestSupport))
+            if (!CheckServerVersion(MinServerVer.PNL,
+                    "  It does not support PnL requests."))
                 return;
 
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             try
             {
@@ -3274,7 +3305,7 @@ namespace IBApi
             }
             catch (EClientException e)
             {
-                wrapper.Error(reqId, e.Err.Code, e.Err.Message + e.Text, "");
+                wrapper.error(reqId, e.Err.Code, e.Err.Message + e.Text, "");
                 return;
             }
 
@@ -3286,16 +3317,17 @@ namespace IBApi
         * params reqId
         */
 
-        public void CancelPnL(int reqId)
+        public void cancelPnL(int reqId)
         {
             if (!CheckConnection())
                 return;
 
-            if (!CheckServerVersion(MinServerVer.PNL, Constants.NoPnlRequestSupport))
+            if (!CheckServerVersion(MinServerVer.PNL,
+                    "  It does not support PnL requests."))
                 return;
 
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             paramsList.AddParameter(OutgoingMessages.CancelPnL);
             paramsList.AddParameter(reqId);
@@ -3312,16 +3344,17 @@ namespace IBApi
         * Note: does not return message if invalid conId is entered
         */
 
-        public void ReqPnLSingle(int reqId, string account, string modelCode, int conId)
+        public void reqPnLSingle(int reqId, string account, string modelCode, int conId)
         {
             if (!CheckConnection())
                 return;
 
-            if (!CheckServerVersion(MinServerVer.PNL, Constants.NoPnlRequestSupport))
+            if (!CheckServerVersion(MinServerVer.PNL,
+                    "  It does not support PnL requests."))
                 return;
 
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             try
             {
@@ -3333,7 +3366,7 @@ namespace IBApi
             }
             catch (EClientException e)
             {
-                wrapper.Error(reqId, e.Err.Code, e.Err.Message + e.Text, "");
+                wrapper.error(reqId, e.Err.Code, e.Err.Message + e.Text, "");
                 return;
             }
 
@@ -3345,16 +3378,17 @@ namespace IBApi
         * @param reqId
         */
 
-        public void CancelPnLSingle(int reqId)
+        public void cancelPnLSingle(int reqId)
         {
             if (!CheckConnection())
                 return;
 
-            if (!CheckServerVersion(MinServerVer.PNL, Constants.NoPnlRequestSupport))
+            if (!CheckServerVersion(MinServerVer.PNL,
+                    "  It does not support PnL requests."))
                 return;
 
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             paramsList.AddParameter(OutgoingMessages.CancelPnLSingle);
             paramsList.AddParameter(reqId);
@@ -3375,7 +3409,7 @@ namespace IBApi
         * @param miscOptions should be defined as <i>null</i>, reserved for internal use
         */
 
-        public void ReqHistoricalTicks(int reqId, Contract contract, string startDateTime,
+        public void reqHistoricalTicks(int reqId, Contract contract, string startDateTime,
             string endDateTime, int numberOfTicks, string whatToShow, int useRth, bool ignoreSize,
             List<TagValue> miscOptions)
         {
@@ -3387,7 +3421,7 @@ namespace IBApi
                 return;
 
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             try
             {
@@ -3404,7 +3438,7 @@ namespace IBApi
             }
             catch (EClientException e)
             {
-                wrapper.Error(reqId, e.Err.Code, e.Err.Message + e.Text, "");
+                wrapper.error(reqId, e.Err.Code, e.Err.Message + e.Text, "");
                 return;
             }
 
@@ -3416,16 +3450,17 @@ namespace IBApi
         * @param reqId
         */
 
-        public void ReqWshMetaData(int reqId)
+        public void reqWshMetaData(int reqId)
         {
             if (!CheckConnection())
                 return;
 
-            if (!CheckServerVersion(MinServerVer.WSHE_CALENDAR, Constants.NoCalendarAPISupport))
+            if (!CheckServerVersion(MinServerVer.WSHE_CALENDAR,
+                    "  It does not support WSHE Calendar API."))
                 return;
 
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             try
             {
@@ -3434,7 +3469,7 @@ namespace IBApi
             }
             catch (EClientException e)
             {
-                wrapper.Error(reqId, e.Err.Code, e.Err.Message + e.Text, "");
+                wrapper.error(reqId, e.Err.Code, e.Err.Message + e.Text, "");
                 return;
             }
 
@@ -3446,16 +3481,17 @@ namespace IBApi
         * @param reqId
         */
 
-        public void CancelWshMetaData(int reqId)
+        public void cancelWshMetaData(int reqId)
         {
             if (!CheckConnection())
                 return;
 
-            if (!CheckServerVersion(MinServerVer.WSHE_CALENDAR, Constants.NoCalendarAPISupport))
+            if (!CheckServerVersion(MinServerVer.WSHE_CALENDAR,
+                    "  It does not support WSHE Calendar API."))
                 return;
 
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             paramsList.AddParameter(OutgoingMessages.CancelWshMetaData);
             paramsList.AddParameter(reqId);
@@ -3469,28 +3505,34 @@ namespace IBApi
         * @param conId contract ID (conId) of contract to receive WSH Event Data for.
         */
 
-        public void ReqWshEventData(int reqId, WshEventData wshEventData)
+        public void reqWshEventData(int reqId, WshEventData wshEventData)
         {
             if (!CheckConnection())
                 return;
 
-            if (!CheckServerVersion(MinServerVer.WSHE_CALENDAR, Constants.NoCalendarAPISupport))
+            if (!CheckServerVersion(MinServerVer.WSHE_CALENDAR, "  It does not support WSHE Calendar API."))
                 return;
 
-            if (serverVersion < MinServerVer.MIN_SERVER_VER_WSH_EVENT_DATA_FILTERS && (!IsEmpty(wshEventData.Filter) || wshEventData.FillWatchlist || wshEventData.FillPortfolio || wshEventData.FillCompetitors))
+            if (serverVersion < MinServerVer.MIN_SERVER_VER_WSH_EVENT_DATA_FILTERS)
             {
-                ReportError(reqId, EClientErrors.UPDATE_TWS, "  It does not support WSH event data filters.");
-                return;
+                if (!IsEmpty(wshEventData.Filter) || wshEventData.FillWatchlist || wshEventData.FillPortfolio || wshEventData.FillCompetitors)
+                {
+                    ReportError(reqId, EClientErrors.UPDATE_TWS, "  It does not support WSH event data filters.");
+                    return;
+                }
             }
 
-            if (serverVersion < MinServerVer.MIN_SERVER_VER_WSH_EVENT_DATA_FILTERS_DATE && (!IsEmpty(wshEventData.StartDate) || !IsEmpty(wshEventData.EndDate) || wshEventData.TotalLimit != int.MaxValue))
+            if (serverVersion < MinServerVer.MIN_SERVER_VER_WSH_EVENT_DATA_FILTERS_DATE)
             {
-                ReportError(reqId, EClientErrors.UPDATE_TWS, "  It does not support WSH event data date filters.");
-                return;
+                if (!IsEmpty(wshEventData.StartDate) || !IsEmpty(wshEventData.EndDate) || wshEventData.TotalLimit != int.MaxValue)
+                {
+                    ReportError(reqId, EClientErrors.UPDATE_TWS, "  It does not support WSH event data date filters.");
+                    return;
+                }
             }
 
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             try
             {
@@ -3515,7 +3557,7 @@ namespace IBApi
             }
             catch (EClientException e)
             {
-                wrapper.Error(reqId, e.Err.Code, e.Err.Message + e.Text, "");
+                wrapper.error(reqId, e.Err.Code, e.Err.Message + e.Text, "");
                 return;
             }
 
@@ -3527,16 +3569,17 @@ namespace IBApi
         * @param reqId
         */
 
-        public void CancelWshEventData(int reqId)
+        public void cancelWshEventData(int reqId)
         {
             if (!CheckConnection())
                 return;
 
-            if (!CheckServerVersion(MinServerVer.WSHE_CALENDAR, Constants.NoCalendarAPISupport))
+            if (!CheckServerVersion(MinServerVer.WSHE_CALENDAR,
+                    "  It does not support WSHE Calendar API."))
                 return;
 
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             paramsList.AddParameter(OutgoingMessages.CancelWshEventData);
             paramsList.AddParameter(reqId);
@@ -3549,7 +3592,7 @@ namespace IBApi
         * @param reqId
         */
 
-        public void ReqUserInfo(int reqId)
+        public void reqUserInfo(int reqId)
         {
             if (!CheckConnection())
                 return;
@@ -3558,7 +3601,7 @@ namespace IBApi
                 return;
 
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             try
             {
@@ -3567,7 +3610,7 @@ namespace IBApi
             }
             catch (EClientException e)
             {
-                wrapper.Error(reqId, e.Err.Code, e.Err.Message + e.Text, "");
+                wrapper.error(reqId, e.Err.Code, e.Err.Message + e.Text, "");
                 return;
             }
 
@@ -3612,7 +3655,7 @@ namespace IBApi
             }
             catch (Exception)
             {
-                wrapper.Error(reqId, error.Code, error.Message, "");
+                wrapper.error(reqId, error.Code, error.Message, "");
                 Close();
             }
         }
@@ -3623,11 +3666,16 @@ namespace IBApi
         {
             if (!isConnected)
             {
-                wrapper.Error(IncomingMessage.NotValid, EClientErrors.NOT_CONNECTED.Code, EClientErrors.NOT_CONNECTED.Message, "");
+                wrapper.error(IncomingMessage.NotValid, EClientErrors.NOT_CONNECTED.Code, EClientErrors.NOT_CONNECTED.Message, "");
                 return false;
             }
 
             return true;
+        }
+
+        protected void ReportError(int reqId, CodeMsgPair error, string tail)
+        {
+            ReportError(reqId, error.Code, error.Message + tail);
         }
 
         protected void ReportUpdateTWS(int reqId, string tail)
@@ -3640,20 +3688,15 @@ namespace IBApi
             ReportError(IncomingMessage.NotValid, EClientErrors.UPDATE_TWS.Code, EClientErrors.UPDATE_TWS.Message + tail);
         }
 
-        protected void ReportError(int reqId, CodeMsgPair error, string tail)
-        {
-            ReportError(reqId, error.Code, error.Message + tail);
-        }
-
         protected void ReportError(int reqId, int code, string message)
         {
-            wrapper.Error(reqId, code, message, "");
+            wrapper.error(reqId, code, message, "");
         }
 
         protected void SendCancelRequest(OutgoingMessages msgType, int version, int reqId, CodeMsgPair errorMessage)
         {
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             try
             {
@@ -3663,7 +3706,7 @@ namespace IBApi
             }
             catch (EClientException e)
             {
-                wrapper.Error(reqId, e.Err.Code, e.Err.Message + e.Text, "");
+                wrapper.error(reqId, e.Err.Code, e.Err.Message + e.Text, "");
                 return;
             }
 
@@ -3673,7 +3716,7 @@ namespace IBApi
             }
             catch (Exception)
             {
-                wrapper.Error(reqId, errorMessage.Code, errorMessage.Message, "");
+                wrapper.error(reqId, errorMessage.Code, errorMessage.Message, "");
                 Close();
             }
         }
@@ -3681,7 +3724,7 @@ namespace IBApi
         protected void SendCancelRequest(OutgoingMessages msgType, int version, CodeMsgPair errorMessage)
         {
             var paramsList = new BinaryWriter(new MemoryStream());
-            var lengthPos = PrepareBuffer(paramsList);
+            var lengthPos = prepareBuffer(paramsList);
 
             try
             {
@@ -3690,7 +3733,7 @@ namespace IBApi
             }
             catch (EClientException e)
             {
-                wrapper.Error(IncomingMessage.NotValid, e.Err.Code, e.Err.Message + e.Text, "");
+                wrapper.error(IncomingMessage.NotValid, e.Err.Code, e.Err.Message + e.Text, "");
                 return;
             }
 
@@ -3700,229 +3743,310 @@ namespace IBApi
             }
             catch (Exception)
             {
-                wrapper.Error(IncomingMessage.NotValid, errorMessage.Code, errorMessage.Message, "");
+                wrapper.error(IncomingMessage.NotValid, errorMessage.Code, errorMessage.Message, "");
                 Close();
             }
         }
 
         protected bool VerifyOrderContract(Contract contract, int id)
         {
-            if (serverVersion < MinServerVer.SSHORT_COMBO_LEGS && contract.ComboLegs.Count > 0)
+            if (serverVersion < MinServerVer.SSHORT_COMBO_LEGS)
             {
-                ComboLeg comboLeg;
-                for (int i = 0; i < contract.ComboLegs.Count; ++i)
+                if (contract.ComboLegs.Count > 0)
                 {
-                    comboLeg = contract.ComboLegs[i];
-                    if (comboLeg.ShortSaleSlot != 0 ||
-                        !IsEmpty(comboLeg.DesignatedLocation))
+                    ComboLeg comboLeg;
+                    for (int i = 0; i < contract.ComboLegs.Count; ++i)
                     {
-                        ReportError(id, EClientErrors.UPDATE_TWS,
-                            "  It does not support SSHORT flag for combo legs.");
-                        return false;
+                        comboLeg = contract.ComboLegs[i];
+                        if (comboLeg.ShortSaleSlot != 0 ||
+                            !IsEmpty(comboLeg.DesignatedLocation))
+                        {
+                            ReportError(id, EClientErrors.UPDATE_TWS,
+                                "  It does not support SSHORT flag for combo legs.");
+                            return false;
+                        }
                     }
                 }
             }
 
-            if (serverVersion < MinServerVer.DELTA_NEUTRAL && contract.DeltaNeutralContract != null)
+            if (serverVersion < MinServerVer.DELTA_NEUTRAL)
             {
-                ReportError(id, EClientErrors.UPDATE_TWS, "  It does not support delta-neutral orders.");
-                return false;
-            }
-
-            if (serverVersion < MinServerVer.PLACE_ORDER_CONID && contract.ConId > 0)
-            {
-                ReportError(id, EClientErrors.UPDATE_TWS, "  It does not support conId parameter.");
-                return false;
-            }
-
-            if (serverVersion < MinServerVer.SEC_ID_TYPE && !IsEmpty(contract.SecIdType) || !IsEmpty(contract.SecId))
-            {
-                ReportError(id, EClientErrors.UPDATE_TWS, "  It does not support secIdType and secId parameters.");
-                return false;
-            }
-            if (serverVersion < MinServerVer.SSHORTX && contract.ComboLegs.Count > 0)
-            {
-                ComboLeg comboLeg;
-                for (int i = 0; i < contract.ComboLegs.Count; ++i)
+                if (contract.DeltaNeutralContract != null)
                 {
-                    comboLeg = contract.ComboLegs[i];
-                    if (comboLeg.ExemptCode != -1)
+                    ReportError(id, EClientErrors.UPDATE_TWS,
+                        "  It does not support delta-neutral orders.");
+                    return false;
+                }
+            }
+
+            if (serverVersion < MinServerVer.PLACE_ORDER_CONID)
+            {
+                if (contract.ConId > 0)
+                {
+                    ReportError(id, EClientErrors.UPDATE_TWS,
+                        "  It does not support conId parameter.");
+                    return false;
+                }
+            }
+
+            if (serverVersion < MinServerVer.SEC_ID_TYPE)
+            {
+                if (!IsEmpty(contract.SecIdType) || !IsEmpty(contract.SecId))
+                {
+                    ReportError(id, EClientErrors.UPDATE_TWS,
+                        "  It does not support secIdType and secId parameters.");
+                    return false;
+                }
+            }
+            if (serverVersion < MinServerVer.SSHORTX)
+            {
+                if (contract.ComboLegs.Count > 0)
+                {
+                    ComboLeg comboLeg;
+                    for (int i = 0; i < contract.ComboLegs.Count; ++i)
                     {
-                        ReportError(id, EClientErrors.UPDATE_TWS, "  It does not support exemptCode parameter.");
-                        return false;
+                        comboLeg = contract.ComboLegs[i];
+                        if (comboLeg.ExemptCode != -1)
+                        {
+                            ReportError(id, EClientErrors.UPDATE_TWS,
+                                "  It does not support exemptCode parameter.");
+                            return false;
+                        }
                     }
                 }
             }
-            if (serverVersion < MinServerVer.TRADING_CLASS && !IsEmpty(contract.TradingClass))
+            if (serverVersion < MinServerVer.TRADING_CLASS)
             {
-                ReportError(id, EClientErrors.UPDATE_TWS, "  It does not support tradingClass parameters in placeOrder.");
-                return false;
+                if (!IsEmpty(contract.TradingClass))
+                {
+                    ReportError(id, EClientErrors.UPDATE_TWS,
+                        "  It does not support tradingClass parameters in placeOrder.");
+                    return false;
+                }
             }
             return true;
         }
 
         protected bool VerifyOrder(Order order, int id, bool isBagOrder)
         {
-            if (serverVersion < MinServerVer.SCALE_ORDERS && (order.ScaleInitLevelSize != int.MaxValue || !Util.AboutEqual(order.ScalePriceIncrement, double.MaxValue)))
+            if (serverVersion < MinServerVer.SCALE_ORDERS)
             {
-                ReportError(id, EClientErrors.UPDATE_TWS,
+                if (order.ScaleInitLevelSize != int.MaxValue ||
+                    order.ScalePriceIncrement != double.MaxValue)
+                {
+                    ReportError(id, EClientErrors.UPDATE_TWS,
                         "  It does not support Scale orders.");
-                return false;
+                    return false;
+                }
             }
-            if (serverVersion < MinServerVer.WHAT_IF_ORDERS && order.WhatIf)
+            if (serverVersion < MinServerVer.WHAT_IF_ORDERS)
             {
-                ReportError(id, EClientErrors.UPDATE_TWS,
-                    "  It does not support what-if orders.");
-                return false;
+                if (order.WhatIf)
+                {
+                    ReportError(id, EClientErrors.UPDATE_TWS,
+                        "  It does not support what-if orders.");
+                    return false;
+                }
             }
 
-            if (serverVersion < MinServerVer.SCALE_ORDERS2 && order.ScaleSubsLevelSize != int.MaxValue)
+            if (serverVersion < MinServerVer.SCALE_ORDERS2)
             {
-                ReportError(id, EClientErrors.UPDATE_TWS,
-                    "  It does not support Subsequent Level Size for Scale orders.");
-                return false;
+                if (order.ScaleSubsLevelSize != int.MaxValue)
+                {
+                    ReportError(id, EClientErrors.UPDATE_TWS,
+                        "  It does not support Subsequent Level Size for Scale orders.");
+                    return false;
+                }
             }
 
-            if (serverVersion < MinServerVer.ALGO_ORDERS && !IsEmpty(order.AlgoStrategy))
+            if (serverVersion < MinServerVer.ALGO_ORDERS)
             {
-                ReportError(id, EClientErrors.UPDATE_TWS,
-                    "  It does not support algo orders.");
-                return false;
+                if (!IsEmpty(order.AlgoStrategy))
+                {
+                    ReportError(id, EClientErrors.UPDATE_TWS,
+                        "  It does not support algo orders.");
+                    return false;
+                }
             }
 
-            if (serverVersion < MinServerVer.NOT_HELD && order.NotHeld)
+            if (serverVersion < MinServerVer.NOT_HELD)
             {
-                ReportError(id, EClientErrors.UPDATE_TWS,
-                    "  It does not support notHeld parameter.");
-                return false;
+                if (order.NotHeld)
+                {
+                    ReportError(id, EClientErrors.UPDATE_TWS,
+                        "  It does not support notHeld parameter.");
+                    return false;
+                }
             }
 
-            if (serverVersion < MinServerVer.SSHORTX && order.ExemptCode != -1)
+            if (serverVersion < MinServerVer.SSHORTX)
             {
-                ReportError(id, EClientErrors.UPDATE_TWS,
-                    "  It does not support exemptCode parameter.");
-                return false;
+                if (order.ExemptCode != -1)
+                {
+                    ReportError(id, EClientErrors.UPDATE_TWS,
+                        "  It does not support exemptCode parameter.");
+                    return false;
+                }
             }
 
 
-            if (serverVersion < MinServerVer.HEDGE_ORDERS && !IsEmpty(order.HedgeType))
+
+            if (serverVersion < MinServerVer.HEDGE_ORDERS)
             {
-                ReportError(id, EClientErrors.UPDATE_TWS,
-                    "  It does not support hedge orders.");
-                return false;
+                if (!IsEmpty(order.HedgeType))
+                {
+                    ReportError(id, EClientErrors.UPDATE_TWS,
+                        "  It does not support hedge orders.");
+                    return false;
+                }
             }
 
-            if (serverVersion < MinServerVer.OPT_OUT_SMART_ROUTING && order.OptOutSmartRouting)
+            if (serverVersion < MinServerVer.OPT_OUT_SMART_ROUTING)
             {
-                ReportError(id, EClientErrors.UPDATE_TWS,
-                    "  It does not support optOutSmartRouting parameter.");
-                return false;
+                if (order.OptOutSmartRouting)
+                {
+                    ReportError(id, EClientErrors.UPDATE_TWS,
+                        "  It does not support optOutSmartRouting parameter.");
+                    return false;
+                }
             }
 
-            if ((serverVersion < MinServerVer.DELTA_NEUTRAL_CONID) && (order.DeltaNeutralConId > 0
+            if (serverVersion < MinServerVer.DELTA_NEUTRAL_CONID)
+            {
+                if (order.DeltaNeutralConId > 0
                         || !IsEmpty(order.DeltaNeutralSettlingFirm)
                         || !IsEmpty(order.DeltaNeutralClearingAccount)
-                        || !IsEmpty(order.DeltaNeutralClearingIntent)))
-            {
-                ReportError(id, EClientErrors.UPDATE_TWS,
-                    "  It does not support deltaNeutral parameters: ConId, SettlingFirm, ClearingAccount, ClearingIntent");
-                return false;
+                        || !IsEmpty(order.DeltaNeutralClearingIntent))
+                {
+                    ReportError(id, EClientErrors.UPDATE_TWS,
+                        "  It does not support deltaNeutral parameters: ConId, SettlingFirm, ClearingAccount, ClearingIntent");
+                    return false;
+                }
             }
 
-            if ((serverVersion < MinServerVer.DELTA_NEUTRAL_OPEN_CLOSE) && (!IsEmpty(order.DeltaNeutralOpenClose)
+            if (serverVersion < MinServerVer.DELTA_NEUTRAL_OPEN_CLOSE)
+            {
+                if (!IsEmpty(order.DeltaNeutralOpenClose)
                         || order.DeltaNeutralShortSale
                         || order.DeltaNeutralShortSaleSlot > 0
                         || !IsEmpty(order.DeltaNeutralDesignatedLocation)
-                        ))
-            {
-                ReportError(id, EClientErrors.UPDATE_TWS,
-                    "  It does not support deltaNeutral parameters: OpenClose, ShortSale, ShortSaleSlot, DesignatedLocation");
-                return false;
-            }
-
-            if (serverVersion < MinServerVer.SCALE_ORDERS3 &&
-                order.ScalePriceIncrement > 0 &&
-                !Util.AboutEqual(order.ScalePriceIncrement, double.MaxValue) &&
-                (!Util.AboutEqual(order.ScalePriceAdjustValue, double.MaxValue) ||
-                    order.ScalePriceAdjustInterval != int.MaxValue ||
-                    !Util.AboutEqual(order.ScaleProfitOffset, double.MaxValue) ||
-                    order.ScaleAutoReset ||
-                    order.ScaleInitPosition != int.MaxValue ||
-                    order.ScaleInitFillQty != int.MaxValue ||
-                    order.ScaleRandomPercent)
-                )
-            {
-                ReportError(id, EClientErrors.UPDATE_TWS,
-                    "  It does not support Scale order parameters: PriceAdjustValue, PriceAdjustInterval, " +
-                    "ProfitOffset, AutoReset, InitPosition, InitFillQty and RandomPercent");
-                return false;
-            }
-
-            if (serverVersion < MinServerVer.ORDER_COMBO_LEGS_PRICE && isBagOrder && order.OrderComboLegs.Count > 0)
-            {
-                OrderComboLeg orderComboLeg;
-                for (int i = 0; i < order.OrderComboLegs.Count; ++i)
+                        )
                 {
-                    orderComboLeg = order.OrderComboLegs[i];
-                    if (!Util.AboutEqual(orderComboLeg.Price, double.MaxValue))
+                    ReportError(id, EClientErrors.UPDATE_TWS,
+                        "  It does not support deltaNeutral parameters: OpenClose, ShortSale, ShortSaleSlot, DesignatedLocation");
+                    return false;
+                }
+            }
+
+            if (serverVersion < MinServerVer.SCALE_ORDERS3)
+            {
+                if (order.ScalePriceIncrement > 0 && order.ScalePriceIncrement != double.MaxValue)
+                {
+                    if (order.ScalePriceAdjustValue != double.MaxValue ||
+                        order.ScalePriceAdjustInterval != int.MaxValue ||
+                        order.ScaleProfitOffset != double.MaxValue ||
+                        order.ScaleAutoReset ||
+                        order.ScaleInitPosition != int.MaxValue ||
+                        order.ScaleInitFillQty != int.MaxValue ||
+                        order.ScaleRandomPercent)
                     {
-                        ReportError(id, EClientErrors.UPDATE_TWS, "  It does not support per-leg prices for order combo legs.");
+                        ReportError(id, EClientErrors.UPDATE_TWS,
+                            "  It does not support Scale order parameters: PriceAdjustValue, PriceAdjustInterval, " +
+                            "ProfitOffset, AutoReset, InitPosition, InitFillQty and RandomPercent");
                         return false;
                     }
                 }
             }
 
-            if (serverVersion < MinServerVer.TRAILING_PERCENT && Util.AboutEqual(order.TrailingPercent, double.MaxValue))
+            if (serverVersion < MinServerVer.ORDER_COMBO_LEGS_PRICE && isBagOrder)
             {
-                ReportError(id, EClientErrors.UPDATE_TWS, "  It does not support trailing percent parameter.");
-                return false;
+                if (order.OrderComboLegs.Count > 0)
+                {
+                    OrderComboLeg orderComboLeg;
+                    for (int i = 0; i < order.OrderComboLegs.Count; ++i)
+                    {
+                        orderComboLeg = order.OrderComboLegs[i];
+                        if (orderComboLeg.Price != double.MaxValue)
+                        {
+                            ReportError(id, EClientErrors.UPDATE_TWS,
+                                "  It does not support per-leg prices for order combo legs.");
+                            return false;
+                        }
+                    }
+                }
+            }
+
+            if (serverVersion < MinServerVer.TRAILING_PERCENT)
+            {
+                if (order.TrailingPercent != double.MaxValue)
+                {
+                    ReportError(id, EClientErrors.UPDATE_TWS,
+                        "  It does not support trailing percent parameter.");
+                    return false;
+                }
             }
 
             if (serverVersion < MinServerVer.ALGO_ID && !IsEmpty(order.AlgoId))
             {
                 ReportError(id, EClientErrors.UPDATE_TWS, " It does not support algoId parameter");
+
                 return false;
             }
 
-            if (serverVersion < MinServerVer.SCALE_TABLE && (!IsEmpty(order.ScaleTable) || !IsEmpty(order.ActiveStartTime) || !IsEmpty(order.ActiveStopTime)))
+            if (serverVersion < MinServerVer.SCALE_TABLE)
             {
-                ReportError(id, EClientErrors.UPDATE_TWS, "  It does not support scaleTable, activeStartTime nor activeStopTime parameters.");
-                return false;
+                if (!IsEmpty(order.ScaleTable) || !IsEmpty(order.ActiveStartTime) || !IsEmpty(order.ActiveStopTime))
+                {
+                    ReportError(id, EClientErrors.UPDATE_TWS,
+                        "  It does not support scaleTable, activeStartTime nor activeStopTime parameters.");
+                    return false;
+                }
             }
 
             if (serverVersion < MinServerVer.EXT_OPERATOR && !IsEmpty(order.ExtOperator))
             {
                 ReportError(id, EClientErrors.UPDATE_TWS, " It does not support extOperator parameter");
+
                 return false;
             }
 
-            if (serverVersion < MinServerVer.CASH_QTY && !Util.AboutEqual(order.CashQty, double.MaxValue))
+            if (serverVersion < MinServerVer.CASH_QTY && order.CashQty != double.MaxValue)
             {
                 ReportError(id, EClientErrors.UPDATE_TWS, " It does not support cashQty parameter");
+
                 return false;
             }
 
-            if (serverVersion < MinServerVer.DECISION_MAKER && (!IsEmpty(order.Mifid2DecisionMaker) || !IsEmpty(order.Mifid2DecisionAlgo)))
+            if (serverVersion < MinServerVer.DECISION_MAKER
+                && (!IsEmpty(order.Mifid2DecisionMaker)
+                    || !IsEmpty(order.Mifid2DecisionAlgo)))
             {
                 ReportError(id, EClientErrors.UPDATE_TWS, " It does not support MIFID II decision maker parameters");
+
                 return false;
             }
 
-            if (serverVersion < MinServerVer.DECISION_MAKER && (!IsEmpty(order.Mifid2ExecutionTrader) || !IsEmpty(order.Mifid2ExecutionAlgo)))
+            if (serverVersion < MinServerVer.DECISION_MAKER
+                && (!IsEmpty(order.Mifid2ExecutionTrader)
+                    || !IsEmpty(order.Mifid2ExecutionAlgo)))
             {
                 ReportError(id, EClientErrors.UPDATE_TWS, " It does not support MIFID II execution parameters");
+
                 return false;
             }
 
-            if (serverVersion < MinServerVer.AUTO_PRICE_FOR_HEDGE && order.DontUseAutoPriceForHedge)
+            if (serverVersion < MinServerVer.AUTO_PRICE_FOR_HEDGE
+                && order.DontUseAutoPriceForHedge)
             {
                 ReportError(id, EClientErrors.UPDATE_TWS, " It does not support don't use auto price for hedge parameter");
+
                 return false;
             }
 
             if (serverVersion < MinServerVer.ORDER_CONTAINER && order.IsOmsContainer)
             {
                 ReportError(id, EClientErrors.UPDATE_TWS, " It does not support oms container parameter.");
+
                 return false;
             }
 
@@ -3975,26 +4099,29 @@ namespace IBApi
                 return false;
             }
 
-            if ((serverVersion < MinServerVer.PEGBEST_PEGMID_OFFSETS) &&
-            (order.MinTradeQty != int.MaxValue ||
-                    order.MinCompeteSize != int.MaxValue ||
-                    !Util.AboutEqual(order.CompeteAgainstBestOffset, double.MaxValue) ||
-                    !Util.AboutEqual(order.MidOffsetAtWhole, double.MaxValue) ||
-                    !Util.AboutEqual(order.MidOffsetAtHalf, double.MaxValue)))
+            if (serverVersion < MinServerVer.PEGBEST_PEGMID_OFFSETS)
             {
-                ReportError(id, EClientErrors.UPDATE_TWS, "  It does not support PEG BEST / PEG MID order parameters: minTradeQty, minCompeteSize, competeAgainstBestOffset, midOffsetAtWhole and midOffsetAtHalf");
-                return false;
+                if (order.MinTradeQty != int.MaxValue ||
+                    order.MinCompeteSize != int.MaxValue ||
+                    order.CompeteAgainstBestOffset != double.MaxValue ||
+                    order.MidOffsetAtWhole != double.MaxValue ||
+                    order.MidOffsetAtHalf != double.MaxValue)
+                {
+                    ReportError(id, EClientErrors.UPDATE_TWS,
+                        "  It does not support PEG BEST / PEG MID order parameters: minTradeQty, minCompeteSize, competeAgainstBestOffset, midOffsetAtWhole and midOffsetAtHalf");
+                    return false;
+                }
             }
 
             return true;
         }
 
-        private static bool IsEmpty(string str)
+        private bool IsEmpty(string str)
         {
             return Util.StringIsEmpty(str);
         }
 
-        private static bool StringsAreEqual(string a, string b)
+        private bool StringsAreEqual(string a, string b)
         {
             return string.Compare(a, b, true) == 0;
         }
@@ -4002,7 +4129,10 @@ namespace IBApi
         public bool IsDataAvailable()
         {
             if (!isConnected) return false;
-            return tcpStream is not NetworkStream networkStream || networkStream.DataAvailable;
+
+            var networkStream = tcpStream as NetworkStream;
+
+            return networkStream == null || networkStream.DataAvailable;
         }
 
         public int ReadInt()
@@ -4022,6 +4152,6 @@ namespace IBApi
             return new BinaryReader(tcpStream).ReadBytes(msgSize);
         }
 
-        public bool AsyncEConnect { get; set; } = false;
+        public bool AsyncEConnect { get; set; }
     }
 }

@@ -1,6 +1,8 @@
 ﻿/* Copyright (C) 2019 Interactive Brokers LLC. All rights reserved. This code is subject to the terms
  * and conditions of the IB API Non-Commercial License or the IB API Commercial License, as applicable. */
 
+using System.Collections.Generic;
+
 namespace IBApi
 {
     /**
@@ -48,15 +50,16 @@ namespace IBApi
             YieldRedemptionDate = 0;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object p_other)
         {
             bool l_bRetVal;
+            CommissionReport l_theOther = p_other as CommissionReport;
 
-            if (obj is not CommissionReport l_theOther)
+            if (l_theOther == null)
             {
                 l_bRetVal = false;
             }
-            else if (this == obj)
+            else if (this == p_other)
             {
                 l_bRetVal = true;
             }
@@ -69,7 +72,14 @@ namespace IBApi
 
         public override int GetHashCode()
         {
-            return System.HashCode.Combine(ExecId, Commission, Currency, RealizedPNL, Yield, YieldRedemptionDate);
+            var hashCode = 662669467;
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(ExecId);
+            hashCode = hashCode * -1521134295 + Commission.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Currency);
+            hashCode = hashCode * -1521134295 + RealizedPNL.GetHashCode();
+            hashCode = hashCode * -1521134295 + Yield.GetHashCode();
+            hashCode = hashCode * -1521134295 + YieldRedemptionDate.GetHashCode();
+            return hashCode;
         }
     }
 }

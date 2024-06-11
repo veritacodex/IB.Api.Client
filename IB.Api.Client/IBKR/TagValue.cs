@@ -26,13 +26,15 @@ namespace IBApi
             Value = p_value;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object other)
         {
-            if (this == obj)
+            if (this == other)
                 return true;
 
-            if (obj is not TagValue l_theOther)
-                return false;
+            TagValue l_theOther = other as TagValue;
+
+            if (l_theOther == null)
+                return false;  
 
             if (Util.StringCompare(Tag, l_theOther.Tag) != 0 ||
                 Util.StringCompare(Value, l_theOther.Value) != 0)
@@ -45,7 +47,10 @@ namespace IBApi
 
         public override int GetHashCode()
         {
-            return System.HashCode.Combine(Tag, Value);
+            var hashCode = 221537429;
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Tag);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Value);
+            return hashCode;
         }
     }
 }

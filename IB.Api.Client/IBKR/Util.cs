@@ -16,9 +16,10 @@ namespace IBApi
             return string.IsNullOrEmpty(str);
         }
 
+
         public static string NormalizeString(string str)
         {
-            return !string.IsNullOrEmpty(str) ? str : "";
+            return str != null ? str : "";
         }
 
         public static int StringCompare(string lhs, string rhs)
@@ -30,7 +31,7 @@ namespace IBApi
         {
             string normalisedLhs = NormalizeString(lhs);
             string normalisedRhs = NormalizeString(rhs);
-            return string.Compare(normalisedLhs, normalisedRhs, true);
+            return string.Compare(normalisedLhs, normalisedRhs, true); 
         }
 
         public static bool VectorEqualsUnordered<T>(List<T> lhs, List<T> rhs)
@@ -93,7 +94,7 @@ namespace IBApi
 
         public static string DoubleMaxString(double d, String def)
         {
-            return !AboutEqual(d, double.MaxValue) ? d.ToString("0.########") : def;
+            return d != double.MaxValue ? d.ToString("0.########") : def;
         }
 
         public static string DecimalMaxString(decimal value)
@@ -108,10 +109,10 @@ namespace IBApi
 
         public static string UnixSecondsToString(long seconds, string format)
         {
-            return DateTime.UnixEpoch.AddSeconds(Convert.ToDouble(seconds)).ToString(format);
+            return new DateTime(1970, 1, 1, 0, 0, 0).AddSeconds(Convert.ToDouble(seconds)).ToString(format);
         }
 
-        public static string FormatDoubleString(string str)
+        public static string formatDoubleString(string str)
         {
             return string.IsNullOrEmpty(str) ? "" : Util.DoubleMaxString(double.Parse(str));
         }
@@ -124,7 +125,7 @@ namespace IBApi
             for (int i = 0; i < tagValuesCount; i++)
             {
                 TagValue tagValue = options[i];
-                tagValuesStr.Append(tagValue.Tag).Append('=').Append(tagValue.Value).Append(';');
+                tagValuesStr.Append(tagValue.Tag).Append("=").Append(tagValue.Value).Append(";");
             }
 
             return tagValuesStr.ToString();
@@ -137,12 +138,6 @@ namespace IBApi
         public static decimal GetDecimal(object value)
         {
             return Convert.ToDecimal(((IEnumerable)value).Cast<object>().ToArray()[0]);
-        }
-
-        public static bool AboutEqual(double x, double y)
-        {
-            double epsilon = Math.Max(Math.Abs(x), Math.Abs(y)) * 1E-15;
-            return Math.Abs(x - y) <= epsilon;
         }
 
     }

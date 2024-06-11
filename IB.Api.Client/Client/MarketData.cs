@@ -20,7 +20,7 @@ namespace IB.Api.Client
         public event EventHandler<List<OptionParameterDefinition>> OptionParametersReceived;
         public void SubscribeToTimeAndSales(int reqId, Contract contract)
         {
-            ClientSocket.ReqTickByTickData(reqId, contract, "BidAsk", 0, true);
+            ClientSocket.reqTickByTickData(reqId, contract, "BidAsk", 0, true);
             Notify($"Time and sales for symbol {contract.Symbol} requested");
         }
         public void SubscribeToRealTimePrice(int tickerId, Contract contract, string genericTickList)
@@ -29,7 +29,7 @@ namespace IB.Api.Client
             {
                 TickerId = tickerId
             });
-            ClientSocket.ReqMktData(tickerId, contract, genericTickList, false, false, null);
+            ClientSocket.reqMktData(tickerId, contract, genericTickList, false, false, null);
             Notify($"Real time data for symbol {contract.Symbol} requested");
         }
         public void SubscribeToRealTimePrice(int tickerId, Contract contract)
@@ -38,12 +38,12 @@ namespace IB.Api.Client
             {
                 TickerId = tickerId
             });
-            ClientSocket.ReqMktData(tickerId, contract, string.Empty, false, false, null);
+            ClientSocket.reqMktData(tickerId, contract, string.Empty, false, false, null);
             Notify($"Real time data for symbol {contract.Symbol} requested");
         }
         public void SubscribeToDefaultBar(int tickerId, Contract contract)
         {
-            ClientSocket.ReqRealTimeBars(tickerId, contract, 0, nameof(WhatToShow.TRADES), false, null);
+            ClientSocket.reqRealTimeBars(tickerId, contract, 0, nameof(WhatToShow.TRADES), false, null);
         }
         public void ReqMarketDepth(int reqId, Contract contract, double ratio)
         {
@@ -56,16 +56,16 @@ namespace IB.Api.Client
                 orderBookUpdate.OrderBookLines[iterator] = new OrderBookLine();
             _orderBookUpdates.Add(reqId, orderBookUpdate);
 
-            ClientSocket.ReqMarketDepth(reqId, contract, 10, false, null);
+            ClientSocket.reqMarketDepth(reqId, contract, 10, false, null);
             Notify($"Subscribed to {contract.Symbol} marketDepth");
         }
         public void ReqOptionParameters(int reqId, ContractDetails contractDetails)
         {
             _optionParameterDefinitions = [];
             Notify($"Derivatives parameters for symbol {contractDetails.Contract.Symbol} requested");
-            ClientSocket.ReqSecDefOptParams(reqId, contractDetails.Contract.Symbol, string.Empty, contractDetails.Contract.SecType, contractDetails.Contract.ConId);
+            ClientSocket.reqSecDefOptParams(reqId, contractDetails.Contract.Symbol, string.Empty, contractDetails.Contract.SecType, contractDetails.Contract.ConId);
         }
-        public void UpdateMktDepth(int tickerId, int position, int operation, int side, double price, decimal size)
+        public void updateMktDepth(int tickerId, int position, int operation, int side, double price, decimal size)
         {
             if (side == 0)
                 position += 10;
@@ -92,7 +92,7 @@ namespace IB.Api.Client
             if (position == 19)
                 OrderBookUpdateReceived?.Invoke(this, _orderBookUpdates[tickerId]);
         }
-        public virtual void TickPrice(int tickerId, int field, double price, TickAttrib attribs)
+        public virtual void tickPrice(int tickerId, int field, double price, TickAttrib attribs)
         {
             switch (field)
             {
@@ -108,7 +108,7 @@ namespace IB.Api.Client
                     }
             }
         }
-        public void TickByTickBidAsk(int reqId, long time, double bidPrice, double askPrice, decimal bidSize, decimal askSize, TickAttribBidAsk tickAttribBidAsk)
+        public void tickByTickBidAsk(int reqId, long time, double bidPrice, double askPrice, decimal bidSize, decimal askSize, TickAttribBidAsk tickAttribBidAsk)
         {
             _ = reqId;
             var tick = new HistoricalTickBidAsk
@@ -122,17 +122,17 @@ namespace IB.Api.Client
             };
             TimeAndSalesUpdateReceived?.Invoke(this, tick);
         }
-        public void MarketDataType(int reqId, int marketDataType)
+        public void marketDataType(int reqId, int marketDataType)
         {
             _priceUpdates[reqId].MarketDataType = marketDataType;
         }
-        public void TickReqParams(int tickerId, double minTick, string bboExchange, int snapshotPermissions)
+        public void tickReqParams(int tickerId, double minTick, string bboExchange, int snapshotPermissions)
         {
             _priceUpdates[tickerId].MinTick = minTick;
             _priceUpdates[tickerId].BboExchange = bboExchange;
             _priceUpdates[tickerId].SnapshotPermissions = snapshotPermissions;
         }
-        public virtual void TickSize(int tickerId, int field, decimal size)
+        public virtual void tickSize(int tickerId, int field, decimal size)
         {
             switch (field)
             {
@@ -176,13 +176,13 @@ namespace IB.Api.Client
                 _priceUpdates[tickerId].Volume -= _priceUpdates[tickerId].AskSize;
             }
         }
-        public virtual void TickString(int tickerId, int field, string value)
+        public virtual void tickString(int tickerId, int field, string value)
         {
         }
-        public virtual void TickGeneric(int tickerId, int field, double value)
+        public virtual void tickGeneric(int tickerId, int field, double value)
         {
         }
-        public void RealtimeBar(int reqId, long date, double open, double high, double low, double close, decimal volume, decimal WAP, int count)
+        public void realtimeBar(int reqId, long date, double open, double high, double low, double close, decimal volume, decimal WAP, int count)
         {
             _ = reqId;
             var realtimeBarUpdate = new RealTimeBarUpdate
@@ -198,7 +198,7 @@ namespace IB.Api.Client
             };
             BarUpdateReceived?.Invoke(this, realtimeBarUpdate);
         }
-        public void TickOptionComputation(int tickerId, int field,
+        public void tickOptionComputation(int tickerId, int field,
         int tickAttrib, double impliedVolatility, double delta, double optPrice, double pvDividend, double gamma, double vega, double theta, double undPrice)
         {
             switch (field)
@@ -221,7 +221,7 @@ namespace IB.Api.Client
             _priceUpdates[tickerId].Vega = vega;
             _priceUpdates[tickerId].Theta = theta;
         }
-        public void SecurityDefinitionOptionParameter(int reqId, string exchange, int underlyingConId, string tradingClass, string multiplier, HashSet<string> expirations, HashSet<double> strikes)
+        public void securityDefinitionOptionParameter(int reqId, string exchange, int underlyingConId, string tradingClass, string multiplier, HashSet<string> expirations, HashSet<double> strikes)
         {
             _optionParameterDefinitions.Add(new OptionParameterDefinition
             {
@@ -233,7 +233,7 @@ namespace IB.Api.Client
                 Strikes = strikes
             });
         }
-        public void SecurityDefinitionOptionParameterEnd(int reqId)
+        public void securityDefinitionOptionParameterEnd(int reqId)
         {
             OptionParametersReceived?.Invoke(this, _optionParameterDefinitions);
         }

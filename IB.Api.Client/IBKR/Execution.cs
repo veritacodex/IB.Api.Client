@@ -11,7 +11,7 @@ namespace IBApi
      * @brief Class describing the liquidity type of an execution.
      * @sa Execution
      */
-    public class Liquidity(int p)
+    public class Liquidity
     {
         /**
          * @brief The enum of available liquidity flag types. 
@@ -26,10 +26,15 @@ namespace IBApi
             {3, "Liquidity Routed Out" }
         };
 
+        public Liquidity(int p)
+        {
+            Value = Values.ContainsKey(p) ? p : 0;
+        }
+
         /**
          * @brief The value of the liquidity type.
          */
-        public int Value { get; set; } = Values.ContainsKey(p) ? p : 0;
+        public int Value { get; set; }
 
         public override string ToString()
         {
@@ -181,14 +186,16 @@ namespace IBApi
             LastLiquidity = lastLiquidity;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object p_other)
         {
-            bool l_bRetVal;
-            if (obj is not Execution l_theOther)
-            {
+            bool l_bRetVal = false;
+            Execution l_theOther = p_other as Execution;
+
+            if (l_theOther == null)
+            { 
                 l_bRetVal = false;
             }
-            else if (this == obj)
+            else if (this == p_other)
             {
                 l_bRetVal = true;
             }
@@ -201,26 +208,26 @@ namespace IBApi
 
         public override int GetHashCode()
         {
-            System.HashCode hash = new System.HashCode();
-            hash.Add(OrderId);
-            hash.Add(ClientId);
-            hash.Add(ExecId);
-            hash.Add(Time);
-            hash.Add(AcctNumber);
-            hash.Add(Exchange);
-            hash.Add(Side);
-            hash.Add(Shares);
-            hash.Add(Price);
-            hash.Add(PermId);
-            hash.Add(Liquidation);
-            hash.Add(CumQty);
-            hash.Add(AvgPrice);
-            hash.Add(OrderRef);
-            hash.Add(EvRule);
-            hash.Add(EvMultiplier);
-            hash.Add(ModelCode);
-            hash.Add(LastLiquidity);
-            return hash.ToHashCode();
+            var hashCode = 926796717;
+            hashCode = hashCode * -1521134295 + OrderId.GetHashCode();
+            hashCode = hashCode * -1521134295 + ClientId.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(ExecId);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Time);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(AcctNumber);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Exchange);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Side);
+            hashCode = hashCode * -1521134295 + Shares.GetHashCode();
+            hashCode = hashCode * -1521134295 + Price.GetHashCode();
+            hashCode = hashCode * -1521134295 + PermId.GetHashCode();
+            hashCode = hashCode * -1521134295 + Liquidation.GetHashCode();
+            hashCode = hashCode * -1521134295 + CumQty.GetHashCode();
+            hashCode = hashCode * -1521134295 + AvgPrice.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(OrderRef);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(EvRule);
+            hashCode = hashCode * -1521134295 + EvMultiplier.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(ModelCode);
+            hashCode = hashCode * -1521134295 + EqualityComparer<Liquidity>.Default.GetHashCode(LastLiquidity);
+            return hashCode;
         }
     }
 }

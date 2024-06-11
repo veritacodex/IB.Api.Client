@@ -3,7 +3,10 @@
 
 namespace IBApi
 {
-    public static class TickType
+    /**
+    * @brief - DOC_TODO
+    */
+    public class TickType
     {
         public const int BID_SIZE = 0;
         public const int BID = 1;
@@ -109,7 +112,7 @@ namespace IBApi
         public const int ESTIMATED_IPO_MIDPOINT = 101;
         public const int FINAL_IPO_LAST = 102;
 
-        public static string GetField( int tickType) {
+        public static string getField( int tickType) {
             switch( tickType) {
                 case BID_SIZE:                    return "bidSize";
                 case BID:                         return "bidPrice";

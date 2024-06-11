@@ -1,6 +1,8 @@
 ﻿/* Copyright (C) 2019 Interactive Brokers LLC. All rights reserved. This code is subject to the terms
  * and conditions of the IB API Non-Commercial License or the IB API Commercial License, as applicable. */
 
+using System.Collections.Generic;
+
 namespace IBApi
 {
     /**
@@ -63,14 +65,16 @@ namespace IBApi
             Side = side;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object other)
         {
-            bool l_bRetVal;
-            if (obj is not ExecutionFilter l_theOther)
+            bool l_bRetVal = false;
+            ExecutionFilter l_theOther = other as ExecutionFilter;
+
+            if (l_theOther == null)
             {
                 l_bRetVal = false;
             }
-            else if (this == obj)
+            else if (this == other)
             {
                 l_bRetVal = true;
             }
@@ -89,7 +93,15 @@ namespace IBApi
 
         public override int GetHashCode()
         {
-            return System.HashCode.Combine(ClientId, AcctCode, Time, Symbol, SecType, Exchange, Side);
+            var hashCode = 82934527;
+            hashCode = hashCode * -1521134295 + ClientId.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(AcctCode);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Time);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Symbol);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(SecType);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Exchange);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Side);
+            return hashCode;
         }
     }
 }

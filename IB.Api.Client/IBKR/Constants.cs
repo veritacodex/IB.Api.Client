@@ -17,8 +17,5 @@ namespace IBApi
         public const int MinVersion = 100;
         public const int MaxVersion = MinServerVer.MIN_SERVER_VER_BOND_ISSUERID;
         public const int MaxMsgSize = 0x00FFFFFF;
-
-        public const string NoCalendarAPISupport = "It does not support WSHE Calendar API.";
-        public const string NoPnlRequestSupport = " It does not support PnL requests.";
     }
 }

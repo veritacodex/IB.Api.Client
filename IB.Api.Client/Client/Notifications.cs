@@ -11,7 +11,7 @@ namespace IB.Api.Client
     {
         public event EventHandler<Notification> NotificationReceived;
         public event EventHandler<UiNotification> UiNotificationReceived;
-        public void Error(Exception e)
+        public void error(Exception e)
         {
             var notification = new Notification
             {
@@ -23,7 +23,7 @@ namespace IB.Api.Client
             };
             NotificationReceived?.Invoke(this, notification);
         }
-        public void Error(string str)
+        public void error(string str)
         {
             var notification = new Notification
             {
@@ -35,7 +35,7 @@ namespace IB.Api.Client
             };
             NotificationReceived?.Invoke(this, notification);
         }
-        public void Error(int id, int errorCode, string errorMsg, string advancedOrderRejectJson)
+        public void error(int id, int errorCode, string errorMsg, string advancedOrderRejectJson)
         {
             var notification = new Notification
             {
@@ -48,7 +48,7 @@ namespace IB.Api.Client
             };
             NotificationReceived?.Invoke(this, notification);
         }
-        public void Error(int id, int code, string message)
+        public void error(int id, int code, string message)
         {
             var notification = new Notification
             {
@@ -81,11 +81,11 @@ namespace IB.Api.Client
             };
             UiNotificationReceived?.Invoke(this, uiNotification);
         }
-        public void ConnectAck()
+        public void connectAck()
         {
             Notify("Connection Acknowledged");
         }
-        public void ConnectionClosed()
+        public void connectionClosed()
         {
             Notify("Connection Closed");
         }

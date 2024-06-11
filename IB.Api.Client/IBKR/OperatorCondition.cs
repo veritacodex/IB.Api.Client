@@ -17,7 +17,9 @@ namespace IBApi
 
         public override bool Equals(object obj)
         {
-            if (obj is not OperatorCondition other)
+            var other = obj as OperatorCondition;
+
+            if (other == null)
                 return false;
 
             return base.Equals(obj)
@@ -44,10 +46,10 @@ namespace IBApi
 
                 IsMore = cond.StartsWith(">=");
 
-                if (base.TryParse(cond[cond.LastIndexOf(' ')..]))
-                    cond = cond[..cond.LastIndexOf(' ')];
+                if (base.TryParse(cond.Substring(cond.LastIndexOf(" "))))
+                    cond = cond.Substring(0, cond.LastIndexOf(" "));
 
-                Value = cond[3..];
+                Value = cond.Substring(3);
             }
             catch
             {

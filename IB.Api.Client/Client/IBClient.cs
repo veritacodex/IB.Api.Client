@@ -3,10 +3,10 @@ using IBApi;
 namespace IB.Api.Client
 {
     //Main
-    public partial class IBClient : IEWrapper
+    public partial class IBClient : EWrapper
     {
         internal readonly EClientSocket ClientSocket;
-        internal readonly IEReaderSignal Signal;
+        internal readonly EReaderSignal Signal;
         public IBClient()
         {
             Signal = new EReaderMonitorSignal();

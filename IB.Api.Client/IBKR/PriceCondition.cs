@@ -54,7 +54,9 @@ namespace IBApi
 
         public override bool Equals(object obj)
         {
-            if (obj is not PriceCondition other)
+            var other = obj as PriceCondition;
+
+            if (other == null)
                 return false;
 
             return base.Equals(obj)
@@ -92,7 +94,7 @@ namespace IBApi
             try
             {
                 TriggerMethod = CTriggerMethod.FromFriendlyString(fName);
-                cond = cond[(cond.IndexOf(fName) + fName.Length + 1)..];
+                cond = cond.Substring(cond.IndexOf(fName) + fName.Length + 1);
 
                 return base.TryParse(cond);
             }

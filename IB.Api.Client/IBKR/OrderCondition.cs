@@ -81,12 +81,14 @@ namespace IBApi
         {
             var conditions = Enum.GetValues(typeof(OrderConditionType)).OfType<OrderConditionType>().Select(t => Create(t)).ToList();
 
-            return conditions.Find(c => c.TryParse(cond));
+            return conditions.FirstOrDefault(c => c.TryParse(cond));
         }
 
         public override bool Equals(object obj)
         {
-            if (obj is not OrderCondition other)
+            var other = obj as OrderCondition;
+
+            if (other == null)
                 return false;
 
             return IsConjunctionConnection == other.IsConjunctionConnection && Type == other.Type;
@@ -98,21 +100,26 @@ namespace IBApi
         }
     }
 
-    class StringSuffixParser(string str)
+    class StringSuffixParser
     {
+        public StringSuffixParser(string str)
+        {
+            Rest = str;
+        }
+
         string SkipSuffix(string perfix)
         {
-            return Rest[(Rest.IndexOf(perfix) + perfix.Length)..];
+            return Rest.Substring(Rest.IndexOf(perfix) + perfix.Length);
         }
 
         public string GetNextSuffixedValue(string perfix)
         {
-            var rval = Rest[..Rest.IndexOf(perfix)];
+            var rval = Rest.Substring(0, Rest.IndexOf(perfix));
             Rest = SkipSuffix(perfix);
 
             return rval;
         }
 
-        public string Rest { get; private set; } = str;
+        public string Rest { get; private set; }
     }
 }

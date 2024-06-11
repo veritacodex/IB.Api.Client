@@ -60,5 +60,19 @@ namespace IBApi
             [param: MarshalAs(UnmanagedType.I8)]
             set;
         }
+
+        public HistoricalTickBidAsk()
+        {
+        }
+
+        public HistoricalTickBidAsk(long time, TickAttribBidAsk tickAttribBidAsk, double priceBid, double priceAsk, decimal sizeBid, decimal sizeAsk)
+        {
+            Time = time;
+            TickAttribBidAsk = tickAttribBidAsk;
+            PriceBid = priceBid;
+            PriceAsk = priceAsk;
+            SizeBid = sizeBid;
+            SizeAsk = sizeAsk;
+        }
     }
 }

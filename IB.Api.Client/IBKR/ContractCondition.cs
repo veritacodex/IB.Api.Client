@@ -5,7 +5,7 @@ using System;
 
 namespace IBApi
 {
-    public abstract class ContractCondition : OperatorCondition
+	public abstract class ContractCondition : OperatorCondition
     {
         public int ConId { get; set; }
         public string Exchange { get; set; }
@@ -14,7 +14,7 @@ namespace IBApi
 
         public Func<int, string, string> ContractResolver { get; set; }
 
-        protected ContractCondition()
+        public ContractCondition()
         {
             ContractResolver = (conid, exch) => conid + "(" + exch + ")";
         }
@@ -26,7 +26,9 @@ namespace IBApi
 
         public override bool Equals(object obj)
         {
-            if (obj is not ContractCondition other)
+            var other = obj as ContractCondition;
+
+            if (other == null)
                 return false;
 
             return base.Equals(obj)
@@ -43,18 +45,19 @@ namespace IBApi
         {
             try
             {
-                if (cond[..cond.IndexOf(delimiter)] != Type.ToString())
+                if (cond.Substring(0, cond.IndexOf(delimiter)) != Type.ToString())
                     return false;
 
-                cond = cond[(cond.IndexOf(delimiter) + delimiter.Length)..];
+                cond = cond.Substring(cond.IndexOf(delimiter) + delimiter.Length);
+                int conid;
 
-                if (!int.TryParse(cond.AsSpan(0, cond.IndexOf('(')), out int conid))
+                if (!int.TryParse(cond.Substring(0, cond.IndexOf("(")), out conid))
                     return false;
 
                 ConId = conid;
-                cond = cond[(cond.IndexOf('(') + 1)..];
-                Exchange = cond[..cond.IndexOf(')')];
-                cond = cond[(cond.IndexOf(')') + 1)..];
+                cond = cond.Substring(cond.IndexOf("(") + 1);
+                Exchange = cond.Substring(0, cond.IndexOf(")"));
+                cond = cond.Substring(cond.IndexOf(")") + 1);
 
                 return base.TryParse(cond);
             }

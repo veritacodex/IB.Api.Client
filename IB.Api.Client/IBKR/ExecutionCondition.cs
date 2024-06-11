@@ -81,7 +81,9 @@ namespace IBApi
 
         public override bool Equals(object obj)
         {
-            if (obj is not ExecutionCondition other)
+            var other = obj as ExecutionCondition;
+
+            if (other == null)
                 return false;
 
             return base.Equals(obj) 
