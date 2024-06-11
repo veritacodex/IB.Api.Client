@@ -33,6 +33,7 @@ namespace IB.Api.Client
         }
         public void CancelOrder(int orderId)
         {
+            Notify($"Cancel Order Id ({orderId}) requested");
             ClientSocket.cancelOrder(orderId, string.Empty);
         }
         public void CancellAllOrders()

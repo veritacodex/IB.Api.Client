@@ -8,34 +8,34 @@ namespace IB.Api.Client.Model
         public int OrderId { get; set; }
 
         [JsonProperty("status")]
-        public string Status { get; internal set; }
+        public string Status { get; set; }
 
         [JsonProperty("filledAmount")]
-        public decimal FilledAmount { get; internal set; }
+        public decimal FilledAmount { get; set; }
 
         [JsonProperty("remainingAmount")]
-        public decimal RemainingAmount { get; internal set; }
+        public decimal RemainingAmount { get; set; }
 
         [JsonProperty("avgFillPrice")]
-        public double AvgFillPrice { get; internal set; }
+        public double AvgFillPrice { get; set; }
 
         [JsonProperty("permId")]
-        public int PermId { get; internal set; }
+        public int PermId { get; set; }
 
         [JsonProperty("parentId")]
-        public int ParentId { get; internal set; }
+        public int ParentId { get; set; }
 
         [JsonProperty("lastFillPrice")]
-        public double LastFillPrice { get; internal set; }
+        public double LastFillPrice { get; set; }
 
         [JsonProperty("clientId")]
-        public int ClientId { get; internal set; }
+        public int ClientId { get; set; }
 
         [JsonProperty("whyHeld")]
-        public string WhyHeld { get; internal set; }
+        public string WhyHeld { get; set; }
 
         [JsonProperty("mktCapPrice")]
-        public double MktCapPrice { get; internal set; }
+        public double MktCapPrice { get; set; }
 
         [JsonProperty("action")]
         public string Action { get; set; }
