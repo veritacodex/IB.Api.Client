@@ -21,8 +21,7 @@ namespace IB.Api.Client.Examples
                 {
                     ibClient.SubscribeToAccountUpdates(accountId);
                 }
-            }
-            
+            }            
             Common.KeepConsoleAlive();
         }
 
