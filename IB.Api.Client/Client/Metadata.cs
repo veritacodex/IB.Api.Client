@@ -10,6 +10,7 @@ namespace IB.Api.Client
     {
         private List<ContractDetails> _contracts;
         public event EventHandler<List<ContractDetails>> ContractDetailsReceived;
+        public event EventHandler<MarketRule> MarketRuleReceived;
         public void GetContractDetails(string symbol, SecurityType securityType)
         {
             _contracts = [];
@@ -32,6 +33,20 @@ namespace IB.Api.Client
         public void ContractDetailsEnd(int reqId)
         {
             ContractDetailsReceived?.Invoke(this, _contracts);
+        }
+        public void ReqMarketRule(int ruleId)
+        {
+            ClientSocket.ReqMarketRule(ruleId);
+        }
+
+        public void MarketRule(int marketRuleId, PriceIncrement[] priceIncrements)
+        {
+            var marketRule = new MarketRule
+            {
+                MarketRuleId = marketRuleId,
+                PriceIncrements = priceIncrements
+            };
+            MarketRuleReceived?.Invoke(this, marketRule);
         }
     }
 }

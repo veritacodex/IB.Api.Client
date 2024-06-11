@@ -91,9 +91,14 @@ namespace IB.Api.Client.Helper
             ibClient.GetContractDetails(symbol, SecurityType.IND);
         }
 
-        public static void RequestOptionsContract(IBClient ibClient, string symbol, SecurityType securityType)
+        public static void RequestOptionsOnFuturesContract(IBClient ibClient, string symbol)
         {
-            ibClient.GetContractDetails(symbol, securityType);
+            ibClient.GetContractDetails(symbol, SecurityType.FOP);
+        }
+
+        public static void RequestOptionsContract(IBClient ibClient, string symbol)
+        {
+            ibClient.GetContractDetails(symbol, SecurityType.OPT);
         }
 
         public static void RequestComodityContract(IBClient ibClient, string symbol, string currency)

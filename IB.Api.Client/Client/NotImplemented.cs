@@ -42,11 +42,7 @@ namespace IB.Api.Client
         public void HistogramData(int reqId, HistogramEntry[] data)
         {
             throw new NotImplementedException();
-        }
-        public void MarketRule(int marketRuleId, PriceIncrement[] priceIncrements)
-        {
-            throw new NotImplementedException();
-        }
+        }        
         public void MktDepthExchanges(DepthMktDataDescription[] depthMktDataDescriptions)
         {
             throw new NotImplementedException();
