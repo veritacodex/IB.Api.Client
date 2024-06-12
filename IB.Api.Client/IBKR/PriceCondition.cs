@@ -94,7 +94,7 @@ namespace IBApi
             try
             {
                 TriggerMethod = CTriggerMethod.FromFriendlyString(fName);
-                cond = cond.Substring(cond.IndexOf(fName) + fName.Length + 1);
+                cond = cond[(cond.IndexOf(fName) + fName.Length + 1)..];
 
                 return base.TryParse(cond);
             }

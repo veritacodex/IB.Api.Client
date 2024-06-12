@@ -81,7 +81,7 @@ namespace IBApi
         {
             var conditions = Enum.GetValues(typeof(OrderConditionType)).OfType<OrderConditionType>().Select(t => Create(t)).ToList();
 
-            return conditions.FirstOrDefault(c => c.TryParse(cond));
+            return conditions.Find(c => c.TryParse(cond));
         }
 
         public override bool Equals(object obj)
@@ -109,12 +109,12 @@ namespace IBApi
 
         string SkipSuffix(string perfix)
         {
-            return Rest.Substring(Rest.IndexOf(perfix) + perfix.Length);
+            return Rest[(Rest.IndexOf(perfix) + perfix.Length)..];
         }
 
         public string GetNextSuffixedValue(string perfix)
         {
-            var rval = Rest.Substring(0, Rest.IndexOf(perfix));
+            var rval = Rest[..Rest.IndexOf(perfix)];
             Rest = SkipSuffix(perfix);
 
             return rval;

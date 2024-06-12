@@ -45,19 +45,19 @@ namespace IBApi
         {
             try
             {
-                if (cond.Substring(0, cond.IndexOf(delimiter)) != Type.ToString())
+                if (cond[..cond.IndexOf(delimiter)] != Type.ToString())
                     return false;
 
-                cond = cond.Substring(cond.IndexOf(delimiter) + delimiter.Length);
+                cond = cond[(cond.IndexOf(delimiter) + delimiter.Length)..];
                 int conid;
 
                 if (!int.TryParse(cond.AsSpan(0, cond.IndexOf('(')), out conid))
                     return false;
 
                 ConId = conid;
-                cond = cond.Substring(cond.IndexOf('(') + 1);
-                Exchange = cond.Substring(0, cond.IndexOf(')'));
-                cond = cond.Substring(cond.IndexOf(')') + 1);
+                cond = cond[(cond.IndexOf('(') + 1)..];
+                Exchange = cond[..cond.IndexOf(')')];
+                cond = cond[(cond.IndexOf(')') + 1)..];
 
                 return base.TryParse(cond);
             }
