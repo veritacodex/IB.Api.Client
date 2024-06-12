@@ -25,20 +25,20 @@ namespace IB.Api.Client
             _contracts = [];
             ClientSocket.reqContractDetails(1021, contract);
         }
-        public void contractDetails(int reqId, ContractDetails contractDetails)
-        {
-            _contracts.Add(contractDetails);
-        }
-        public void contractDetailsEnd(int reqId)
-        {
-            ContractDetailsReceived?.Invoke(this, _contracts);
-        }
         public void ReqMarketRule(int ruleId)
         {
             ClientSocket.reqMarketRule(ruleId);
         }
-
-        public void marketRule(int marketRuleId, PriceIncrement[] priceIncrements)
+        
+        void IEWrapper.contractDetails(int reqId, ContractDetails contractDetails)
+        {
+            _contracts.Add(contractDetails);
+        }
+        void IEWrapper.contractDetailsEnd(int reqId)
+        {
+            ContractDetailsReceived?.Invoke(this, _contracts);
+        }
+        void IEWrapper.marketRule(int marketRuleId, PriceIncrement[] priceIncrements)
         {
             var marketRule = new MarketRule
             {

@@ -11,15 +11,16 @@ namespace IB.Api.Client
         {
             ClientSocket.reqNewsProviders();
         }
-        public void newsProviders(NewsProvider[] newsProviders)
+
+        void IEWrapper.newsProviders(NewsProvider[] newsProviders)
         {
             NewsProvidersUpdateReceived?.Invoke(this, newsProviders);
         }
-        public void tickNews(int tickerId, long timeStamp, string providerCode, string articleId, string headline, string extraData)
+        void IEWrapper.tickNews(int tickerId, long timeStamp, string providerCode, string articleId, string headline, string extraData)
         {
             _ = string.Empty;
         }
-        public void updateNewsBulletin(int msgId, int msgType, string message, string origExchange)
+        void IEWrapper.updateNewsBulletin(int msgId, int msgType, string message, string origExchange)
         {
             var output = $"MsgId:{msgId} MsType:{msgType} Message:{message} Origin:{origExchange}";
             Notify(output);

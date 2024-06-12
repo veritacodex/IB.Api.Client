@@ -53,7 +53,7 @@ namespace IB.Api.Client
             }
             else
             {
-                error($"WhatToShow tick type: {whatToShow} not allowed");
+                Notify($"WhatToShow tick type: {whatToShow} not allowed");
             }
         }
         private void InitializeHistoricalTickDictionary(int reqId, WhatToShow whatToShow)

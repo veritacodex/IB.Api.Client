@@ -1,6 +1,7 @@
 using System;
 using IB.Api.Client.Client.Model;
 using IB.Api.Client.Model;
+using IBApi;
 
 namespace IB.Api.Client
 {
@@ -11,7 +12,7 @@ namespace IB.Api.Client
     {
         public event EventHandler<Notification> NotificationReceived;
         public event EventHandler<UiNotification> UiNotificationReceived;
-        public void error(Exception e)
+        void IEWrapper.error(Exception e)
         {
             var notification = new Notification
             {
@@ -23,7 +24,7 @@ namespace IB.Api.Client
             };
             NotificationReceived?.Invoke(this, notification);
         }
-        public void error(string str)
+        void IEWrapper.error(string str)
         {
             var notification = new Notification
             {
@@ -35,7 +36,7 @@ namespace IB.Api.Client
             };
             NotificationReceived?.Invoke(this, notification);
         }
-        public void error(int id, int errorCode, string errorMsg, string advancedOrderRejectJson)
+        void IEWrapper.error(int id, int errorCode, string errorMsg, string advancedOrderRejectJson)
         {
             var notification = new Notification
             {
@@ -48,18 +49,7 @@ namespace IB.Api.Client
             };
             NotificationReceived?.Invoke(this, notification);
         }
-        public void error(int id, int code, string message)
-        {
-            var notification = new Notification
-            {
-                At = DateTime.Now,
-                Id = id,
-                Code = code,
-                Message = message,
-                NotificationType = GetNotificationType(message)
-            };
-            NotificationReceived?.Invoke(this, notification);
-        }
+        
         public void Notify(string message)
         {
             var notification = new Notification
@@ -81,11 +71,11 @@ namespace IB.Api.Client
             };
             UiNotificationReceived?.Invoke(this, uiNotification);
         }
-        public void connectAck()
+        void IEWrapper.connectAck()
         {
             Notify("Connection Acknowledged");
         }
-        public void connectionClosed()
+        void IEWrapper.connectionClosed()
         {
             Notify("Connection Closed");
         }
