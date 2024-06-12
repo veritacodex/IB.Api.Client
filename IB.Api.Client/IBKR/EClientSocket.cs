@@ -96,10 +96,10 @@ namespace IBApi
                 {
                     var eReader = new EReader(this, eReaderSignal);
 
-                    while (serverVersion == 0 && eReader.putMessageToQueue())
+                    while (serverVersion == 0 && eReader.PutMessageToQueue())
                     {
                         eReaderSignal.waitForSignal();
-                        eReader.processMsgs();
+                        eReader.ProcessMsgs();
                     }
                 }
             }

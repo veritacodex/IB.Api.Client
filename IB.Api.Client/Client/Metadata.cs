@@ -15,7 +15,7 @@ namespace IB.Api.Client
         public void GetContractDetails(string symbol, SecurityType securityType)
         {
             _contracts = [];
-            ClientSocket.reqContractDetails(1020, new Contract
+            ClientSocket.ReqContractDetails(1020, new Contract
             {
                 Symbol = symbol,
                 SecType = securityType.ToString()
@@ -24,11 +24,11 @@ namespace IB.Api.Client
         public void GetContractDetails(Contract contract)
         {
             _contracts = [];
-            ClientSocket.reqContractDetails(1021, contract);
+            ClientSocket.ReqContractDetails(1021, contract);
         }
         public void ReqMarketRule(int ruleId)
         {
-            ClientSocket.reqMarketRule(ruleId);
+            ClientSocket.ReqMarketRule(ruleId);
         }
 
         void IEWrapper.ContractDetails(int reqId, ContractDetails contractDetails)

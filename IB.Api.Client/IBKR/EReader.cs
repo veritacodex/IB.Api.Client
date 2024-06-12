@@ -50,7 +50,7 @@ namespace IBApi
                             continue;
                         }
 
-                        if (!putMessageToQueue())
+                        if (!PutMessageToQueue())
                             break;
                     }
                 }
@@ -64,25 +64,25 @@ namespace IBApi
             }) { IsBackground = true }.Start();
         }
 
-        EMessage getMsg()
+        EMessage GetMsg()
         {
             lock (msgQueue)
                 return msgQueue.Count == 0 ? null : msgQueue.Dequeue();
         }
 
-        public void processMsgs()
+        public void ProcessMsgs()
         {
-            EMessage msg = getMsg();
+            EMessage msg = GetMsg();
 
             while (msg != null && processMsgsDecoder.ParseAndProcessMsg(msg.GetBuf()) > 0)
-                msg = getMsg();
+                msg = GetMsg();
         }
 
-        public bool putMessageToQueue()
+        public bool PutMessageToQueue()
         {
             try
             {
-                EMessage msg = readSingleMessage();
+                EMessage msg = ReadSingleMessage();
 
                 if (msg == null)
                     return false;
@@ -103,9 +103,9 @@ namespace IBApi
             }
         }
 
-        readonly List<byte> inBuf = new List<byte>(defaultInBufSize);
+        readonly List<byte> inBuf = new(defaultInBufSize);
 
-        private EMessage readSingleMessage()
+        private EMessage ReadSingleMessage()
         {
             var msgSize = 0;
 

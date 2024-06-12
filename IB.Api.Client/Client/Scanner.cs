@@ -13,7 +13,7 @@ public partial class IBClient
     {
         _xmlFilePath = xmlFilePath;
         Notify("Scanner parameters requested");
-        ClientSocket.reqScannerParameters();
+        ClientSocket.ReqScannerParameters();
     }    
     void IEWrapper.ScannerParameters(string xml)
     {

@@ -16,29 +16,29 @@ namespace IB.Api.Client
         
         public void RequestOrders()
         {
-            ClientSocket.reqAllOpenOrders();
+            ClientSocket.ReqAllOpenOrders();
         }
         public void PlaceOrder(int orderId, Contract contract, Order order)
         {
-            ClientSocket.placeOrder(orderId, contract, order);
+            ClientSocket.PlaceOrder(orderId, contract, order);
         }
         public void WhatIf(int orderId, Contract contract, Order order)
         {
             order.WhatIf = true;
-            ClientSocket.placeOrder(orderId, contract, order);
+            ClientSocket.PlaceOrder(orderId, contract, order);
         }
         public void CancelOrder(int orderId)
         {
             Notify($"Cancel Order Id ({orderId}) requested");
-            ClientSocket.cancelOrder(orderId, string.Empty);
+            ClientSocket.CancelOrder(orderId, string.Empty);
         }
         public void CancellAllOrders()
         {
-            ClientSocket.reqGlobalCancel();
+            ClientSocket.ReqGlobalCancel();
         }
         public void RequestExecutions(int reqId)
         {
-            ClientSocket.reqExecutions(reqId, new ExecutionFilter());
+            ClientSocket.ReqExecutions(reqId, new ExecutionFilter());
         }
 
         void IEWrapper.NextValidId(int orderId)

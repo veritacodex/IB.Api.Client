@@ -496,7 +496,7 @@ namespace IBApi
          * @param reqId the identifier of the option's price's calculation request.
          * @sa calculateOptionPrice
          */
-        public void cancelCalculateOptionPrice(int reqId)
+        public void CancelCalculateOptionPrice(int reqId)
         {
             if (!CheckConnection())
                 return;
@@ -511,7 +511,7 @@ namespace IBApi
          * @param reqId the request's identifier.
          * @sa reqFundamentalData
          */
-        public void cancelFundamentalData(int reqId)
+        public void CancelFundamentalData(int reqId)
         {
             if (!CheckConnection())
                 return;
@@ -528,7 +528,7 @@ namespace IBApi
          * @param tickerId request's identifier
          * @sa reqMktData
          */
-        public void cancelMktData(int tickerId)
+        public void CancelMktData(int tickerId)
         {
             if (!CheckConnection())
                 return;
@@ -541,7 +541,7 @@ namespace IBApi
          * @param tickerId request's identifier.
          * @sa reqMarketDepth
          */
-        public void cancelMktDepth(int tickerId, bool isSmartDepth)
+        public void CancelMktDepth(int tickerId, bool isSmartDepth)
         {
             if (!CheckConnection())
                 return;
@@ -572,7 +572,7 @@ namespace IBApi
          * @brief Cancels IB's news bulletin subscription
          * @sa reqNewsBulletins
          */
-        public void cancelNewsBulletin()
+        public void CancelNewsBulletin()
         {
             if (!CheckConnection())
                 return;
@@ -586,7 +586,7 @@ namespace IBApi
          * @param orderId the order's client id
          * @sa placeOrder, reqGlobalCancel
          */
-        public void cancelOrder(int orderId, string manualOrderCancelTime)
+        public void CancelOrder(int orderId, string manualOrderCancelTime)
         {
             if (!CheckConnection())
                 return;
@@ -617,7 +617,7 @@ namespace IBApi
          * @brief Cancels a previous position subscription request made with reqPositions
          * @sa reqPositions
          */
-        public void cancelPositions()
+        public void CancelPositions()
         {
             if (!CheckConnection())
                 return;
@@ -634,7 +634,7 @@ namespace IBApi
          * @param tickerId the request's identifier.
          * @sa reqRealTimeBars
          */
-        public void cancelRealTimeBars(int tickerId)
+        public void CancelRealTimeBars(int tickerId)
         {
             if (!CheckConnection())
                 return;
@@ -647,7 +647,7 @@ namespace IBApi
          * @param tickerId the subscription's unique identifier.
          * @sa reqScannerSubscription, ScannerSubscription, reqScannerParameters
          */
-        public void cancelScannerSubscription(int tickerId)
+        public void CancelScannerSubscription(int tickerId)
         {
             if (!CheckConnection())
                 return;
@@ -665,7 +665,7 @@ namespace IBApi
          * @param account destination account
          * @param ovrd Specifies whether your setting will override the system's natural action. For example, if your action is "exercise" and the option is not in-the-money, by natural action the option would not exercise. If you have override set to "yes" the natural action would be overridden and the out-of-the money option would be exercised. Set to 1 to override, set to 0 not to.
          */
-        public void exerciseOptions(int tickerId, Contract contract, int exerciseAction, int exerciseQuantity, string account, int ovrd)
+        public void ExerciseOptions(int tickerId, Contract contract, int exerciseAction, int exerciseQuantity, string account, int ovrd)
         {
             //WARN needs to be tested!
             if (!CheckConnection())
@@ -725,7 +725,7 @@ namespace IBApi
          * @param order the order
          * @sa EWrapper::nextValidId, reqAllOpenOrders, reqAutoOpenOrders, reqOpenOrders, cancelOrder, reqGlobalCancel, EWrapper::openOrder, EWrapper::orderStatus, Order, Contract
          */
-        public void placeOrder(int id, Contract contract, Order order)
+        public void PlaceOrder(int id, Contract contract, Order order)
         {
             if (!CheckConnection())
                 return;
@@ -1320,7 +1320,7 @@ namespace IBApi
          * @param xml the xml-formatted configuration string
          * @sa requestFA
          */
-        public void replaceFA(int reqId, int faDataType, string xml)
+        public void ReplaceFA(int reqId, int faDataType, string xml)
         {
             if (!CheckConnection())
                 return;
@@ -1358,7 +1358,7 @@ namespace IBApi
          * @param faDataType the configuration to change. Set to 1, 2 or 3 as defined above.
          * @sa replaceFA
          */
-        public void requestFA(int faDataType)
+        public void RequestFA(int faDataType)
         {
             if (!CheckConnection())
                 return;
@@ -1413,7 +1413,7 @@ namespace IBApi
          *      - $LEDGER:ALL — Single flag to relay all cash balance tags* in all currencies.
          * @sa cancelAccountSummary, EWrapper::accountSummary, EWrapper::accountSummaryEnd
          */
-        public void reqAccountSummary(int reqId, string group, string tags)
+        public void ReqAccountSummary(int reqId, string group, string tags)
         {
             int VERSION = 1;
             if (!CheckConnection())
@@ -1451,7 +1451,7 @@ namespace IBApi
          * @param acctCode the account id (i.e. U123456) for which the information is requested.
          * @sa reqPositions, EWrapper::updateAccountValue, EWrapper::updatePortfolio, EWrapper::updateAccountTime
          */
-        public void reqAccountUpdates(bool subscribe, string acctCode)
+        public void ReqAccountUpdates(bool subscribe, string acctCode)
         {
             int VERSION = 2;
             if (!CheckConnection())
@@ -1481,7 +1481,7 @@ namespace IBApi
          * Open orders are returned once; this function does not initiate a subscription
          * @sa reqAutoOpenOrders, reqOpenOrders, EWrapper::openOrder, EWrapper::orderStatus, EWrapper::openOrderEnd
          */
-        public void reqAllOpenOrders()
+        public void ReqAllOpenOrders()
         {
             int VERSION = 1;
             if (!CheckConnection())
@@ -1499,7 +1499,7 @@ namespace IBApi
          * @param autoBind if set to true, the newly created orders will be assigned an API order ID and implicitly associated with this client. If set to false, future orders will not be.
          * @sa reqAllOpenOrders, reqOpenOrders, cancelOrder, reqGlobalCancel, EWrapper::openOrder, EWrapper::orderStatus
          */
-        public void reqAutoOpenOrders(bool autoBind)
+        public void ReqAutoOpenOrders(bool autoBind)
         {
             int VERSION = 1;
             if (!CheckConnection())
@@ -1520,7 +1520,7 @@ namespace IBApi
          * @param contract the contract used as sample to query the available contracts. Typically, it will contain the Contract::Symbol, Contract::Currency, Contract::SecType, Contract::Exchange\n
          * @sa EWrapper::contractDetails, EWrapper::contractDetailsEnd
          */
-        public void reqContractDetails(int reqId, Contract contract)
+        public void ReqContractDetails(int reqId, Contract contract)
         {
             if (!CheckConnection())
                 return;
@@ -1622,7 +1622,7 @@ namespace IBApi
          * @brief Requests TWS's current time.
          * @sa EWrapper::currentTime
          */
-        public void reqCurrentTime()
+        public void ReqCurrentTime()
         {
             int VERSION = 1;
             if (!CheckConnection())
@@ -1646,7 +1646,7 @@ namespace IBApi
          * @param filter the filter criteria used to determine which execution reports are returned.
          * @sa EWrapper::execDetails, EWrapper::commissionReport, ExecutionFilter
          */
-        public void reqExecutions(int reqId, ExecutionFilter filter)
+        public void ReqExecutions(int reqId, ExecutionFilter filter)
         {
             if (!CheckConnection())
                 return;
@@ -1702,7 +1702,7 @@ namespace IBApi
                 - RESC: Analyst estimates
          * @sa EWrapper::fundamentalData
          */
-        public void reqFundamentalData(int reqId, Contract contract, string reportType,
+        public void ReqFundamentalData(int reqId, Contract contract, string reportType,
             //reserved for future use, must be blank
             List<TagValue> fundamentalDataOptions)
         {
@@ -1759,7 +1759,7 @@ namespace IBApi
          * This method will cancel ALL open orders including those placed directly from TWS.
          * @sa cancelOrder
          */
-        public void reqGlobalCancel()
+        public void ReqGlobalCancel()
         {
             if (!CheckConnection())
                 return;
@@ -1820,7 +1820,7 @@ namespace IBApi
 		 * @param keepUpToDate set to True to received continuous updates on most recent bar data. If True, and endDateTime cannot be specified.
          * @sa EWrapper::historicalData
          */
-        public void reqHistoricalData(int tickerId, Contract contract, string endDateTime,
+        public void ReqHistoricalData(int tickerId, Contract contract, string endDateTime,
             string durationStr, string barSizeSetting, string whatToShow, int useRTH, int formatDate, bool keepUpToDate, List<TagValue> chartOptions)
         {
             if (!CheckConnection())
@@ -1935,7 +1935,7 @@ namespace IBApi
          * @param numIds deprecated- this parameter will not affect the value returned to nextValidId
          * @sa EWrapper::nextValidId
          */
-        public void reqIds(int numIds)
+        public void ReqIds(int numIds)
         {
             if (!CheckConnection())
                 return;
@@ -1954,7 +1954,7 @@ namespace IBApi
          * @brief Requests the accounts to which the logged user has access to.
          * @sa EWrapper::managedAccounts
          */
-        public void reqManagedAccts()
+        public void ReqManagedAccts()
         {
             if (!CheckConnection())
                 return;
@@ -1992,7 +1992,7 @@ namespace IBApi
      * @param regulatory snapshot for US stocks requests NBBO snapshots for users which have "US Securities Snapshot Bundle" subscription but not corresponding Network A, B, or C subscription necessary for streaming 		 * market data. One-time snapshot of current market price that will incur a fee of 1 cent to the account per snapshot.
          * @sa cancelMktData, EWrapper::tickPrice, EWrapper::tickSize, EWrapper::tickString, EWrapper::tickEFP, EWrapper::tickGeneric, EWrapper::tickOptionComputation, EWrapper::tickSnapshotEnd
          */
-        public void reqMktData(int tickerId, Contract contract, string genericTickList, bool snapshot, bool regulatorySnaphsot, List<TagValue> mktDataOptions)
+        public void ReqMktData(int tickerId, Contract contract, string genericTickList, bool snapshot, bool regulatorySnaphsot, List<TagValue> mktDataOptions)
         {
             if (!CheckConnection())
                 return;
@@ -2132,7 +2132,7 @@ namespace IBApi
          *      sending 3 (delayed) enables delayed and disables delayed-frozen market data
          *      sending 4 (delayed-frozen) enables delayed and delayed-frozen market data
          */
-        public void reqMarketDataType(int marketDataType)
+        public void ReqMarketDataType(int marketDataType)
         {
             if (!CheckConnection())
                 return;
@@ -2250,7 +2250,7 @@ namespace IBApi
          * @param allMessages if set to true, will return all the existing bulletins for the current day, set to false to receive only the new bulletins.
          * @sa cancelNewsBulletin, EWrapper::updateNewsBulletin
          */
-        public void reqNewsBulletins(bool allMessages)
+        public void ReqNewsBulletins(bool allMessages)
         {
             if (!CheckConnection())
                 return;
@@ -2269,7 +2269,7 @@ namespace IBApi
          * @brief Requests all open orders places by this specific API client (identified by the API client id). For client ID 0, this will bind previous manual TWS orders.
          * @sa reqAllOpenOrders, reqAutoOpenOrders, placeOrder, cancelOrder, reqGlobalCancel, EWrapper::openOrder, EWrapper::orderStatus, EWrapper::openOrderEnd
          */
-        public void reqOpenOrders()
+        public void ReqOpenOrders()
         {
             int VERSION = 1;
             if (!CheckConnection())
@@ -2286,7 +2286,7 @@ namespace IBApi
          * @brief Subscribes to position updates for all accessible accounts. All positions sent initially, and then only updates as positions change.
          * @sa cancelPositions, EWrapper::position, EWrapper::positionEnd
          */
-        public void reqPositions()
+        public void ReqPositions()
         {
             if (!CheckConnection())
                 return;
@@ -2316,7 +2316,7 @@ namespace IBApi
          * @param useRTH set to 0 to obtain the data which was also generated ourside of the Regular Trading Hours, set to 1 to obtain only the RTH data
          * @sa cancelRealTimeBars, EWrapper::realtimeBar
          */
-        public void reqRealTimeBars(int tickerId, Contract contract, int barSize, string whatToShow, bool useRTH, List<TagValue> realTimeBarsOptions)
+        public void ReqRealTimeBars(int tickerId, Contract contract, int barSize, string whatToShow, bool useRTH, List<TagValue> realTimeBarsOptions)
         {
             if (!CheckConnection())
                 return;
@@ -2384,7 +2384,7 @@ namespace IBApi
          * Not all parameters are valid from API scanner.
          * @sa reqScannerSubscription
          */
-        public void reqScannerParameters()
+        public void ReqScannerParameters()
         {
             if (!CheckConnection())
                 return;
@@ -2403,12 +2403,12 @@ namespace IBApi
          * @param subscription summary of the scanner subscription including its filters.
          * @sa reqScannerParameters, ScannerSubscription, EWrapper::scannerData
          */
-        public void reqScannerSubscription(int reqId, ScannerSubscription subscription, List<TagValue> scannerSubscriptionOptions, List<TagValue> scannerSubscriptionFilterOptions)
+        public void ReqScannerSubscription(int reqId, ScannerSubscription subscription, List<TagValue> scannerSubscriptionOptions, List<TagValue> scannerSubscriptionFilterOptions)
         {
-            reqScannerSubscription(reqId, subscription, Util.TagValueListToString(scannerSubscriptionOptions), Util.TagValueListToString(scannerSubscriptionFilterOptions));
+            ReqScannerSubscription(reqId, subscription, Util.TagValueListToString(scannerSubscriptionOptions), Util.TagValueListToString(scannerSubscriptionFilterOptions));
         }
 
-        public void reqScannerSubscription(int reqId, ScannerSubscription subscription, string scannerSubscriptionOptions, string scannerSubscriptionFilterOptions)
+        public void ReqScannerSubscription(int reqId, ScannerSubscription subscription, string scannerSubscriptionOptions, string scannerSubscriptionFilterOptions)
         {
             if (!CheckConnection())
                 return;
@@ -2493,7 +2493,7 @@ namespace IBApi
          * 4 = INFORMATION\n
          * 5 = DETAIL\n
          */
-        public void setServerLogLevel(int logLevel)
+        public void SetServerLogLevel(int logLevel)
         {
             if (!CheckConnection())
                 return;
@@ -2512,7 +2512,7 @@ namespace IBApi
         /**
          * @brief For IB's internal purpose. Allows to provide means of verification between the TWS and third party programs.
          */
-        public void verifyRequest(string apiName, string apiVersion)
+        public void VerifyRequest(string apiName, string apiVersion)
         {
             if (!CheckConnection())
                 return;
@@ -2547,7 +2547,7 @@ namespace IBApi
         /**
          * @brief For IB's internal purpose. Allows to provide means of verification between the TWS and third party programs.
          */
-        public void verifyMessage(string apiData)
+        public void VerifyMessage(string apiData)
         {
             if (!CheckConnection())
                 return;
@@ -2575,7 +2575,7 @@ namespace IBApi
         /**
          * @brief For IB's internal purpose. Allows to provide means of verification between the TWS and third party programs.
          */
-        public void verifyAndAuthRequest(string apiName, string apiVersion, string opaqueIsvKey)
+        public void VerifyAndAuthRequest(string apiName, string apiVersion, string opaqueIsvKey)
         {
             if (!CheckConnection())
                 return;
@@ -2611,7 +2611,7 @@ namespace IBApi
         /**
          * @brief For IB's internal purpose. Allows to provide means of verification between the TWS and third party programs.
          */
-        public void verifyAndAuthMessage(string apiData, string xyzResponse)
+        public void VerifyAndAuthMessage(string apiData, string xyzResponse)
         {
             if (!CheckConnection())
                 return;
@@ -2641,7 +2641,7 @@ namespace IBApi
          * @brief Requests all available Display Groups in TWS
          * @param requestId is the ID of this request
          */
-        public void queryDisplayGroups(int requestId)
+        public void QueryDisplayGroups(int requestId)
         {
             if (!CheckConnection())
                 return;
@@ -2662,7 +2662,7 @@ namespace IBApi
          *@param requestId is the Id chosen for this subscription request
          * @param groupId is the display group for integration
          */
-        public void subscribeToGroupEvents(int requestId, int groupId)
+        public void SubscribeToGroupEvents(int requestId, int groupId)
         {
             if (!CheckConnection())
                 return;
@@ -2688,7 +2688,7 @@ namespace IBApi
          * 3. combo= if any combo is selected
          * Note: This request from the API does not get a TWS response unless an error occurs.
          */
-        public void updateDisplayGroup(int requestId, string contractInfo)
+        public void UpdateDisplayGroup(int requestId, string contractInfo)
         {
             if (!CheckConnection())
                 return;
@@ -2717,7 +2717,7 @@ namespace IBApi
         /**
          * @brief Cancels a TWS Window Group subscription
          */
-        public void unsubscribeFromGroupEvents(int requestId)
+        public void UnsubscribeFromGroupEvents(int requestId)
         {
             if (!CheckConnection())
                 return;
@@ -2741,7 +2741,7 @@ namespace IBApi
          * @param modelCode - The code of the model's positions we are interested in.
          * @sa cancelPositionsMulti, EWrapper::positionMulti, EWrapper::positionMultiEnd
          */
-        public void reqPositionsMulti(int requestId, string account, string modelCode)
+        public void ReqPositionsMulti(int requestId, string account, string modelCode)
         {
             if (!CheckConnection())
                 return;
@@ -2774,7 +2774,7 @@ namespace IBApi
          * @param requestId - the identifier of the request to be canceled.
          * @sa reqPositionsMulti
          */
-        public void cancelPositionsMulti(int requestId)
+        public void CancelPositionsMulti(int requestId)
         {
             if (!CheckConnection())
                 return;
@@ -2801,7 +2801,7 @@ namespace IBApi
 		 * @param ledgerAndNLV returns light-weight request; only currency positions as opposed to account values and currency positions
          * @sa cancelAccountUpdatesMulti, EWrapper::accountUpdateMulti, EWrapper::accountUpdateMultiEnd
          */
-        public void reqAccountUpdatesMulti(int requestId, string account, string modelCode, bool ledgerAndNLV)
+        public void ReqAccountUpdatesMulti(int requestId, string account, string modelCode, bool ledgerAndNLV)
         {
             if (!CheckConnection())
                 return;
@@ -2835,7 +2835,7 @@ namespace IBApi
          * @param requestId account subscription to cancel
          * @sa reqAccountUpdatesMulti
          */
-        public void cancelAccountUpdatesMulti(int requestId)
+        public void CancelAccountUpdatesMulti(int requestId)
         {
             if (!CheckConnection())
                 return;
@@ -2863,7 +2863,7 @@ namespace IBApi
          * @param underlyingConId the contract ID of the underlying security
          * @sa EWrapper::securityDefinitionOptionParameter
          */
-        public void reqSecDefOptParams(int reqId, string underlyingSymbol, string futFopExchange, string underlyingSecType, int underlyingConId)
+        public void ReqSecDefOptParams(int reqId, string underlyingSymbol, string futFopExchange, string underlyingSecType, int underlyingConId)
         {
             if (!CheckConnection())
                 return;
@@ -2897,7 +2897,7 @@ namespace IBApi
          * @brief Requests pre-defined Soft Dollar Tiers. This is only supported for registered professional advisors and hedge and mutual funds who have configured Soft Dollar Tiers in Account Management. Refer to: https://www.interactivebrokers.com/en/software/am/am/manageaccount/requestsoftdollars.htm?Highlight=soft%20dollar%20tier
          * @sa EWrapper::softDollarTiers
          */
-        public void reqSoftDollarTiers(int reqId)
+        public void ReqSoftDollarTiers(int reqId)
         {
             if (!CheckConnection())
                 return;
@@ -2918,7 +2918,7 @@ namespace IBApi
         * @brief Requests family codes for an account, for instance if it is a FA, IBroker, or associated account.
         * @sa EWrapper::familyCodes
         */
-        public void reqFamilyCodes()
+        public void ReqFamilyCodes()
         {
             if (!CheckConnection())
                 return;
@@ -2940,7 +2940,7 @@ namespace IBApi
         * @param pattern - either start of ticker symbol or (for larger strings) company name
         * @sa EWrapper::symbolSamples
         */
-        public void reqMatchingSymbols(int reqId, string pattern)
+        public void ReqMatchingSymbols(int reqId, string pattern)
         {
             if (!CheckConnection())
                 return;
@@ -2971,7 +2971,7 @@ namespace IBApi
          * @brief Requests venues for which market data is returned to updateMktDepthL2 (those with market makers)
          * @sa EWrapper::mktDepthExchanges
          */
-        public void reqMktDepthExchanges()
+        public void ReqMktDepthExchanges()
         {
             if (!CheckConnection())
                 return;
@@ -2993,7 +2993,7 @@ namespace IBApi
          * @param bboExchange mapping identifier received from EWrapper.tickReqParams
          * @sa EWrapper::smartComponents
              */
-        public void reqSmartComponents(int reqId, string bboExchange)
+        public void ReqSmartComponents(int reqId, string bboExchange)
         {
             if (!CheckConnection())
                 return;
@@ -3048,7 +3048,7 @@ namespace IBApi
          * @param newsArticleOptions reserved for internal use. Should be defined as null.
          * @sa EWrapper::newsArticle,
          */
-        public void reqNewsArticle(int requestId, string providerCode, string articleId, List<TagValue> newsArticleOptions)
+        public void ReqNewsArticle(int requestId, string providerCode, string articleId, List<TagValue> newsArticleOptions)
         {
             if (!CheckConnection())
                 return;
@@ -3092,7 +3092,7 @@ namespace IBApi
         * @param historicalNewsOptions reserved for internal use. Should be defined as null.
         * @sa EWrapper::historicalNews, EWrapper::historicalNewsEnd
         */
-        public void reqHistoricalNews(int requestId, int conId, string providerCodes, string startDateTime, string endDateTime, int totalResults, List<TagValue> historicalNewsOptions)
+        public void ReqHistoricalNews(int requestId, int conId, string providerCodes, string startDateTime, string endDateTime, int totalResults, List<TagValue> historicalNewsOptions)
         {
             if (!CheckConnection())
                 return;
@@ -3138,7 +3138,7 @@ namespace IBApi
         * @sa headTimeStamp
         */
 
-        public void reqHeadTimestamp(int tickerId, Contract contract, string whatToShow, int useRTH, int formatDate)
+        public void ReqHeadTimestamp(int tickerId, Contract contract, string whatToShow, int useRTH, int formatDate)
         {
             if (!CheckConnection())
                 return;
@@ -3173,7 +3173,7 @@ namespace IBApi
         * @param tickerId Id of the request
         */
 
-        public void cancelHeadTimestamp(int tickerId)
+        public void CancelHeadTimestamp(int tickerId)
         {
             if (!CheckConnection())
                 return;
@@ -3200,7 +3200,7 @@ namespace IBApi
         * @sa histogramData
         */
 
-        public void reqHistogramData(int tickerId, Contract contract, bool useRTH, string period)
+        public void ReqHistogramData(int tickerId, Contract contract, bool useRTH, string period)
         {
             if (!CheckConnection())
                 return;
@@ -3235,7 +3235,7 @@ namespace IBApi
         * @sa reqHistogramData, histogramData
         */
 
-        public void cancelHistogramData(int tickerId)
+        public void CancelHistogramData(int tickerId)
         {
             if (!CheckConnection())
                 return;
@@ -3260,7 +3260,7 @@ namespace IBApi
         * @param marketRuleId - the id of market rule\n
         * @sa EWrapper::marketRule
         */
-        public void reqMarketRule(int marketRuleId)
+        public void ReqMarketRule(int marketRuleId)
         {
             if (!CheckConnection())
                 return;
@@ -3284,7 +3284,7 @@ namespace IBApi
         * @param modelCode specify to request PnL updates for a specific model
         */
 
-        public void reqPnL(int reqId, string account, string modelCode)
+        public void ReqPnL(int reqId, string account, string modelCode)
         {
             if (!CheckConnection())
                 return;
@@ -3317,7 +3317,7 @@ namespace IBApi
         * params reqId
         */
 
-        public void cancelPnL(int reqId)
+        public void CancelPnL(int reqId)
         {
             if (!CheckConnection())
                 return;
@@ -3344,7 +3344,7 @@ namespace IBApi
         * Note: does not return message if invalid conId is entered
         */
 
-        public void reqPnLSingle(int reqId, string account, string modelCode, int conId)
+        public void ReqPnLSingle(int reqId, string account, string modelCode, int conId)
         {
             if (!CheckConnection())
                 return;
@@ -3378,7 +3378,7 @@ namespace IBApi
         * @param reqId
         */
 
-        public void cancelPnLSingle(int reqId)
+        public void CancelPnLSingle(int reqId)
         {
             if (!CheckConnection())
                 return;
@@ -3409,7 +3409,7 @@ namespace IBApi
         * @param miscOptions should be defined as <i>null</i>, reserved for internal use
         */
 
-        public void reqHistoricalTicks(int reqId, Contract contract, string startDateTime,
+        public void ReqHistoricalTicks(int reqId, Contract contract, string startDateTime,
             string endDateTime, int numberOfTicks, string whatToShow, int useRth, bool ignoreSize,
             List<TagValue> miscOptions)
         {
@@ -3450,7 +3450,7 @@ namespace IBApi
         * @param reqId
         */
 
-        public void reqWshMetaData(int reqId)
+        public void ReqWshMetaData(int reqId)
         {
             if (!CheckConnection())
                 return;
@@ -3505,7 +3505,7 @@ namespace IBApi
         * @param conId contract ID (conId) of contract to receive WSH Event Data for.
         */
 
-        public void reqWshEventData(int reqId, WshEventData wshEventData)
+        public void ReqWshEventData(int reqId, WshEventData wshEventData)
         {
             if (!CheckConnection())
                 return;
@@ -3569,7 +3569,7 @@ namespace IBApi
         * @param reqId
         */
 
-        public void cancelWshEventData(int reqId)
+        public void CancelWshEventData(int reqId)
         {
             if (!CheckConnection())
                 return;
@@ -3592,7 +3592,7 @@ namespace IBApi
         * @param reqId
         */
 
-        public void reqUserInfo(int reqId)
+        public void ReqUserInfo(int reqId)
         {
             if (!CheckConnection())
                 return;
@@ -4116,12 +4116,12 @@ namespace IBApi
             return true;
         }
 
-        private bool IsEmpty(string str)
+        private static bool IsEmpty(string str)
         {
             return Util.StringIsEmpty(str);
         }
 
-        private bool StringsAreEqual(string a, string b)
+        private static bool StringsAreEqual(string a, string b)
         {
             return string.Compare(a, b, true) == 0;
         }

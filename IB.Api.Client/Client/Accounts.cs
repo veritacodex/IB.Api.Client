@@ -16,12 +16,12 @@ namespace IB.Api.Client
         {
             _accountUpdate = new AccountUpdate();
             Notify($"Account:{accountId} updates requested");
-            ClientSocket.reqAccountUpdates(true, accountId);
+            ClientSocket.ReqAccountUpdates(true, accountId);
         }
         public void SubscribeToDefaultAccountUpdates()
         {
             _accountUpdate = new AccountUpdate();
-            ClientSocket.reqAccountUpdates(true, null);
+            ClientSocket.ReqAccountUpdates(true, null);
         }
 
         void IEWrapper.AccountDownloadEnd(string account)

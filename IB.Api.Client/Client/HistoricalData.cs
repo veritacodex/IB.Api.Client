@@ -26,7 +26,7 @@ namespace IB.Api.Client
         public void GetHistoricalData(int reqId, Contract contract, string duration, string barSize, WhatToShow whatToShow, Rth rth, bool keepUpToDate)
         {
             _historicalData.Add(reqId, []);
-            ClientSocket.reqHistoricalData(reqId, contract, string.Empty, duration, barSize, whatToShow.ToString(), (int)rth, 1, keepUpToDate, null);
+            ClientSocket.ReqHistoricalData(reqId, contract, string.Empty, duration, barSize, whatToShow.ToString(), (int)rth, 1, keepUpToDate, null);
             Notify($"Historical data for symbol {contract.Symbol} requested");
         }
 
@@ -48,7 +48,7 @@ namespace IB.Api.Client
             {
                 string endTime = DateHelper.ConvertToApiDate(DateTime.Now);
                 InitializeHistoricalTickDictionary(reqId, whatToShow);
-                ClientSocket.reqHistoricalTicks(reqId, contract, null, endTime, 1000, whatToShow.ToString(), 0, true, null);
+                ClientSocket.ReqHistoricalTicks(reqId, contract, null, endTime, 1000, whatToShow.ToString(), 0, true, null);
                 Notify($"Time and Sales for symbol {contract.Symbol} requested");
             }
             else
