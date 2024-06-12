@@ -30,7 +30,7 @@ namespace IBApi
             {
                 if (index >= 32)
                 {
-                    throw new IndexOutOfRangeException();
+                    throw new ArgumentOutOfRangeException(index.ToString());
                 }
 
                 return (m_mask & (1 << index)) != 0;
@@ -39,7 +39,7 @@ namespace IBApi
             {
                 if (index >= 32)
                 {
-                    throw new IndexOutOfRangeException();
+                    throw new ArgumentOutOfRangeException(index.ToString());
                 }
 
                 if (value)
