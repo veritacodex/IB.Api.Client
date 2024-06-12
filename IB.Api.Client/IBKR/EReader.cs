@@ -103,7 +103,7 @@ namespace IBApi
             }
         }
 
-        List<byte> inBuf = new List<byte>(defaultInBufSize);
+        readonly List<byte> inBuf = new List<byte>(defaultInBufSize);
 
         private EMessage readSingleMessage()
         {

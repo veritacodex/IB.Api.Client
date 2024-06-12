@@ -20,17 +20,17 @@ namespace IB.Api.Client
         }
         public void PlaceOrder(int orderId, Contract contract, Order order)
         {
-            ClientSocket.PlaceOrder(orderId, contract, order);
+            ClientSocket.placeOrder(orderId, contract, order);
         }
         public void WhatIf(int orderId, Contract contract, Order order)
         {
             order.WhatIf = true;
-            ClientSocket.PlaceOrder(orderId, contract, order);
+            ClientSocket.placeOrder(orderId, contract, order);
         }
         public void CancelOrder(int orderId)
         {
             Notify($"Cancel Order Id ({orderId}) requested");
-            ClientSocket.CancelOrder(orderId, string.Empty);
+            ClientSocket.cancelOrder(orderId, string.Empty);
         }
         public void CancellAllOrders()
         {

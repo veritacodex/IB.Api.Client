@@ -75,7 +75,7 @@ namespace IBApi
         /**
          * @brief Reference to the EWrapper implementing object.
          */
-        internal IEWrapper EWrapper
+        internal IEWrapper Wrapper
         {
             get { return wrapper; }
         }
@@ -2156,7 +2156,7 @@ namespace IBApi
          * @param isSmartDepth flag indicates that this is smart depth request
          * @sa cancelMktDepth, EWrapper::updateMktDepth, EWrapper::updateMktDepthL2
          */
-        public void reqMarketDepth(int tickerId, Contract contract, int numRows, bool isSmartDepth, List<TagValue> mktDepthOptions)
+        public void ReqMarketDepth(int tickerId, Contract contract, int numRows, bool isSmartDepth, List<TagValue> mktDepthOptions)
         {
             if (!CheckConnection())
                 return;
@@ -3024,7 +3024,7 @@ namespace IBApi
         * @brief Requests news providers which the user has subscribed to.
         * @sa EWrapper::newsProviders
         */
-        public void reqNewsProviders()
+        public void ReqNewsProviders()
         {
             if (!CheckConnection())
                 return;
