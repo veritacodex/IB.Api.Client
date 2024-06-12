@@ -14,7 +14,7 @@ namespace IBApi
      * @brief TWS/Gateway client class
      * This client class contains all the available methods to communicate with IB. Up to 32 clients can be connected to a single instance of the TWS/Gateway simultaneously. From herein, the TWS/Gateway will be referred to as the Host.
      */
-    public class EClientSocket : EClient, EClientMsgSink
+    public class EClientSocket : EClient, IEClientMsgSink
     {
         private int port;
 
@@ -24,7 +24,7 @@ namespace IBApi
             this.eReaderSignal = eReaderSignal;
         }
 
-        void EClientMsgSink.serverVersion(int version, string time)
+        void IEClientMsgSink.ServerVersion(int version, string time)
         {
             base.serverVersion = version;
 
@@ -155,7 +155,7 @@ namespace IBApi
         /**
         * @brief Redirects connection to different host. 
         */
-        public void redirect(string host)
+        public void Redirect(string host)
         {
             if (!AllowRedirect)
             {

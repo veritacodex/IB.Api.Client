@@ -11,13 +11,13 @@ namespace IBApi
 {
     class EDecoder : IDecoder
     {
-        private EClientMsgSink eClientMsgSink;
-        private IEWrapper eWrapper;
+        private readonly IEClientMsgSink eClientMsgSink;
+        private readonly IEWrapper eWrapper;
         private int serverVersion;
         private BinaryReader dataReader;
         private int nDecodedLen;
 
-        public EDecoder(int serverVersion, IEWrapper callback, EClientMsgSink sink = null)
+        public EDecoder(int serverVersion, IEWrapper callback, IEClientMsgSink sink = null)
         {
             this.serverVersion = serverVersion;
             eWrapper = callback;
@@ -53,7 +53,7 @@ namespace IBApi
                 serverVersion = 0;
 
                 if (eClientMsgSink != null)
-                    eClientMsgSink.redirect(srv);
+                    eClientMsgSink.Redirect(srv);
 
                 return;
             }
@@ -66,7 +66,7 @@ namespace IBApi
             }
 
             if (eClientMsgSink != null)
-                eClientMsgSink.serverVersion(serverVersion, serverTime);
+                eClientMsgSink.ServerVersion(serverVersion, serverTime);
 
             eWrapper.ConnectAck();
         }
@@ -961,7 +961,7 @@ namespace IBApi
 
         private void DisplayGroupUpdatedEvent()
         {
-            int msgVersion = ReadInt();
+            _ = ReadInt();
             int reqId = ReadInt();
             string contractInfo = ReadString();
 
@@ -970,7 +970,7 @@ namespace IBApi
 
         private void DisplayGroupListEvent()
         {
-            int msgVersion = ReadInt();
+            _ = ReadInt();
             int reqId = ReadInt();
             string groups = ReadString();
 
@@ -979,7 +979,7 @@ namespace IBApi
 
         private void VerifyCompletedEvent()
         {
-            int msgVersion = ReadInt();
+            _ = ReadInt();
             bool isSuccessful = string.Compare(ReadString(), "true", true) == 0;
             string errorText = ReadString();
 
@@ -988,7 +988,7 @@ namespace IBApi
 
         private void VerifyMessageApiEvent()
         {
-            int msgVersion = ReadInt();
+            _ = ReadInt();
             string apiData = ReadString();
 
             eWrapper.VerifyMessageAPI(apiData);
@@ -996,7 +996,7 @@ namespace IBApi
 
         private void VerifyAndAuthCompletedEvent()
         {
-            int msgVersion = ReadInt();
+            _ = ReadInt();
             bool isSuccessful = string.Compare(ReadString(), "true", true) == 0;
             string errorText = ReadString();
 
@@ -1005,7 +1005,7 @@ namespace IBApi
 
         private void VerifyAndAuthMessageApiEvent()
         {
-            int msgVersion = ReadInt();
+            _ = ReadInt();
             string apiData = ReadString();
             string xyzChallenge = ReadString();
 
@@ -1081,7 +1081,7 @@ namespace IBApi
 
         private void TickSizeEvent()
         {
-            int msgVersion = ReadInt();
+            _ = ReadInt();
             int requestId = ReadInt();
             int tickType = ReadInt();
             decimal size = ReadDecimal();
@@ -1090,7 +1090,7 @@ namespace IBApi
 
         private void TickStringEvent()
         {
-            int msgVersion = ReadInt();
+            _ = ReadInt();
             int requestId = ReadInt();
             int tickType = ReadInt();
             string value = ReadString();
@@ -1099,7 +1099,7 @@ namespace IBApi
 
         private void TickGenericEvent()
         {
-            int msgVersion = ReadInt();
+            _ = ReadInt();
             int requestId = ReadInt();
             int tickType = ReadInt();
             double value = ReadDouble();
@@ -1108,7 +1108,7 @@ namespace IBApi
 
         private void TickEFPEvent()
         {
-            int msgVersion = ReadInt();
+            _ = ReadInt();
             int requestId = ReadInt();
             int tickType = ReadInt();
             double basisPoints = ReadDouble();
@@ -1123,7 +1123,7 @@ namespace IBApi
 
         private void TickSnapshotEndEvent()
         {
-            int msgVersion = ReadInt();
+            _ = ReadInt();
             int requestId = ReadInt();
             eWrapper.TickSnapshotEnd(requestId);
         }
@@ -1156,28 +1156,28 @@ namespace IBApi
 
         private void CurrentTimeEvent()
         {
-            int msgVersion = ReadInt();//version
+            _ = ReadInt();//version
             long time = ReadLong();
             eWrapper.CurrentTime(time);
         }
 
         private void ManagedAccountsEvent()
         {
-            int msgVersion = ReadInt();
+            _ = ReadInt();
             string accountsList = ReadString();
             eWrapper.ManagedAccounts(accountsList);
         }
 
         private void NextValidIdEvent()
         {
-            int msgVersion = ReadInt();
+            _ = ReadInt();
             int orderId = ReadInt();
             eWrapper.NextValidId(orderId);
         }
 
         private void DeltaNeutralValidationEvent()
         {
-            int msgVersion = ReadInt();
+            _ = ReadInt();
             int requestId = ReadInt();
             DeltaNeutralContract deltaNeutralContract = new DeltaNeutralContract();
             deltaNeutralContract.ConId = ReadInt();
@@ -1255,7 +1255,7 @@ namespace IBApi
 
         private void AccountSummaryEvent()
         {
-            int msgVersion = ReadInt();
+            _ = ReadInt();
             int requestId = ReadInt();
             string account = ReadString();
             string tag = ReadString();
@@ -1266,7 +1266,7 @@ namespace IBApi
 
         private void AccountSummaryEndEvent()
         {
-            int msgVersion = ReadInt();
+            _ = ReadInt();
             int requestId = ReadInt();
             eWrapper.AccountSummaryEnd(requestId);
         }
@@ -1428,14 +1428,14 @@ namespace IBApi
 
         private void AccountUpdateTimeEvent()
         {
-            int msgVersion = ReadInt();
+            _ = ReadInt();
             string timestamp = ReadString();
             eWrapper.UpdateAccountTime(timestamp);
         }
 
         private void AccountDownloadEndEvent()
         {
-            int msgVersion = ReadInt();
+            _ = ReadInt();
             string account = ReadString();
             eWrapper.AccountDownloadEnd(account);
         }
@@ -1579,7 +1579,7 @@ namespace IBApi
 
         private void OpenOrderEndEvent()
         {
-            int msgVersion = ReadInt();
+            _ = ReadInt();
             eWrapper.OpenOrderEnd();
         }
 
@@ -1694,7 +1694,7 @@ namespace IBApi
 
         private void ContractDataEndEvent()
         {
-            int msgVersion = ReadInt();
+            _ = ReadInt();
             int requestId = ReadInt();
             eWrapper.ContractDetailsEnd(requestId);
         }
@@ -1784,14 +1784,14 @@ namespace IBApi
 
         private void ExecutionDataEndEvent()
         {
-            int msgVersion = ReadInt();
+            _ = ReadInt();
             int requestId = ReadInt();
             eWrapper.ExecDetailsEnd(requestId);
         }
 
         private void CommissionReportEvent()
         {
-            int msgVersion = ReadInt();
+            _ = ReadInt();
             CommissionReport commissionReport = new CommissionReport();
             commissionReport.ExecId = ReadString();
             commissionReport.Commission = ReadDouble();
@@ -1804,7 +1804,7 @@ namespace IBApi
 
         private void FundamentalDataEvent()
         {
-            int msgVersion = ReadInt();
+            _ = ReadInt();
             int requestId = ReadInt();
             string fundamentalData = ReadString();
             eWrapper.FundamentalData(requestId, fundamentalData);
@@ -1864,7 +1864,7 @@ namespace IBApi
 
         private void MarketDataTypeEvent()
         {
-            int msgVersion = ReadInt();
+            _ = ReadInt();
             int requestId = ReadInt();
             int marketDataType = ReadInt();
             eWrapper.MarketDataType(requestId, marketDataType);
@@ -1872,7 +1872,7 @@ namespace IBApi
 
         private void MarketDepthEvent()
         {
-            int msgVersion = ReadInt();
+            _ = ReadInt();
             int requestId = ReadInt();
             int position = ReadInt();
             int operation = ReadInt();
@@ -1884,7 +1884,7 @@ namespace IBApi
 
         private void MarketDepthL2Event()
         {
-            int msgVersion = ReadInt();
+            _ = ReadInt();
             int requestId = ReadInt();
             int position = ReadInt();
             string marketMaker = ReadString();
@@ -1904,7 +1904,7 @@ namespace IBApi
 
         private void NewsBulletinsEvent()
         {
-            int msgVersion = ReadInt();
+            _ = ReadInt();
             int newsMsgId = ReadInt();
             int newsMsgType = ReadInt();
             string newsMessage = ReadString();
@@ -1941,13 +1941,13 @@ namespace IBApi
 
         private void PositionEndEvent()
         {
-            int msgVersion = ReadInt();
+            _ = ReadInt();
             eWrapper.PositionEnd();
         }
 
         private void RealTimeBarsEvent()
         {
-            int msgVersion = ReadInt();
+            _ = ReadInt();
             int requestId = ReadInt();
             long time = ReadLong();
             double open = ReadDouble();
@@ -1962,7 +1962,7 @@ namespace IBApi
 
         private void ScannerParametersEvent()
         {
-            int msgVersion = ReadInt();
+            _ = ReadInt();
             string xml = ReadString();
             eWrapper.ScannerParameters(xml);
         }
@@ -2004,7 +2004,7 @@ namespace IBApi
 
         private void ReceiveFAEvent()
         {
-            int msgVersion = ReadInt();
+            _ = ReadInt();
             int faDataType = ReadInt();
             string faData = ReadString();
             eWrapper.ReceiveFA(faDataType, faData);
@@ -2012,7 +2012,7 @@ namespace IBApi
 
         private void PositionMultiEvent()
         {
-            int msgVersion = ReadInt();
+            _ = ReadInt();
             int requestId = ReadInt();
             string account = ReadString();
             Contract contract = new Contract();
@@ -2035,14 +2035,14 @@ namespace IBApi
 
         private void PositionMultiEndEvent()
         {
-            int msgVersion = ReadInt();
+            _ = ReadInt();
             int requestId = ReadInt();
             eWrapper.PositionMultiEnd(requestId);
         }
 
         private void AccountUpdateMultiEvent()
         {
-            int msgVersion = ReadInt();
+            _ = ReadInt();
             int requestId = ReadInt();
             string account = ReadString();
             string modelCode = ReadString();
@@ -2054,7 +2054,7 @@ namespace IBApi
 
         private void AccountUpdateMultiEndEvent()
         {
-            int msgVersion = ReadInt();
+            _ = ReadInt();
             int requestId = ReadInt();
             eWrapper.AccountUpdateMultiEnd(requestId);
         }
@@ -2125,7 +2125,8 @@ namespace IBApi
         public double ReadDoubleMax()
         {
             string str = ReadString();
-            return string.IsNullOrEmpty(str) ? double.MaxValue : str == Constants.INFINITY_STR ? double.PositiveInfinity : double.Parse(str, System.Globalization.NumberFormatInfo.InvariantInfo);
+            double infinityParse = str == Constants.INFINITY_STR ? double.PositiveInfinity : double.Parse(str, System.Globalization.NumberFormatInfo.InvariantInfo);
+            return string.IsNullOrEmpty(str) ? double.MaxValue : infinityParse;
         }
 
         public decimal ReadDecimal()
@@ -2165,7 +2166,7 @@ namespace IBApi
         public bool ReadBoolFromInt()
         {
             string str = ReadString();
-            return str == null ? false : (int.Parse(str) != 0);
+            return str != null && (int.Parse(str) != 0);
         }
 
         public char ReadChar()
