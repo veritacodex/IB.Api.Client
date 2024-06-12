@@ -27,7 +27,7 @@ namespace IBApi
             }
         }
 
-        static readonly EWrapper defaultWrapper = new IBClient();
+        static readonly IEWrapper defaultWrapper = new IBClient();
 
         public EReader(EClientSocket clientSocket, EReaderSignal signal)
         {

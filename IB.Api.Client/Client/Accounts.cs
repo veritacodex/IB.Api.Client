@@ -10,6 +10,7 @@ namespace IB.Api.Client
         public List<string> AccountIds { get; set; }
         private AccountUpdate _accountUpdate;
         public event EventHandler<AccountUpdate> AccountUpdateReceived;
+
         public void SubscribeToAccountUpdates(string accountId)
         {
             _accountUpdate = new AccountUpdate();
@@ -21,6 +22,7 @@ namespace IB.Api.Client
             _accountUpdate = new AccountUpdate();
             ClientSocket.reqAccountUpdates(true, null);
         }
+
         public void accountDownloadEnd(string account)
         {
             _ = string.Empty;

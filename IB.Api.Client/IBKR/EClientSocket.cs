@@ -18,7 +18,7 @@ namespace IBApi
     {
         private int port;
 
-        public EClientSocket(EWrapper wrapper, EReaderSignal eReaderSignal):
+        public EClientSocket(IEWrapper wrapper, EReaderSignal eReaderSignal):
             base(wrapper)
         {
             this.eReaderSignal = eReaderSignal;

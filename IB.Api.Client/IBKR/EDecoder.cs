@@ -12,12 +12,12 @@ namespace IBApi
     class EDecoder : IDecoder
     {
         private EClientMsgSink eClientMsgSink;
-        private EWrapper eWrapper;
+        private IEWrapper eWrapper;
         private int serverVersion;
         private BinaryReader dataReader;
         private int nDecodedLen;
 
-        public EDecoder(int serverVersion, EWrapper callback, EClientMsgSink sink = null)
+        public EDecoder(int serverVersion, IEWrapper callback, EClientMsgSink sink = null)
         {
             this.serverVersion = serverVersion;
             eWrapper = callback;

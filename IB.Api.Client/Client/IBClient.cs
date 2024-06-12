@@ -3,7 +3,7 @@ using IBApi;
 namespace IB.Api.Client
 {
     //Main
-    public partial class IBClient : EWrapper
+    public partial class IBClient : IEWrapper
     {
         internal readonly EClientSocket ClientSocket;
         internal readonly EReaderSignal Signal;
