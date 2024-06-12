@@ -11,6 +11,7 @@ namespace IB.Api.Client
         private List<ContractDetails> _contracts;
         public event EventHandler<List<ContractDetails>> ContractDetailsReceived;
         public event EventHandler<MarketRule> MarketRuleReceived;
+        
         public void GetContractDetails(string symbol, SecurityType securityType)
         {
             _contracts = [];
