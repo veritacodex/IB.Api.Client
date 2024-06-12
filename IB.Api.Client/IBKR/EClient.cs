@@ -21,7 +21,7 @@ namespace IBApi
 
         protected ETransport socketTransport;
 
-        protected IEWrapper wrapper;
+        internal IEWrapper wrapper;
 
         protected bool isConnected;
         protected int clientId;
@@ -38,7 +38,7 @@ namespace IBApi
          * @param wrapper EWrapper's implementing class instance. Every message being delivered by IB to the API client will be forwarded to the EWrapper's implementing class.
          * @sa EWrapper
          */
-        public EClient(IEWrapper wrapper)
+        internal EClient(IEWrapper wrapper)
         {
             this.wrapper = wrapper;
             clientId = -1;
@@ -75,7 +75,7 @@ namespace IBApi
         /**
          * @brief Reference to the EWrapper implementing object.
          */
-        public IEWrapper Wrapper
+        internal IEWrapper Wrapper
         {
             get { return wrapper; }
         }

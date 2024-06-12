@@ -15,6 +15,6 @@ namespace IB.Api.Client
 
         public bool IsConnected(){
             return ClientSocket.IsConnected();
-        }
+        }        
     }
 }

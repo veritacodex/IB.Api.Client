@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using IB.Api.Client.Model;
+using IBApi;
 
 namespace IB.Api.Client
 {
@@ -23,21 +24,21 @@ namespace IB.Api.Client
             ClientSocket.reqAccountUpdates(true, null);
         }
 
-        public void accountDownloadEnd(string account)
+        void IEWrapper.accountDownloadEnd(string account)
         {
             _ = string.Empty;
         }
-        public void managedAccounts(string accountsList)
+        void IEWrapper.managedAccounts(string accountsList)
         {
             AccountIds = [.. accountsList.Split(',')];
             Notify($"Managed accounts ({accountsList})");
         }
-        public void updateAccountTime(string timestamp)
+        void IEWrapper.updateAccountTime(string timestamp)
         {
             _accountUpdate.UpdatedOn = DateTime.Now;
             AccountUpdateReceived?.Invoke(this, _accountUpdate);
         }
-        public void updateAccountValue(string key, string value, string currency, string accountName)
+        void IEWrapper.updateAccountValue(string key, string value, string currency, string accountName)
         {
             _accountUpdate.SetValue(key, value, currency);
         }
