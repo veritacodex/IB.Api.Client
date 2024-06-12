@@ -6,7 +6,7 @@ namespace IB.Api.Client
     public partial class IBClient : IEWrapper
     {
         internal readonly EClientSocket ClientSocket;
-        internal readonly EReaderSignal Signal;
+        internal readonly IEReaderSignal Signal;
         public IBClient()
         {
             Signal = new EReaderMonitorSignal();

@@ -65,28 +65,28 @@ namespace IBApi
             Side = side;
         }
 
-        public override bool Equals(object other)
+        public override bool Equals(object obj)
         {
             bool l_bRetVal = false;
-            ExecutionFilter l_theOther = other as ExecutionFilter;
+            ExecutionFilter l_theOther = obj as ExecutionFilter;
 
             if (l_theOther == null)
             {
                 l_bRetVal = false;
             }
-            else if (this == other)
+            else if (this == obj)
             {
                 l_bRetVal = true;
             }
             else
             {
-                l_bRetVal = (ClientId == l_theOther.ClientId &&
+                l_bRetVal = ClientId == l_theOther.ClientId &&
                     string.Compare(AcctCode, l_theOther.AcctCode, true) == 0 &&
                     string.Compare(Time, l_theOther.Time, true) == 0 &&
                     string.Compare(Symbol, l_theOther.Symbol, true) == 0 &&
                     string.Compare(SecType, l_theOther.SecType, true) == 0 &&
                     string.Compare(Exchange, l_theOther.Exchange, true) == 0 &&
-                    string.Compare(Side, l_theOther.Side, true) == 0);
+                    string.Compare(Side, l_theOther.Side, true) == 0;
             }
             return l_bRetVal;
         }

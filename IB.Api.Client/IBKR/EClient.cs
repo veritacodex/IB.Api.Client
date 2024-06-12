@@ -19,7 +19,7 @@ namespace IBApi
     {
         protected int serverVersion;
 
-        protected ETransport socketTransport;
+        protected IETransport socketTransport;
 
         internal IEWrapper wrapper;
 

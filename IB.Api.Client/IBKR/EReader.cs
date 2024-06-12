@@ -14,7 +14,7 @@ namespace IBApi
     public class EReader
     {
         readonly EClientSocket eClientSocket;
-        readonly EReaderSignal eReaderSignal;
+        readonly IEReaderSignal eReaderSignal;
         readonly Queue<EMessage> msgQueue = new();
         readonly EDecoder processMsgsDecoder;
         const int defaultInBufSize = ushort.MaxValue / 8;
@@ -29,7 +29,7 @@ namespace IBApi
 
         static readonly IEWrapper defaultWrapper = new IBClient();
 
-        public EReader(EClientSocket clientSocket, EReaderSignal signal)
+        public EReader(EClientSocket clientSocket, IEReaderSignal signal)
         {
             eClientSocket = clientSocket;
             eReaderSignal = signal;
@@ -60,7 +60,7 @@ namespace IBApi
                     eClientSocket.EDisconnect();
                 }
 
-                eReaderSignal.issueSignal();
+                eReaderSignal.IssueSignal();
             }) { IsBackground = true }.Start();
         }
 
@@ -90,7 +90,7 @@ namespace IBApi
                 lock (msgQueue)
                     msgQueue.Enqueue(msg);
 
-                eReaderSignal.issueSignal();
+                eReaderSignal.IssueSignal();
 
                 return true;
             }

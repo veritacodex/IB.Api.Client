@@ -102,7 +102,7 @@ namespace IBApi
             }
             for (int i = 0; i < str.Length; i++)
             {
-                if (isAsciiPrintable(str[i]) == false)
+                if (!IsAsciiPrintable(str[i]))
                 {
                     return false;
                 }
@@ -110,11 +110,9 @@ namespace IBApi
             return true;
         }
 
-        private static bool isAsciiPrintable(char ch)
+        private static bool IsAsciiPrintable(char ch)
         {
             return ch >= 32 && ch < 127;
         }
-
-
     }
 }

@@ -186,16 +186,16 @@ namespace IBApi
             LastLiquidity = lastLiquidity;
         }
 
-        public override bool Equals(object p_other)
+        public override bool Equals(object obj)
         {
             bool l_bRetVal = false;
-            Execution l_theOther = p_other as Execution;
+            Execution l_theOther = obj as Execution;
 
             if (l_theOther == null)
             { 
                 l_bRetVal = false;
             }
-            else if (this == p_other)
+            else if (this == obj)
             {
                 l_bRetVal = true;
             }
