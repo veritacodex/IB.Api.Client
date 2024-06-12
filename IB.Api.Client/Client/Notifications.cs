@@ -70,15 +70,7 @@ namespace IB.Api.Client
                 Message = message
             };
             UiNotificationReceived?.Invoke(this, uiNotification);
-        }
-        void IEWrapper.connectAck()
-        {
-            Notify("Connection Acknowledged");
-        }
-        void IEWrapper.connectionClosed()
-        {
-            Notify("Connection Closed");
-        }
+        }        
 
         public static NotificationType GetNotificationType(string message)
         {

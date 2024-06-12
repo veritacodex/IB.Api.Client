@@ -13,8 +13,18 @@ namespace IB.Api.Client
             ClientSocket = new EClientSocket(this, Signal);
         }
 
-        public bool IsConnected(){
+        public bool IsConnected()
+        {
             return ClientSocket.IsConnected();
-        }        
+        }
+
+        void IEWrapper.connectAck()
+        {
+            Notify("Connection Acknowledged");
+        }
+        void IEWrapper.connectionClosed()
+        {
+            Notify("Connection Closed");
+        }
     }
 }
