@@ -26,12 +26,12 @@ namespace IBApi
             Value = p_value;
         }
 
-        public override bool Equals(object other)
+        public override bool Equals(object obj)
         {
-            if (this == other)
+            if (this == obj)
                 return true;
 
-            TagValue l_theOther = other as TagValue;
+            TagValue l_theOther = obj as TagValue;
 
             if (l_theOther == null)
                 return false;  
