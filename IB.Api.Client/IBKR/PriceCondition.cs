@@ -15,7 +15,7 @@ namespace IBApi
 
     public static class CTriggerMethod
     {
-        public static readonly string[] friendlyNames = new string[] { "default", "double bid/ask", "last", "double last", "bid/ask", "", "", "last of bid/ask", "mid-point" };
+        public static readonly string[] friendlyNames = ["default", "double bid/ask", "last", "double last", "bid/ask", "", "", "last of bid/ask", "mid-point"];
 
 
         public static string ToFriendlyString(this TriggerMethod th)
