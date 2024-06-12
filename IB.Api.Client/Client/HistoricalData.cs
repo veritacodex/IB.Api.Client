@@ -77,16 +77,16 @@ namespace IB.Api.Client
                     }
             }
         }
-        void IEWrapper.historicalData(int reqId, Bar bar)
+        void IEWrapper.HistoricalData(int reqId, Bar bar)
         {
             _historicalData[reqId].Add(bar);
         }
-        void IEWrapper.historicalDataEnd(int reqId, string start, string end)
+        void IEWrapper.HistoricalDataEnd(int reqId, string start, string end)
         {
             var data = _historicalData[reqId];
             HistoricalDataReceived?.Invoke(this, new Tuple<int, List<Bar>>(reqId, data));
         }
-        void IEWrapper.historicalDataUpdate(int reqId, Bar bar)
+        void IEWrapper.HistoricalDataUpdate(int reqId, Bar bar)
         {
             var barUpdate = new BarUpdate
             {
@@ -95,7 +95,7 @@ namespace IB.Api.Client
             };
             HistoricalDataUpdateReceived?.Invoke(this, barUpdate);
         }
-        void IEWrapper.historicalTicks(int reqId, HistoricalTick[] ticks, bool done)
+        void IEWrapper.HistoricalTicks(int reqId, HistoricalTick[] ticks, bool done)
         {
             _historicalTicks[reqId].AddRange(ticks);
             if (done)
@@ -104,7 +104,7 @@ namespace IB.Api.Client
                 _historicalTicks[reqId] = [];
             }
         }
-        void IEWrapper.historicalTicksBidAsk(int reqId, HistoricalTickBidAsk[] ticks, bool done)
+        void IEWrapper.HistoricalTicksBidAsk(int reqId, HistoricalTickBidAsk[] ticks, bool done)
         {
             _historicalTickBidAsk[reqId].AddRange(ticks);
             if (done)
@@ -113,7 +113,7 @@ namespace IB.Api.Client
                 _historicalTickBidAsk[reqId] = [];
             }
         }
-        void IEWrapper.historicalTicksLast(int reqId, HistoricalTickLast[] ticks, bool done)
+        void IEWrapper.HistoricalTicksLast(int reqId, HistoricalTickLast[] ticks, bool done)
         {
             _historicalTickLast[reqId].AddRange(ticks);
             if (done)

@@ -56,7 +56,7 @@ namespace IBApi
                 }
                 catch (Exception ex)
                 {
-                    eClientSocket.Wrapper.error(ex);
+                    eClientSocket.Wrapper.Error(ex);
                     eClientSocket.eDisconnect();
                 }
 
@@ -97,7 +97,7 @@ namespace IBApi
             catch (Exception ex)
             {
                 if (eClientSocket.IsConnected())
-                    eClientSocket.Wrapper.error(ex);
+                    eClientSocket.Wrapper.Error(ex);
 
                 return false;
             }

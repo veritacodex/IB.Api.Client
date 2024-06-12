@@ -29,16 +29,16 @@ namespace IB.Api.Client
         {
             ClientSocket.reqMarketRule(ruleId);
         }
-        
-        void IEWrapper.contractDetails(int reqId, ContractDetails contractDetails)
+
+        void IEWrapper.ContractDetails(int reqId, ContractDetails contractDetails)
         {
             _contracts.Add(contractDetails);
         }
-        void IEWrapper.contractDetailsEnd(int reqId)
+        void IEWrapper.ContractDetailsEnd(int reqId)
         {
             ContractDetailsReceived?.Invoke(this, _contracts);
         }
-        void IEWrapper.marketRule(int marketRuleId, PriceIncrement[] priceIncrements)
+        void IEWrapper.MarketRule(int marketRuleId, PriceIncrement[] priceIncrements)
         {
             var marketRule = new MarketRule
             {

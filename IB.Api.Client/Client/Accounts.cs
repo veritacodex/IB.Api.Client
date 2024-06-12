@@ -24,21 +24,21 @@ namespace IB.Api.Client
             ClientSocket.reqAccountUpdates(true, null);
         }
 
-        void IEWrapper.accountDownloadEnd(string account)
+        void IEWrapper.AccountDownloadEnd(string account)
         {
             _ = string.Empty;
         }
-        void IEWrapper.managedAccounts(string accountsList)
+        void IEWrapper.ManagedAccounts(string accountsList)
         {
             AccountIds = [.. accountsList.Split(',')];
             Notify($"Managed accounts ({accountsList})");
         }
-        void IEWrapper.updateAccountTime(string timestamp)
+        void IEWrapper.UpdateAccountTime(string timestamp)
         {
             _accountUpdate.UpdatedOn = DateTime.Now;
             AccountUpdateReceived?.Invoke(this, _accountUpdate);
         }
-        void IEWrapper.updateAccountValue(string key, string value, string currency, string accountName)
+        void IEWrapper.UpdateAccountValue(string key, string value, string currency, string accountName)
         {
             _accountUpdate.SetValue(key, value, currency);
         }

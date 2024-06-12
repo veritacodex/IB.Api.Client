@@ -66,7 +66,7 @@ namespace IB.Api.Client
             ClientSocket.reqSecDefOptParams(reqId, contractDetails.Contract.Symbol, string.Empty, contractDetails.Contract.SecType, contractDetails.Contract.ConId);
         }
         
-        void IEWrapper.updateMktDepth(int tickerId, int position, int operation, int side, double price, decimal size)
+        void IEWrapper.UpdateMktDepth(int tickerId, int position, int operation, int side, double price, decimal size)
         {
             if (side == 0)
                 position += 10;
@@ -93,7 +93,7 @@ namespace IB.Api.Client
             if (position == 19)
                 OrderBookUpdateReceived?.Invoke(this, _orderBookUpdates[tickerId]);
         }
-        void IEWrapper.tickPrice(int tickerId, int field, double price, TickAttrib attribs)
+        void IEWrapper.TickPrice(int tickerId, int field, double price, TickAttrib attribs)
         {
             switch (field)
             {
@@ -109,7 +109,7 @@ namespace IB.Api.Client
                     }
             }
         }
-        void IEWrapper.tickByTickBidAsk(int reqId, long time, double bidPrice, double askPrice, decimal bidSize, decimal askSize, TickAttribBidAsk tickAttribBidAsk)
+        void IEWrapper.TickByTickBidAsk(int reqId, long time, double bidPrice, double askPrice, decimal bidSize, decimal askSize, TickAttribBidAsk tickAttribBidAsk)
         {
             _ = reqId;
             var tick = new HistoricalTickBidAsk
@@ -123,17 +123,17 @@ namespace IB.Api.Client
             };
             TimeAndSalesUpdateReceived?.Invoke(this, tick);
         }
-        void IEWrapper.marketDataType(int reqId, int marketDataType)
+        void IEWrapper.MarketDataType(int reqId, int marketDataType)
         {
             _priceUpdates[reqId].MarketDataType = marketDataType;
         }
-        void IEWrapper.tickReqParams(int tickerId, double minTick, string bboExchange, int snapshotPermissions)
+        void IEWrapper.TickReqParams(int tickerId, double minTick, string bboExchange, int snapshotPermissions)
         {
             _priceUpdates[tickerId].MinTick = minTick;
             _priceUpdates[tickerId].BboExchange = bboExchange;
             _priceUpdates[tickerId].SnapshotPermissions = snapshotPermissions;
         }
-        void IEWrapper.tickSize(int tickerId, int field, decimal size)
+        void IEWrapper.TickSize(int tickerId, int field, decimal size)
         {
             switch (field)
             {
@@ -177,13 +177,13 @@ namespace IB.Api.Client
                 _priceUpdates[tickerId].Volume -= _priceUpdates[tickerId].AskSize;
             }
         }
-        void IEWrapper.tickString(int tickerId, int field, string value)
+        void IEWrapper.TickString(int tickerId, int field, string value)
         {
         }
-        void IEWrapper.tickGeneric(int tickerId, int field, double value)
+        void IEWrapper.TickGeneric(int tickerId, int field, double value)
         {
         }
-        void IEWrapper.realtimeBar(int reqId, long date, double open, double high, double low, double close, decimal volume, decimal WAP, int count)
+        void IEWrapper.RealtimeBar(int reqId, long date, double open, double high, double low, double close, decimal volume, decimal WAP, int count)
         {
             _ = reqId;
             var realtimeBarUpdate = new RealTimeBarUpdate
@@ -199,7 +199,7 @@ namespace IB.Api.Client
             };
             BarUpdateReceived?.Invoke(this, realtimeBarUpdate);
         }
-        void IEWrapper.tickOptionComputation(int tickerId, int field,
+        void IEWrapper.TickOptionComputation(int tickerId, int field,
         int tickAttrib, double impliedVolatility, double delta, double optPrice, double pvDividend, double gamma, double vega, double theta, double undPrice)
         {
             switch (field)
@@ -222,7 +222,7 @@ namespace IB.Api.Client
             _priceUpdates[tickerId].Vega = vega;
             _priceUpdates[tickerId].Theta = theta;
         }
-        void IEWrapper.securityDefinitionOptionParameter(int reqId, string exchange, int underlyingConId, string tradingClass, string multiplier, HashSet<string> expirations, HashSet<double> strikes)
+        void IEWrapper.SecurityDefinitionOptionParameter(int reqId, string exchange, int underlyingConId, string tradingClass, string multiplier, HashSet<string> expirations, HashSet<double> strikes)
         {
             _optionParameterDefinitions.Add(new OptionParameterDefinition
             {
@@ -234,7 +234,7 @@ namespace IB.Api.Client
                 Strikes = strikes
             });
         }
-        void IEWrapper.securityDefinitionOptionParameterEnd(int reqId)
+        void IEWrapper.SecurityDefinitionOptionParameterEnd(int reqId)
         {
             OptionParametersReceived?.Invoke(this, _optionParameterDefinitions);
         }

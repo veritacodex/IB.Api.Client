@@ -43,7 +43,7 @@ namespace IB.Api.Client
             return NotificationType.Information;
         }
 
-        void IEWrapper.error(Exception e)
+        void IEWrapper.Error(Exception e)
         {
             var notification = new Notification
             {
@@ -55,7 +55,7 @@ namespace IB.Api.Client
             };
             NotificationReceived?.Invoke(this, notification);
         }
-        void IEWrapper.error(string str)
+        void IEWrapper.Error(string str)
         {
             var notification = new Notification
             {
@@ -67,7 +67,7 @@ namespace IB.Api.Client
             };
             NotificationReceived?.Invoke(this, notification);
         }
-        void IEWrapper.error(int id, int errorCode, string errorMsg, string advancedOrderRejectJson)
+        void IEWrapper.Error(int id, int errorCode, string errorMsg, string advancedOrderRejectJson)
         {
             var notification = new Notification
             {

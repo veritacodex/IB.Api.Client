@@ -38,7 +38,7 @@ namespace IBApi
             }
             else if (serverVersion < Constants.MinVersion || serverVersion > Constants.MaxVersion)
             {
-                wrapper.error(clientId, EClientErrors.UNSUPPORTED_VERSION.Code, EClientErrors.UNSUPPORTED_VERSION.Message, "");
+                wrapper.Error(clientId, EClientErrors.UNSUPPORTED_VERSION.Code, EClientErrors.UNSUPPORTED_VERSION.Message, "");
                 return;
             }
 
@@ -81,7 +81,7 @@ namespace IBApi
         {
             if (isConnected)
             {
-                wrapper.error(IncomingMessage.NotValid, EClientErrors.AlreadyConnected.Code, EClientErrors.AlreadyConnected.Message, "");
+                wrapper.Error(IncomingMessage.NotValid, EClientErrors.AlreadyConnected.Code, EClientErrors.AlreadyConnected.Message, "");
                 return;
             }
             try
@@ -108,21 +108,21 @@ namespace IBApi
             }
             catch (ArgumentNullException ane)
             {
-                wrapper.error(ane);
+                wrapper.Error(ane);
             }
             catch (SocketException se)
             {
-                wrapper.error(se);
+                wrapper.Error(se);
             }
             catch (EClientException e)
             {
                 var cmp = (e as EClientException).Err;
 
-                wrapper.error(-1, cmp.Code, cmp.Message, "");
+                wrapper.Error(-1, cmp.Code, cmp.Message, "");
             }
             catch (Exception e)
             {
-                wrapper.error(e);
+                wrapper.Error(e);
             }
         }
 
@@ -162,7 +162,7 @@ namespace IBApi
         {
             if (!allowRedirect)
             {
-                wrapper.error(clientId, EClientErrors.CONNECT_FAIL.Code, EClientErrors.CONNECT_FAIL.Message, "");
+                wrapper.Error(clientId, EClientErrors.CONNECT_FAIL.Code, EClientErrors.CONNECT_FAIL.Message, "");
                 return;
             }
 
@@ -178,7 +178,7 @@ namespace IBApi
             if (redirectCount > Constants.REDIRECT_COUNT_MAX)
             {
                 eDisconnect();
-                wrapper.error(clientId, EClientErrors.CONNECT_FAIL.Code, "Redirect count exceeded", "");
+                wrapper.Error(clientId, EClientErrors.CONNECT_FAIL.Code, "Redirect count exceeded", "");
                 return;
             }
 
