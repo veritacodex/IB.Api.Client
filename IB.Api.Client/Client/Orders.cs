@@ -13,11 +13,7 @@ namespace IB.Api.Client
         public event EventHandler<OpenOrderUpdate> OpenOrderUpdateReceived;
         public event EventHandler<OpenOrderUpdate> WhatIfOpenOrderUpdateReceived;
         public int NextOrderId { get; set; }
-        public void nextValidId(int orderId)
-        {
-            NextOrderId = orderId;
-            Notify($"Next valid Order Id ({orderId})");
-        }
+        
         public void RequestOrders()
         {
             ClientSocket.reqAllOpenOrders();
@@ -44,15 +40,14 @@ namespace IB.Api.Client
         {
             ClientSocket.reqExecutions(reqId, new ExecutionFilter());
         }
-        public void completedOrder(Contract contract, Order order, OrderState orderState)
+
+        void IEWrapper.nextValidId(int orderId)
         {
-            throw new NotImplementedException();
+            NextOrderId = orderId;
+            Notify($"Next valid Order Id ({orderId})");
         }
-        public void completedOrdersEnd()
-        {
-            throw new NotImplementedException();
-        }
-        public void execDetails(int reqId, Contract contract, Execution execution)
+        
+        void IEWrapper.execDetails(int reqId, Contract contract, Execution execution)
         {
             ExecutionUpdateReceived?.Invoke(this, new ExecutionUpdate
             {
@@ -65,15 +60,15 @@ namespace IB.Api.Client
                 AvgPrice = execution.AvgPrice
             });
         }
-        public void execDetailsEnd(int reqId)
+        void IEWrapper.execDetailsEnd(int reqId)
         {
             _ = string.Empty;
         }
-        public void openOrderEnd()
+        void IEWrapper.openOrderEnd()
         {
             _ = string.Empty;
         }
-        public void orderStatus(int orderId, string status, decimal filled, decimal remaining, double avgFillPrice,
+        void IEWrapper.orderStatus(int orderId, string status, decimal filled, decimal remaining, double avgFillPrice,
             int permId, int parentId, double lastFillPrice, int clientId, string whyHeld, double mktCapPrice)
         {
             var orderUpdate = new OrderUpdate
@@ -92,7 +87,7 @@ namespace IB.Api.Client
             };
             OrderUpdateReceived?.Invoke(this, orderUpdate);
         }
-        public void commissionReport(CommissionReport commissionReport)
+        void IEWrapper.commissionReport(CommissionReport commissionReport)
         {
             CommissionUpdateReceived?.Invoke(this, new CommissionUpdate
             {
@@ -100,7 +95,7 @@ namespace IB.Api.Client
                 Commission = commissionReport.Commission
             });
         }
-        public void openOrder(int orderId, Contract contract, Order order, OrderState orderState)
+        void IEWrapper.openOrder(int orderId, Contract contract, Order order, OrderState orderState)
         {
             if (order.WhatIf)
                 WhatIfOpenOrderUpdateReceived?.Invoke(this, new OpenOrderUpdate

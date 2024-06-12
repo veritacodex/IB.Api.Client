@@ -42,7 +42,7 @@ namespace IB.Api.Client
         void IEWrapper.histogramData(int reqId, HistogramEntry[] data)
         {
             throw new NotImplementedException();
-        }        
+        }
         void IEWrapper.mktDepthExchanges(DepthMktDataDescription[] depthMktDataDescriptions)
         {
             throw new NotImplementedException();
@@ -66,7 +66,7 @@ namespace IB.Api.Client
         void IEWrapper.rerouteMktDepthReq(int reqId, int conId, string exchange)
         {
             throw new NotImplementedException();
-        }        
+        }
         void IEWrapper.smartComponents(int reqId, Dictionary<int, KeyValuePair<string, char>> theMap)
         {
             throw new NotImplementedException();
@@ -182,6 +182,22 @@ namespace IB.Api.Client
         void IEWrapper.userInfo(int reqId, string whiteBrandingId)
         {
             throw new NotImplementedException();
-        }        
+        }
+        void IEWrapper.completedOrder(Contract contract, Order order, OrderState orderState)
+        {
+            throw new NotImplementedException();
+        }
+        void IEWrapper.completedOrdersEnd()
+        {
+            throw new NotImplementedException();
+        }
+        void IEWrapper.scannerData(int reqId, int rank, ContractDetails contractDetails, string distance, string benchmark, string projection, string legsStr)
+        {
+            throw new NotImplementedException();
+        }
+        void IEWrapper.scannerDataEnd(int reqId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
