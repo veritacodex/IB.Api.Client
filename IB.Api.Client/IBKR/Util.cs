@@ -16,7 +16,6 @@ namespace IBApi
             return string.IsNullOrEmpty(str);
         }
 
-
         public static string NormalizeString(string str)
         {
             return str != null ? str : "";
@@ -109,7 +108,8 @@ namespace IBApi
 
         public static string UnixSecondsToString(long seconds, string format)
         {
-            return new DateTime(1970, 1, 1, 0, 0, 0).AddSeconds(Convert.ToDouble(seconds)).ToString(format);
+            var unixEpoch = DateTime.UnixEpoch;
+            return unixEpoch.AddSeconds(Convert.ToDouble(seconds)).ToString(format);
         }
 
         public static string formatDoubleString(string str)
@@ -125,7 +125,7 @@ namespace IBApi
             for (int i = 0; i < tagValuesCount; i++)
             {
                 TagValue tagValue = options[i];
-                tagValuesStr.Append(tagValue.Tag).Append("=").Append(tagValue.Value).Append(";");
+                tagValuesStr.Append(tagValue.Tag).Append('=').Append(tagValue.Value).Append(';');
             }
 
             return tagValuesStr.ToString();
