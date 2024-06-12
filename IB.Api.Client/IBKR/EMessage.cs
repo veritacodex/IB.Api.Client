@@ -5,7 +5,7 @@ namespace IBApi
 {
     public class EMessage
     {
-        byte[] buf;
+        readonly byte[] buf;
 
         public EMessage(byte[] buf)
         {
