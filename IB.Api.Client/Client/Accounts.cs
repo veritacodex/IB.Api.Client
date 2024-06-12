@@ -21,7 +21,7 @@ namespace IB.Api.Client
             _accountUpdate = new AccountUpdate();
             ClientSocket.reqAccountUpdates(true, null);
         }
-        public void accountDownloadEnd(string account)
+        internal void accountDownloadEnd(string account)
         {
             _ = string.Empty;
         }

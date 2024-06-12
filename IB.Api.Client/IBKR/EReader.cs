@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.IO;
+using IB.Api.Client;
 
 namespace IBApi
 {
@@ -26,8 +27,7 @@ namespace IBApi
             }
         }
 
-
-        static EWrapper defaultWrapper = new DefaultEWrapper();
+        static readonly EWrapper defaultWrapper = new IBClient();
 
         public EReader(EClientSocket clientSocket, EReaderSignal signal)
         {
