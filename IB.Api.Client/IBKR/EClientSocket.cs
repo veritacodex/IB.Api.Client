@@ -181,8 +181,6 @@ namespace IBApi
 
             EDisconnect(false);
             EConnect(srv[0], port, clientId, extraAuth);
-
-            return;
         }
 
         public override void EDisconnect(bool resetState = true)
