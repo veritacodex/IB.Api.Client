@@ -139,12 +139,12 @@ namespace IBApi
             CompletedStatus = completedStatus;
         }
 
-        public override bool Equals(object other)
+        public override bool Equals(object obj)
         {
-            if (this == other)
+            if (this == obj)
                 return true;
 
-            OrderState state = other as OrderState;
+            OrderState state = obj as OrderState;
 
             if (state == null)
                 return false; 
