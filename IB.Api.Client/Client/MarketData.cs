@@ -20,7 +20,7 @@ namespace IB.Api.Client
         public event EventHandler<List<OptionParameterDefinition>> OptionParametersReceived;
         public void SubscribeToTimeAndSales(int reqId, Contract contract)
         {
-            ClientSocket.reqTickByTickData(reqId, contract, "BidAsk", 0, true);
+            ClientSocket.ReqTickByTickData(reqId, contract, "BidAsk", 0, true);
             Notify($"Time and sales for symbol {contract.Symbol} requested");
         }
         public void SubscribeToRealTimePrice(int tickerId, Contract contract, string genericTickList)
@@ -56,7 +56,7 @@ namespace IB.Api.Client
                 orderBookUpdate.OrderBookLines[iterator] = new OrderBookLine();
             _orderBookUpdates.Add(reqId, orderBookUpdate);
 
-            ClientSocket.reqMarketDepth(reqId, contract, 10, false, null);
+            ClientSocket.ReqMarketDepth(reqId, contract, 10, false, null);
             Notify($"Subscribed to {contract.Symbol} marketDepth");
         }
         public void ReqOptionParameters(int reqId, ContractDetails contractDetails)

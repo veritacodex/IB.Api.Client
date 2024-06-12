@@ -10,10 +10,10 @@ namespace IBApi
      */
     public class ComboLeg
     {
-        public static int SAME = 0;
-        public static int 	OPEN = 1;
-        public static int 	CLOSE = 2;
-        public static int 	UNKNOWN = 3;
+        public const int SAME = 0;
+        public const int OPEN = 1;
+        public const int CLOSE = 2;
+        public const int UNKNOWN = 3;
 
 
         /**

@@ -50,16 +50,16 @@ namespace IBApi
             YieldRedemptionDate = 0;
         }
 
-        public override bool Equals(object p_other)
+        public override bool Equals(object obj)
         {
             bool l_bRetVal;
-            CommissionReport l_theOther = p_other as CommissionReport;
+            CommissionReport l_theOther = obj as CommissionReport;
 
             if (l_theOther == null)
             {
                 l_bRetVal = false;
             }
-            else if (this == p_other)
+            else if (this == obj)
             {
                 l_bRetVal = true;
             }

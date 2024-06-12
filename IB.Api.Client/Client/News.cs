@@ -9,7 +9,7 @@ namespace IB.Api.Client
         public event EventHandler<NewsProvider[]> NewsProvidersUpdateReceived;
         public void GetNewsProviders()
         {
-            ClientSocket.reqNewsProviders();
+            ClientSocket.ReqNewsProviders();
         }
 
         void IEWrapper.NewsProviders(NewsProvider[] newsProviders)

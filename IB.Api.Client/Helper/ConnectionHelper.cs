@@ -9,7 +9,7 @@ namespace IB.Api.Client.Helper
     {
         public static void StartIbClient(IBClient ibClient, ConnectionDetails connectionDetails)
         {
-            ibClient.ClientSocket.eConnect(connectionDetails.Host, connectionDetails.Port, connectionDetails.ClientId);
+            ibClient.ClientSocket.EConnect(connectionDetails.Host, connectionDetails.Port, connectionDetails.ClientId);
             var reader = new EReader(ibClient.ClientSocket, ibClient.Signal);
             reader.Start();
             new Thread(() =>

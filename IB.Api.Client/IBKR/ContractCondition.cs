@@ -14,7 +14,7 @@ namespace IBApi
 
         public Func<int, string, string> ContractResolver { get; set; }
 
-        public ContractCondition()
+        protected ContractCondition()
         {
             ContractResolver = (conid, exch) => conid + "(" + exch + ")";
         }
@@ -51,13 +51,13 @@ namespace IBApi
                 cond = cond.Substring(cond.IndexOf(delimiter) + delimiter.Length);
                 int conid;
 
-                if (!int.TryParse(cond.Substring(0, cond.IndexOf("(")), out conid))
+                if (!int.TryParse(cond.AsSpan(0, cond.IndexOf('(')), out conid))
                     return false;
 
                 ConId = conid;
-                cond = cond.Substring(cond.IndexOf("(") + 1);
-                Exchange = cond.Substring(0, cond.IndexOf(")"));
-                cond = cond.Substring(cond.IndexOf(")") + 1);
+                cond = cond.Substring(cond.IndexOf('(') + 1);
+                Exchange = cond.Substring(0, cond.IndexOf(')'));
+                cond = cond.Substring(cond.IndexOf(')') + 1);
 
                 return base.TryParse(cond);
             }

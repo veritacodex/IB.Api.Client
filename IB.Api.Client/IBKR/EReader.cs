@@ -13,10 +13,10 @@ namespace IBApi
     */
     public class EReader
     {
-        EClientSocket eClientSocket;
-        EReaderSignal eReaderSignal;
-        Queue<EMessage> msgQueue = new Queue<EMessage>();
-        EDecoder processMsgsDecoder;
+        readonly EClientSocket eClientSocket;
+        readonly EReaderSignal eReaderSignal;
+        readonly Queue<EMessage> msgQueue = new();
+        readonly EDecoder processMsgsDecoder;
         const int defaultInBufSize = ushort.MaxValue / 8;
 
         bool UseV100Plus
@@ -57,7 +57,7 @@ namespace IBApi
                 catch (Exception ex)
                 {
                     eClientSocket.Wrapper.Error(ex);
-                    eClientSocket.eDisconnect();
+                    eClientSocket.EDisconnect();
                 }
 
                 eReaderSignal.issueSignal();
