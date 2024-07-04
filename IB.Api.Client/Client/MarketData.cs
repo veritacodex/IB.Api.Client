@@ -59,6 +59,12 @@ namespace IB.Api.Client
             ClientSocket.ReqMarketDepth(reqId, contract, 10, false, null);
             Notify($"Subscribed to {contract.Symbol} marketDepth");
         }
+        public void ReqOptionOnFuturesParameters(int reqId, ContractDetails contractDetails)
+        {
+            _optionParameterDefinitions = [];
+            Notify($"Derivatives parameters for symbol {contractDetails.Contract.Symbol} requested");
+            ClientSocket.ReqSecDefOptParams(reqId, contractDetails.Contract.Symbol, contractDetails.Contract.Exchange, contractDetails.Contract.SecType, contractDetails.Contract.ConId);
+        }
         public void ReqOptionParameters(int reqId, ContractDetails contractDetails)
         {
             _optionParameterDefinitions = [];
@@ -145,6 +151,7 @@ namespace IB.Api.Client
                 case 3:
                     {
                         _priceUpdates[tickerId].AskSize = size;
+                        _priceUpdates[tickerId].DateTime = DateTime.Now;
                         SetPriceBar(tickerId);
                         PriceUpdateReceived?.Invoke(this, _priceUpdates[tickerId]);
                         break;
