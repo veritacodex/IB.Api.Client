@@ -43,8 +43,8 @@ namespace IB.Api.Client
         }
         public void SubscribeToDefaultBar(int tickerId, Contract contract)
         {
-             Notify($"Default bar for symbol {contract.Symbol} requested");
             ClientSocket.ReqRealTimeBars(tickerId, contract, 0, nameof(WhatToShow.TRADES), false, null);
+            Notify($"Default bar for symbol {contract.Symbol} requested");
         }
         public void ReqMarketDepth(int reqId, Contract contract, double ratio)
         {
@@ -72,7 +72,7 @@ namespace IB.Api.Client
             Notify($"Derivatives parameters for symbol {contractDetails.Contract.Symbol} requested");
             ClientSocket.ReqSecDefOptParams(reqId, contractDetails.Contract.Symbol, string.Empty, contractDetails.Contract.SecType, contractDetails.Contract.ConId);
         }
-        
+
         void IEWrapper.UpdateMktDepth(int tickerId, int position, int operation, int side, double price, decimal size)
         {
             if (side == 0)
