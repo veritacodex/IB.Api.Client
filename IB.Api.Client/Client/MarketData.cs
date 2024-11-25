@@ -39,7 +39,12 @@ namespace IB.Api.Client
                 TickerId = tickerId
             });
             ClientSocket.ReqMktData(tickerId, contract, string.Empty, false, false, null);
-            Notify($"Real time data for symbol {contract.Symbol} requested");
+
+            if (contract.Strike != 0)
+            {
+                Notify($"Option chain real time data requested for {contract.Symbol}. Strike:{contract.Strike} Strike:{contract.Right}");
+            }
+            else Notify($"Real time data for symbol {contract.Symbol} requested");
         }
         public void SubscribeToDefaultBar(int tickerId, Contract contract)
         {
