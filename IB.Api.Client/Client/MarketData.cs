@@ -42,7 +42,7 @@ namespace IB.Api.Client
 
             if (contract.Strike != 0)
             {
-                Notify($"Option chain real time data requested for {contract.Symbol}. Strike:{contract.Strike} Strike:{contract.Right}");
+                Notify($"Option chain real time data requested for {contract.Symbol}. Strike:{contract.Strike} Side:{contract.Right}");
             }
             else Notify($"Real time data for symbol {contract.Symbol} requested");
         }
@@ -164,6 +164,9 @@ namespace IB.Api.Client
                     }
             }
         }
+
+
+
         private void SetPriceBar(int tickerId)
         {
             var tzi = TimeZoneInfo.FindSystemTimeZoneById("US/Central");
@@ -177,19 +180,15 @@ namespace IB.Api.Client
                 _priceUpdates[tickerId].Close = _priceUpdates[tickerId].Ask;
                 _priceUpdates[tickerId].High = _priceUpdates[tickerId].Ask;
                 _priceUpdates[tickerId].Low = _priceUpdates[tickerId].Bid;
-                _priceUpdates[tickerId].Volume = 0;
-                _priceUpdates[tickerId].Volume += _priceUpdates[tickerId].BidSize;
-                _priceUpdates[tickerId].Volume -= _priceUpdates[tickerId].AskSize;
             }
             else
             {
                 _priceUpdates[tickerId].Close = _priceUpdates[tickerId].Ask;
                 _priceUpdates[tickerId].High = _priceUpdates[tickerId].Ask > _priceUpdates[tickerId].High ? _priceUpdates[tickerId].Ask : _priceUpdates[tickerId].High;
                 _priceUpdates[tickerId].Low = _priceUpdates[tickerId].Bid < _priceUpdates[tickerId].Low ? _priceUpdates[tickerId].Bid : _priceUpdates[tickerId].Low;
-                _priceUpdates[tickerId].Volume += _priceUpdates[tickerId].BidSize;
-                _priceUpdates[tickerId].Volume -= _priceUpdates[tickerId].AskSize;
             }
         }
+
         void IEWrapper.TickString(int tickerId, int field, string value)
         {
         }
