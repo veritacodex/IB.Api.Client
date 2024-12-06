@@ -21,6 +21,7 @@ namespace IB.Api.Client
         public void SubscribeToDefaultAccountUpdates()
         {
             _accountUpdate = new AccountUpdate();
+            Notify($"Default account updates requested");
             ClientSocket.ReqAccountUpdates(true, null);
         }
 
