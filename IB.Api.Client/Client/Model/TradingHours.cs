@@ -1,5 +1,5 @@
 using System;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace IB.Api.Client.Model
 {
@@ -8,7 +8,7 @@ namespace IB.Api.Client.Model
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
 
-        [JsonProperty("startToString")]
+        [JsonPropertyName("startToString")]
         public string StartToString
         {
             get
@@ -17,7 +17,7 @@ namespace IB.Api.Client.Model
             }
         }
 
-        [JsonProperty("endToString")]
+        [JsonPropertyName("endToString")]
         public string EndToString
         {
             get
@@ -26,10 +26,10 @@ namespace IB.Api.Client.Model
             }
         }
 
-        [JsonProperty("lastTradeDate")]
+        [JsonPropertyName("lastTradeDate")]
         public string LastTradeDate { get; internal set; }
 
-        [JsonProperty("symbol")]
+        [JsonPropertyName("symbol")]
         public string Symbol { get; set; }
     }
 }

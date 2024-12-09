@@ -1,14 +1,14 @@
 using System;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace IB.Api.Client.Model
 {
     public class AccountUpdate
     {
-        [JsonProperty("updatedOn")]
+        [JsonPropertyName("updatedOn")]
         public DateTime UpdatedOn { get; set; }
 
-        [JsonProperty("updated")]
+        [JsonPropertyName("updated")]
         public string Updated
         {
             get
@@ -17,31 +17,31 @@ namespace IB.Api.Client.Model
             }
         }
 
-        [JsonProperty("accountCode")]
+        [JsonPropertyName("accountCode")]
         public string AccountCode { get; set; }
 
-        [JsonProperty("acountType")]
+        [JsonPropertyName("acountType")]
         public string AccountType { get; set; }
 
-        [JsonProperty("availableFunds")]
+        [JsonPropertyName("availableFunds")]
         public double AvailableFunds { get; set; }
 
-        [JsonProperty("buyingPower")]
+        [JsonPropertyName("buyingPower")]
         public double BuyingPower { get; set; }
 
-        [JsonProperty("cashEuro")]
+        [JsonPropertyName("cashEuro")]
         public double CashEuro { get; set; }
 
-        [JsonProperty("cashUsd")]
+        [JsonPropertyName("cashUsd")]
         public double CashUsd { get; set; }
 
-        [JsonProperty("accruedCash")]
+        [JsonPropertyName("accruedCash")]
         public double AccruedCash { get; set; }
 
-        [JsonProperty("baseNetLiquidation")]
+        [JsonPropertyName("baseNetLiquidation")]
         public double BaseNetLiquidation { get; set; }
 
-        [JsonProperty("excessLiquidity")]
+        [JsonPropertyName("excessLiquidity")]
         public double ExcessLiquidity { get; set; }
 
         public void SetValue(string key, string value, string currency)

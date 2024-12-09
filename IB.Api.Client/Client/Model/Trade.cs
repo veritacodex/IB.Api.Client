@@ -1,71 +1,71 @@
 using System;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace IB.Api.Client.Model
 {
     public class Trade
     {
-        [JsonProperty("orderId")]
+        [JsonPropertyName("orderId")]
         public int? OrderId { get; set; }
 
-        [JsonProperty("orderRef")]
+        [JsonPropertyName("orderRef")]
         public string OrderRef { get; set; }
 
-        [JsonProperty("executionId")]
+        [JsonPropertyName("executionId")]
         public string ExecutionId { get; set; }
 
-        [JsonProperty("at")]
+        [JsonPropertyName("at")]
         public DateTime? At { get; set; }
 
-        [JsonProperty("atControl")]
+        [JsonPropertyName("atControl")]
         public DateTime? AtControl { get; set; }
 
-        [JsonProperty("symbol")]
+        [JsonPropertyName("symbol")]
         public string Symbol { get; set; }
 
-        [JsonProperty("localSymbol")]
+        [JsonPropertyName("localSymbol")]
         public string LocalSymbol { get; set; }
 
-        [JsonProperty("tradeAction")]
+        [JsonPropertyName("tradeAction")]
         public string TradeAction { get; set; }
 
-        [JsonProperty("status")]
+        [JsonPropertyName("status")]
         public string Status { get; set; }        
 
-        [JsonProperty("orderType")]
+        [JsonPropertyName("orderType")]
         public string OrderType { get; set; }
 
-        [JsonProperty("quantity")]
+        [JsonPropertyName("quantity")]
         public decimal Quantity { get; set; }
 
-        [JsonProperty("multiplier")]
+        [JsonPropertyName("multiplier")]
         public string Multiplier { get; set; }
 
-        [JsonProperty("commission")]
+        [JsonPropertyName("commission")]
         public double Commission { get; set; }
 
-        [JsonProperty("pnl")]
+        [JsonPropertyName("pnl")]
         public decimal Pnl { get; set; }        
 
-        [JsonProperty("limitPrice")]
+        [JsonPropertyName("limitPrice")]
         public double LimitPrice { get; set; }
 
-        [JsonProperty("stopPrice")]
+        [JsonPropertyName("stopPrice")]
         public double StopPrice { get; set; }
 
-        [JsonProperty("fillPrice")]
+        [JsonPropertyName("fillPrice")]
         public double FillPrice { get; set; }
 
-        [JsonProperty("avgPrice")]
+        [JsonPropertyName("avgPrice")]
         public decimal AvgPrice { get; set; }
 
-        [JsonProperty("drawdown")]
+        [JsonPropertyName("drawdown")]
         public decimal Drawdown { get; set; }
 
-        [JsonProperty("lastPrice")]
+        [JsonPropertyName("lastPrice")]
         public decimal LastPrice { get; set; }
 
-        [JsonProperty("initialStop")]
+        [JsonPropertyName("initialStop")]
         public double InitialStop { get; set; }
     }
 }

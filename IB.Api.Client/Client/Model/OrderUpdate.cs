@@ -1,43 +1,43 @@
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace IB.Api.Client.Model
 {
     public class OrderUpdate
     {
-        [JsonProperty("orderId")]
+        [JsonPropertyName("orderId")]
         public int OrderId { get; set; }
 
-        [JsonProperty("status")]
+        [JsonPropertyName("status")]
         public string Status { get; set; }
 
-        [JsonProperty("filledAmount")]
+        [JsonPropertyName("filledAmount")]
         public decimal FilledAmount { get; set; }
 
-        [JsonProperty("remainingAmount")]
+        [JsonPropertyName("remainingAmount")]
         public decimal RemainingAmount { get; set; }
 
-        [JsonProperty("avgFillPrice")]
+        [JsonPropertyName("avgFillPrice")]
         public double AvgFillPrice { get; set; }
 
-        [JsonProperty("permId")]
+        [JsonPropertyName("permId")]
         public int PermId { get; set; }
 
-        [JsonProperty("parentId")]
+        [JsonPropertyName("parentId")]
         public int ParentId { get; set; }
 
-        [JsonProperty("lastFillPrice")]
+        [JsonPropertyName("lastFillPrice")]
         public double LastFillPrice { get; set; }
 
-        [JsonProperty("clientId")]
+        [JsonPropertyName("clientId")]
         public int ClientId { get; set; }
 
-        [JsonProperty("whyHeld")]
+        [JsonPropertyName("whyHeld")]
         public string WhyHeld { get; set; }
 
-        [JsonProperty("mktCapPrice")]
+        [JsonPropertyName("mktCapPrice")]
         public double MktCapPrice { get; set; }
 
-        [JsonProperty("action")]
+        [JsonPropertyName("action")]
         public string Action { get; set; }
     }
 }

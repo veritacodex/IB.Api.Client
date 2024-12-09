@@ -1,15 +1,15 @@
 using System;
+using System.Text.Json.Serialization;
 using IBApi;
-using Newtonsoft.Json;
 
 namespace IB.Api.Client.Model
 {
     public class PortfolioUpdate
     {
-        [JsonProperty("updatedOn")]
+        [JsonPropertyName("updatedOn")]
         public DateTime UpdatedOn { get; set; }
 
-        [JsonProperty("updated")]
+        [JsonPropertyName("updated")]
         public string Updated
         {
             get
@@ -18,34 +18,34 @@ namespace IB.Api.Client.Model
             }
         }
 
-        [JsonProperty("action")]
+        [JsonPropertyName("action")]
         public string Action { get; set; }
 
-        [JsonProperty("contract")]
+        [JsonPropertyName("contract")]
         public Contract Contract { get; set; }
 
-        [JsonProperty("position")]
+        [JsonPropertyName("position")]
         public decimal Position { get; set; }
 
-        [JsonProperty("unrealizedPnl")]
+        [JsonPropertyName("unrealizedPnl")]
         public double UnrealizedPnl { get; set; }
 
-        [JsonProperty("unrealizedPnlCalculated")]
+        [JsonPropertyName("unrealizedPnlCalculated")]
         public decimal UnrealizedPnlCalculated { get; set; }
 
-        [JsonProperty("realizedPnl")]
+        [JsonPropertyName("realizedPnl")]
         public double RealizedPnl { get; internal set; }
 
-        [JsonProperty("accountName")]
+        [JsonPropertyName("accountName")]
         public string AccountName { get; internal set; }
 
-        [JsonProperty("marketPrice")]
+        [JsonPropertyName("marketPrice")]
         public double MarketPrice { get; internal set; }
 
-        [JsonProperty("marketValue")]
+        [JsonPropertyName("marketValue")]
         public double MarketValue { get; internal set; }
 
-        [JsonProperty("averageCost")]
+        [JsonPropertyName("averageCost")]
         public double AverageCost { get; internal set; }
 
         public string GetAsTable()

@@ -1,77 +1,77 @@
-using Newtonsoft.Json;
 using System;
+using System.Text.Json.Serialization;
 
 namespace IB.Api.Client.Model
 {
     public class PriceUpdate
     {
-        [JsonProperty("tickerId")]
+        [JsonPropertyName("tickerId")]
         public int TickerId { get; internal set; }
 
-        [JsonProperty("time")]
+        [JsonPropertyName("time")]
         public long Time { get; set; }
 
-        [JsonProperty("timeString")]
+        [JsonPropertyName("timeString")]
         public string TimeString { get; set; }
 
-        [JsonProperty("dateTime")]
+        [JsonPropertyName("dateTime")]
         public DateTime DateTime { get; set; }
 
-        [JsonProperty("open")]
+        [JsonPropertyName("open")]
         public double Open { get; set; }
 
-        [JsonProperty("high")]
+        [JsonPropertyName("high")]
         public double High { get; set; }
 
-        [JsonProperty("low")]
+        [JsonPropertyName("low")]
         public double Low { get; set; }
 
-        [JsonProperty("close")]
+        [JsonPropertyName("close")]
         public double Close { get; set; }
 
-        [JsonProperty("bid")]
+        [JsonPropertyName("bid")]
         public double Bid { get; set; }
 
-        [JsonProperty("bidSize")]
+        [JsonPropertyName("bidSize")]
         public decimal BidSize { get; set; }
 
-        [JsonProperty("ask")]
+        [JsonPropertyName("ask")]
         public double Ask { get; set; }
 
-        [JsonProperty("askSize")]
+        [JsonPropertyName("askSize")]
         public decimal AskSize { get; set; }
 
-        [JsonProperty("marketDataType")]
+        [JsonPropertyName("marketDataType")]
         public int MarketDataType { get; set; }
 
-        [JsonProperty("minTick")]
+        [JsonPropertyName("minTick")]
         public double MinTick { get; set; }
 
-        [JsonProperty("snapshotPermissions")]
+        [JsonPropertyName("snapshotPermissions")]
         public int SnapshotPermissions { get; set; }
 
-        [JsonProperty("bboExchange")]
+        [JsonPropertyName("bboExchange")]
         public string BboExchange { get; set; }
 
-        [JsonProperty("volume")]
+        [JsonPropertyName("volume")]
         public decimal Volume { get; set; }
 
-        [JsonProperty("optionBid")]
+        [JsonPropertyName("optionBid")]
         public double OptionBid { get; set; }
 
-        [JsonProperty("optionAsk")]
+        [JsonPropertyName("optionAsk")]
         public double OptionAsk { get; set; }
 
-        [JsonProperty("gamma")]
+        [JsonPropertyName("gamma")]
         public double Gamma { get; set; }
 
-        [JsonProperty("delta")]
+        [JsonPropertyName("delta")]
         public double Delta { get; internal set; }
 
-        [JsonProperty("vega")]
+        [JsonPropertyName("vega")]
         public double Vega { get; internal set; }
 
-        [JsonProperty("tetha")]
+        [JsonPropertyName("tetha")]
         public double Theta { get; internal set; }
     }
 }
