@@ -19,7 +19,7 @@ namespace IB.Api.Client.Helper
         }
         public static long DateToEpoch(DateTime date, long multiplier = 1)
         {
-            return Convert.ToInt64((date - DateTime.UnixEpoch).TotalSeconds * multiplier);
+            return Convert.ToInt64((date - DateTime.UnixEpoch).TotalSeconds * multiplier) * 1000;
         }
         public static DateTime ApiToDate(string date)
         {
