@@ -134,7 +134,6 @@ namespace IBApi
                 {
                     if (inBuf.Count >= inBuf.Capacity * 3/4)
                         inBuf.Capacity *= 2;
-
                     AppendInBuf();
                 }
 
