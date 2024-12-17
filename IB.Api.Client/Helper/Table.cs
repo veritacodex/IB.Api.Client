@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IB.Api.Client;
+namespace IB.Api.Client.Helper;
 
 class Table
 {
@@ -14,7 +14,7 @@ class Table
     {
         if (columns == null || columns.Length == 0)
         {
-            throw new System.ArgumentException("Parameter cannot be null nor empty", nameof(columns));
+            throw new ArgumentException("Parameter cannot be null nor empty", nameof(columns));
         }
 
         _columns = new List<object>(columns);
