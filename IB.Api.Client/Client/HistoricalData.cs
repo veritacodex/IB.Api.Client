@@ -23,10 +23,10 @@ namespace IB.Api.Client
         /// For Bar Sizes check BarSize class
         /// For durations check Duration class
         /// </summary>
-        public void GetHistoricalData(int reqId, Contract contract, string duration, string barSize, WhatToShow whatToShow, Rth rth, bool keepUpToDate)
+        public void GetHistoricalData(int reqId, Contract contract, int durationUnit, DurationType duration, int barUnit, BarSizeType barSize, WhatToShow whatToShow, Rth rth, bool keepUpToDate)
         {
             _historicalData.Add(reqId, []);
-            ClientSocket.ReqHistoricalData(reqId, contract, string.Empty, duration, barSize, whatToShow.ToString(), (int)rth, 1, keepUpToDate, null);
+            ClientSocket.ReqHistoricalData(reqId, contract, string.Empty, Duration.GetDuration(durationUnit, duration), BarSize.GetBarSize(barUnit, barSize), whatToShow.ToString(), (int)rth, 1, keepUpToDate, null);
             Notify($"Historical data for symbol {contract.Symbol} requested");
         }
 
