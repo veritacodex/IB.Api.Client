@@ -294,7 +294,7 @@ namespace IB.Api.Client
         }
         void IEWrapper.positionEnd()
         {
-            Notify("Not implemented");
+            Notify("positionEnd not implemented");
             throw new NotImplementedException();
         }
         void IEWrapper.positionMulti(int requestId, string account, string modelCode, Contract contract, decimal pos, double avgCost)
@@ -363,8 +363,8 @@ namespace IB.Api.Client
         }
         void IEWrapper.wshMetaData(int reqId, string dataJson)
         {
-            _ = reqId;
             _ = dataJson;
+            _ = reqId;            
 
             Notify("Not implemented");
             throw new NotImplementedException();
@@ -407,7 +407,7 @@ namespace IB.Api.Client
         }
         void IEWrapper.completedOrdersEnd()
         {
-            Notify("Not implemented");
+            Notify("completedOrdersEnd Not implemented");
             throw new NotImplementedException();
         }
         void IEWrapper.scannerData(int reqId, int rank, ContractDetails contractDetails, string distance, string benchmark, string projection, string legsStr)
