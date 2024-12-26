@@ -10,10 +10,10 @@ namespace IBApi
      */
     public class ComboLeg
     {
-        public const int SAME = 0;
-        public const int OPEN = 1;
-        public const int CLOSE = 2;
-        public const int UNKNOWN = 3;
+        public static int SAME = 0;
+        public static int OPEN = 1;
+        public static int CLOSE = 2;
+        public static int UNKNOWN = 3;
 
 
         /**
@@ -22,8 +22,8 @@ namespace IBApi
         public int ConId { get; set; }
 
         /**
-          * @brief Select the relative number of contracts for the leg you are constructing. To help determine the ratio for a specific combination order, refer to the Interactive Analytics section of the User's Guide.
-          */
+         * @brief Select the relative number of contracts for the leg you are constructing. To help determine the ratio for a specific combination order, refer to the Interactive Analytics section of the User's Guide.
+         */
         public int Ratio { get; set; }
 
         /**
@@ -38,13 +38,13 @@ namespace IBApi
         public string Exchange { get; set; }
 
         /**
-        * @brief Specifies whether an order is an open or closing order.
-        * For instituational customers to determine if this order is to open or close a position.
-        *      0 - Same as the parent security. This is the only option for retail customers.\n
-        *      1 - Open. This value is only valid for institutional customers.\n
-        *      2 - Close. This value is only valid for institutional customers.\n
-        *      3 - Unknown
-        */
+         * @brief Specifies whether an order is an open or closing order.
+         * For institutional customers to determine if this order is to open or close a position.
+         *      0 - Same as the parent security. This is the only option for retail customers.\n
+         *      1 - Open. This value is only valid for institutional customers.\n
+         *      2 - Close. This value is only valid for institutional customers.\n
+         *      3 - Unknown
+         */
         public int OpenClose { get; set; }
 
         /**
@@ -60,15 +60,13 @@ namespace IBApi
 
         /**
          * @brief Mark order as exempt from short sale uptick rule.\n
-	 * Possible values:\n
-	 * 0 - Does not apply the rule.\n
-	 * -1 - Applies the short sale uptick rule.
+         * Possible values:\n
+         *      0 - Does not apply the rule.\n
+         *      -1 - Applies the short sale uptick rule.
          */
         public int ExemptCode { get; set; }
 
-        public ComboLeg()
-        {
-        }
+        public ComboLeg() { }
 
         public ComboLeg(int conId, int ratio, string action, string exchange, int openClose, int shortSaleSlot, string designatedLocation, int exemptCode)
         {
