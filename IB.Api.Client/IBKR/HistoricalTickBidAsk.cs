@@ -21,23 +21,23 @@ namespace IBApi
             [return: MarshalAs(UnmanagedType.I8)]
             get;
             [param: MarshalAs(UnmanagedType.I8)]
-            private set;
+            set;
         }
 
         /**
          * @brief Tick attribs of historical bid/ask tick
          */
-        public TickAttribBidAsk TickAttribBidAsk { get; private set; }
+        public TickAttribBidAsk TickAttribBidAsk { get; set; }
 
         /**
          * @brief The bid price of the historical tick
          */
-        public double PriceBid { get; private set; }
+        public double PriceBid { get; set; }
 
         /**
          * @brief The ask price of the historical tick 
          */
-        public double PriceAsk { get; private set; }
+        public double PriceAsk { get; set; }
 
         /**
          * @brief The bid size of the historical tick 
@@ -47,7 +47,7 @@ namespace IBApi
             [return: MarshalAs(UnmanagedType.I8)]
             get;
             [param: MarshalAs(UnmanagedType.I8)]
-            private set;
+            set;
         }
 
         /**
@@ -58,7 +58,7 @@ namespace IBApi
             [return: MarshalAs(UnmanagedType.I8)]
             get;
             [param: MarshalAs(UnmanagedType.I8)]
-            private set;
+            set;
         }
 
         public HistoricalTickBidAsk() { }

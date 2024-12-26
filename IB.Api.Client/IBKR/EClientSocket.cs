@@ -22,7 +22,7 @@ namespace IBApi
         private int port;
         private TcpClient tcpClient;
 
-        public EClientSocket(EWrapper wrapper, EReaderSignal eReaderSignal) :
+        public EClientSocket(IEWrapper wrapper, IEReaderSignal eReaderSignal) :
             base(wrapper) => this.eReaderSignal = eReaderSignal;
 
         void EClientMsgSink.serverVersion(int version, string time)
@@ -145,7 +145,7 @@ namespace IBApi
             }
         }
 
-        private readonly EReaderSignal eReaderSignal;
+        private readonly IEReaderSignal eReaderSignal;
         private int redirectCount;
 
         protected override uint prepareBuffer(BinaryWriter paramsList)

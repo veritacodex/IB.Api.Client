@@ -5,7 +5,7 @@ using System.Threading;
 
 namespace IBApi
 {
-    public class EReaderMonitorSignal : EReaderSignal
+    public class EReaderMonitorSignal : IEReaderSignal
     {
         private readonly object cs = new object();
         private bool open;

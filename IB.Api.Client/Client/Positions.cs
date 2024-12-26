@@ -9,7 +9,7 @@ namespace IB.Api.Client
     {
         public event EventHandler<PortfolioUpdate> PortfolioUpdateReceived;
 
-        void IEWrapper.UpdatePortfolio(Contract contract, decimal position, double marketPrice, double marketValue,
+        void IEWrapper.updatePortfolio(Contract contract, decimal position, double marketPrice, double marketValue,
             double averageCost, double unrealizedPNL, double realizedPNL, string accountName)
         {
             var portfolioUpdate = new PortfolioUpdate

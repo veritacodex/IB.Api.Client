@@ -26,7 +26,7 @@ namespace IB.Api.Client
         public void GetHistoricalData(int reqId, Contract contract, int durationUnit, DurationType duration, int barUnit, BarSizeType barSize, WhatToShow whatToShow, Rth rth, bool keepUpToDate)
         {
             _historicalData.Add(reqId, []);
-            ClientSocket.ReqHistoricalData(reqId, contract, string.Empty, Duration.GetDuration(durationUnit, duration), BarSize.GetBarSize(barUnit, barSize), whatToShow.ToString(), (int)rth, 1, keepUpToDate, null);
+            ClientSocket.reqHistoricalData(reqId, contract, string.Empty, Duration.GetDuration(durationUnit, duration), BarSize.GetBarSize(barUnit, barSize), whatToShow.ToString(), (int)rth, 1, keepUpToDate, null);
             Notify($"Historical data for symbol {contract.Symbol} requested");
         }
 
@@ -48,7 +48,7 @@ namespace IB.Api.Client
             {
                 string endTime = DateHelper.ConvertToApiDate(DateTime.Now);
                 InitializeHistoricalTickDictionary(reqId, whatToShow);
-                ClientSocket.ReqHistoricalTicks(reqId, contract, null, endTime, 1000, whatToShow.ToString(), 0, true, null);
+                ClientSocket.reqHistoricalTicks(reqId, contract, null, endTime, 1000, whatToShow.ToString(), 0, true, null);
                 Notify($"Time and Sales for symbol {contract.Symbol} requested");
             }
             else
@@ -77,16 +77,18 @@ namespace IB.Api.Client
                     }
             }
         }
-        void IEWrapper.HistoricalData(int reqId, Bar bar)
+        void IEWrapper.historicalData(int reqId, Bar bar)
         {
             _historicalData[reqId].Add(bar);
         }
-        void IEWrapper.HistoricalDataEnd(int reqId, string start, string end)
+        void IEWrapper.historicalDataEnd(int reqId, string start, string end)
         {
+            _ = start;
+            _ = end;
             var data = _historicalData[reqId];
             HistoricalDataReceived?.Invoke(this, new Tuple<int, List<Bar>>(reqId, data));
         }
-        void IEWrapper.HistoricalDataUpdate(int reqId, Bar bar)
+        void IEWrapper.historicalDataUpdate(int reqId, Bar bar)
         {
             var barUpdate = new BarUpdate
             {
@@ -95,7 +97,7 @@ namespace IB.Api.Client
             };
             HistoricalDataUpdateReceived?.Invoke(this, barUpdate);
         }
-        void IEWrapper.HistoricalTicks(int reqId, HistoricalTick[] ticks, bool done)
+        void IEWrapper.historicalTicks(int reqId, HistoricalTick[] ticks, bool done)
         {
             _historicalTicks[reqId].AddRange(ticks);
             if (done)
@@ -104,7 +106,7 @@ namespace IB.Api.Client
                 _historicalTicks[reqId] = [];
             }
         }
-        void IEWrapper.HistoricalTicksBidAsk(int reqId, HistoricalTickBidAsk[] ticks, bool done)
+        void IEWrapper.historicalTicksBidAsk(int reqId, HistoricalTickBidAsk[] ticks, bool done)
         {
             _historicalTickBidAsk[reqId].AddRange(ticks);
             if (done)
@@ -113,7 +115,7 @@ namespace IB.Api.Client
                 _historicalTickBidAsk[reqId] = [];
             }
         }
-        void IEWrapper.HistoricalTicksLast(int reqId, HistoricalTickLast[] ticks, bool done)
+        void IEWrapper.historicalTicksLast(int reqId, HistoricalTickLast[] ticks, bool done)
         {
             _historicalTickLast[reqId].AddRange(ticks);
             if (done)

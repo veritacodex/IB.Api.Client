@@ -14,16 +14,13 @@ namespace IBApi
     public class EReader
     {
         private readonly EClientSocket eClientSocket;
-        private readonly EReaderSignal eReaderSignal;
+        private readonly IEReaderSignal eReaderSignal;
         private readonly Queue<EMessage> msgQueue = new Queue<EMessage>();
         private readonly EDecoder processMsgsDecoder;
         private const int defaultInBufSize = ushort.MaxValue / 8;
-
         private bool UseV100Plus => eClientSocket.UseV100Plus;
 
-        private static readonly EWrapper defaultWrapper = new DefaultEWrapper();
-
-        public EReader(EClientSocket clientSocket, EReaderSignal signal)
+        public EReader(EClientSocket clientSocket, IEReaderSignal signal)
         {
             eClientSocket = clientSocket;
             eReaderSignal = signal;
@@ -129,7 +126,7 @@ namespace IBApi
             {
                 try
                 {
-                    msgSize = new EDecoder(eClientSocket.ServerVersion, defaultWrapper).ParseAndProcessMsg(inBuf.ToArray());
+                    msgSize = new EDecoder(eClientSocket.ServerVersion, new IEWrapper()).ParseAndProcessMsg(inBuf.ToArray());
                     break;
                 }
                 catch (EndOfStreamException)

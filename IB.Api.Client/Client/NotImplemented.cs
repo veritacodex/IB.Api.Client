@@ -7,196 +7,371 @@ namespace IB.Api.Client
     //Not implemented
     public partial class IBClient
     {
-        void IEWrapper.BondContractDetails(int reqId, ContractDetails contract)
+        void IEWrapper.bondContractDetails(int reqId, ContractDetails contract)
         {
+            _ = reqId;
+            _ = contract;
+
+            Notify("Not implemented");
             throw new NotImplementedException();
         }
-        void IEWrapper.CurrentTime(long time)
+        void IEWrapper.currentTime(long time)
         {
+            _ = time;
+
+            Notify("Not implemented");
             throw new NotImplementedException();
         }
-        void IEWrapper.DeltaNeutralValidation(int reqId, DeltaNeutralContract deltaNeutralContract)
+        void IEWrapper.deltaNeutralValidation(int reqId, DeltaNeutralContract deltaNeutralContract)
         {
+            Notify("Not implemented");
             throw new NotImplementedException();
         }
-        void IEWrapper.DisplayGroupList(int reqId, string groups)
+        void IEWrapper.displayGroupList(int reqId, string groups)
         {
+            Notify("Not implemented");
             throw new NotImplementedException();
         }
-        void IEWrapper.DisplayGroupUpdated(int reqId, string contractInfo)
+        void IEWrapper.displayGroupUpdated(int reqId, string contractInfo)
         {
+            Notify("Not implemented");
             throw new NotImplementedException();
         }
-        void IEWrapper.FamilyCodes(FamilyCode[] familyCodes)
+        void IEWrapper.familyCodes(FamilyCode[] familyCodes)
         {
+            Notify("Not implemented");
             throw new NotImplementedException();
         }
-        void IEWrapper.FundamentalData(int reqId, string data)
+        void IEWrapper.fundamentalData(int reqId, string data)
         {
+            Notify("Not implemented");
             throw new NotImplementedException();
         }
-        void IEWrapper.HeadTimestamp(int reqId, string headTimestamp)
+        void IEWrapper.headTimestamp(int reqId, string headTimestamp)
         {
+            Notify("Not implemented");
             throw new NotImplementedException();
         }
-        void IEWrapper.HistogramData(int reqId, HistogramEntry[] data)
+        void IEWrapper.histogramData(int reqId, HistogramEntry[] data)
         {
+            Notify("Not implemented");
             throw new NotImplementedException();
         }
-        void IEWrapper.MktDepthExchanges(DepthMktDataDescription[] depthMktDataDescriptions)
+        void IEWrapper.mktDepthExchanges(DepthMktDataDescription[] depthMktDataDescriptions)
         {
+            Notify("Not implemented");
             throw new NotImplementedException();
         }
-        void IEWrapper.Pnl(int reqId, double dailyPnL, double unrealizedPnL, double realizedPnL)
+        void IEWrapper.pnl(int reqId, double dailyPnL, double unrealizedPnL, double realizedPnL)
         {
+            Notify("Not implemented");
             throw new NotImplementedException();
         }
-        void IEWrapper.PnlSingle(int reqId, decimal pos, double dailyPnL, double unrealizedPnL, double realizedPnL, double value)
+        void IEWrapper.pnlSingle(int reqId, decimal pos, double dailyPnL, double unrealizedPnL, double realizedPnL, double value)
         {
+            Notify("Not implemented");
             throw new NotImplementedException();
         }
-        void IEWrapper.ReceiveFA(int faDataType, string faXmlData)
+        void IEWrapper.receiveFA(int faDataType, string faXmlData)
         {
+            Notify("Not implemented");
             throw new NotImplementedException();
         }
-        void IEWrapper.RerouteMktDataReq(int reqId, int conId, string exchange)
+        void IEWrapper.rerouteMktDataReq(int reqId, int conId, string exchange)
         {
+            Notify("Not implemented");
             throw new NotImplementedException();
         }
-        void IEWrapper.RerouteMktDepthReq(int reqId, int conId, string exchange)
+        void IEWrapper.rerouteMktDepthReq(int reqId, int conId, string exchange)
         {
+            Notify("Not implemented");
             throw new NotImplementedException();
         }
-        void IEWrapper.SmartComponents(int reqId, Dictionary<int, KeyValuePair<string, char>> theMap)
+        void IEWrapper.smartComponents(int reqId, Dictionary<int, KeyValuePair<string, char>> theMap)
         {
+            Notify("Not implemented");
             throw new NotImplementedException();
         }
-        void IEWrapper.SoftDollarTiers(int reqId, SoftDollarTier[] tiers)
+        void IEWrapper.softDollarTiers(int reqId, SoftDollarTier[] tiers)
         {
+            Notify("Not implemented");
             throw new NotImplementedException();
         }
-        void IEWrapper.SymbolSamples(int reqId, ContractDescription[] contractDescriptions)
+        void IEWrapper.symbolSamples(int reqId, ContractDescription[] contractDescriptions)
         {
+            Notify("Not implemented");
             throw new NotImplementedException();
         }
-        void IEWrapper.VerifyAndAuthCompleted(bool isSuccessful, string errorText)
+        void IEWrapper.verifyAndAuthCompleted(bool isSuccessful, string errorText)
         {
+            _ = isSuccessful;
+            _ = errorText;
+
+            Notify("Not implemented");
             throw new NotImplementedException();
         }
-        void IEWrapper.VerifyAndAuthMessageAPI(string apiData, string xyzChallenge)
+        void IEWrapper.verifyAndAuthMessageAPI(string apiData, string xyzChallenge)
         {
+            _ = apiData;
+            _ = xyzChallenge;
+
+            Notify("Not implemented");
             throw new NotImplementedException();
         }
-        void IEWrapper.VerifyCompleted(bool isSuccessful, string errorText)
+        void IEWrapper.verifyCompleted(bool isSuccessful, string errorText)
         {
+            _ = isSuccessful;
+            _ = errorText;
+
+            Notify("Not implemented");
             throw new NotImplementedException();
         }
-        void IEWrapper.VerifyMessageAPI(string apiData)
+        void IEWrapper.verifyMessageAPI(string apiData)
         {
+            _ = apiData;
+
+            Notify("Not implemented");
             throw new NotImplementedException();
         }
-        void IEWrapper.AccountSummaryEnd(int reqId)
+        void IEWrapper.accountSummaryEnd(int reqId)
         {
+            _ = reqId;
+
+            Notify("Not implemented");
             throw new NotImplementedException();
         }
-        void IEWrapper.AccountUpdateMulti(int requestId, string account, string modelCode, string key, string value, string currency)
+        void IEWrapper.accountUpdateMulti(int requestId, string account, string modelCode, string key, string value, string currency)
         {
+            _= requestId;
+            _ = account;
+            _ = modelCode;
+            _ = key;
+            _ = value;
+            _ = currency;
+
+            Notify("Not implemented");
             throw new NotImplementedException();
         }
-        void IEWrapper.AccountSummary(int reqId, string account, string tag, string value, string currency)
+        void IEWrapper.accountSummary(int reqId, string account, string tag, string value, string currency)
         {
+            _ = reqId;
+            _ = account;
+            _ = tag;
+            _ = value;
+            _ = currency;
+
+            Notify("Not implemented");
             throw new NotImplementedException();
         }
-        void IEWrapper.AccountUpdateMultiEnd(int requestId)
+        void IEWrapper.accountUpdateMultiEnd(int requestId)
         {
+            _ = requestId;
+
+            Notify("Not implemented");
             throw new NotImplementedException();
         }
-        void IEWrapper.TickByTickAllLast(int reqId, int tickType, long time, double price, decimal size, TickAttribLast tickAttribLast, string exchange, string specialConditions)
+        void IEWrapper.tickByTickAllLast(int reqId, int tickType, long time, double price, decimal size, TickAttribLast tickAttribLast, string exchange, string specialConditions)
         {
+            _ = reqId;
+            _ = tickType;
+            _ = time;
+            _ = price;
+            _ = size;
+            _ = tickAttribLast;
+            _ = exchange;
+
+            Notify("Not implemented");
             throw new NotImplementedException();
         }
-        void IEWrapper.TickByTickMidPoint(int reqId, long time, double midPoint)
+        void IEWrapper.tickByTickMidPoint(int reqId, long time, double midPoint)
         {
+            _ = reqId;
+            _ = time;
+            _ = midPoint;
+
+            Notify("Not implemented");
             throw new NotImplementedException();
         }
-        void IEWrapper.TickEFP(int tickerId, int tickType, double basisPoints, string formattedBasisPoints, double impliedFuture, int holdDays, string futureLastTradeDate, double dividendImpact, double dividendsToLastTradeDate)
+        void IEWrapper.tickEFP(int tickerId, int tickType, double basisPoints, string formattedBasisPoints, double impliedFuture, int holdDays, string futureLastTradeDate, double dividendImpact, double dividendsToLastTradeDate)
         {
+            _ = tickerId;
+            _ = tickType;
+            _ = basisPoints;
+            _ = formattedBasisPoints;
+            _ = impliedFuture;
+            _ = holdDays;
+            _ = futureLastTradeDate;
+            _ = dividendImpact;
+            _ = dividendsToLastTradeDate;
+
+            Notify("Not implemented");
             throw new NotImplementedException();
         }
-        void IEWrapper.TickSnapshotEnd(int tickerId)
+        void IEWrapper.tickSnapshotEnd(int tickerId)
         {
+            _ = tickerId;
+
+            Notify("Not implemented");
             throw new NotImplementedException();
         }
-        void IEWrapper.UpdateMktDepthL2(int tickerId, int position, string marketMaker, int operation, int side, double price, decimal size, bool isSmartDepth)
+        void IEWrapper.updateMktDepthL2(int tickerId, int position, string marketMaker, int operation, int side, double price, decimal size, bool isSmartDepth)
         {
+            _ = tickerId;
+            _ = position;
+            _ = marketMaker;
+            _ = operation;
+            _ = side;
+            _ = price;
+            _ = size;
+
+            Notify("Not implemented");
             throw new NotImplementedException();
         }
-        void IEWrapper.Position(string account, Contract contract, decimal pos, double avgCost)
+        void IEWrapper.position(string account, Contract contract, decimal pos, double avgCost)
         {
+            _ = account;
+            _ = contract;
+            _ = pos;
+            _ = avgCost;
+
+            Notify("Not implemented");
             throw new NotImplementedException();
         }
-        void IEWrapper.PositionEnd()
+        void IEWrapper.positionEnd()
         {
+            Notify("Not implemented");
             throw new NotImplementedException();
         }
-        void IEWrapper.PositionMulti(int requestId, string account, string modelCode, Contract contract, decimal pos, double avgCost)
+        void IEWrapper.positionMulti(int requestId, string account, string modelCode, Contract contract, decimal pos, double avgCost)
         {
+            _ = requestId;
+            _ = account;
+            _ = modelCode;
+            _ = contract;
+            _ = pos;
+            _ = avgCost;
+
+            Notify("Not implemented");
             throw new NotImplementedException();
         }
-        void IEWrapper.PositionMultiEnd(int requestId)
+        void IEWrapper.positionMultiEnd(int requestId)
         {
+            _ = requestId;
+
+            Notify("Not implemented");
             throw new NotImplementedException();
         }
-        void IEWrapper.OrderBound(long orderId, int apiClientId, int apiOrderId)
+        void IEWrapper.orderBound(long orderId, int apiClientId, int apiOrderId)
         {
+            _ = orderId;
+            _ = apiClientId;
+            _ = apiOrderId;
+
+            Notify("Not implemented");
             throw new NotImplementedException();
         }
-        void IEWrapper.HistoricalNews(int requestId, string time, string providerCode, string articleId, string headline)
+        void IEWrapper.historicalNews(int requestId, string time, string providerCode, string articleId, string headline)
         {
+            _ = requestId;
+            _ = time;
+            _ = providerCode;
+            _ = articleId;
+            _ = headline;
+
+            Notify("Not implemented");
             throw new NotImplementedException();
         }
-        void IEWrapper.HistoricalNewsEnd(int requestId, bool hasMore)
+        void IEWrapper.historicalNewsEnd(int requestId, bool hasMore)
         {
+            _ = requestId;
+            _ = hasMore;
+
+            Notify("Not implemented");
             throw new NotImplementedException();
         }
-        void IEWrapper.NewsArticle(int requestId, int articleType, string articleText)
+        void IEWrapper.newsArticle(int requestId, int articleType, string articleText)
         {
+            _ = requestId;
+            _ = articleType;
+            _ = articleText;
+
+            Notify("Not implemented");
             throw new NotImplementedException();
         }
-        void IEWrapper.ReplaceFAEnd(int reqId, string text)
+        void IEWrapper.replaceFAEnd(int reqId, string text)
         {
+            _ = reqId;
+            _ = text;
+
+            Notify("Not implemented");
             throw new NotImplementedException();
         }
-        void IEWrapper.WshMetaData(int reqId, string dataJson)
+        void IEWrapper.wshMetaData(int reqId, string dataJson)
         {
+            _ = reqId;
+            _ = dataJson;
+
+            Notify("Not implemented");
             throw new NotImplementedException();
         }
-        void IEWrapper.WshEventData(int reqId, string dataJson)
+        void IEWrapper.wshEventData(int reqId, string dataJson)
         {
+            _ = reqId;
+            _ = dataJson;
+
+            Notify("Not implemented");
             throw new NotImplementedException();
         }
-        void IEWrapper.HistoricalSchedule(int reqId, string startDateTime, string endDateTime, string timeZone, HistoricalSession[] sessions)
+        void IEWrapper.historicalSchedule(int reqId, string startDateTime, string endDateTime, string timeZone, HistoricalSession[] sessions)
         {
+            _ = reqId;
+            _ = startDateTime;
+            _ = endDateTime;
+            _ = timeZone;
+            _ = sessions;
+
+            Notify("Not implemented");
             throw new NotImplementedException();
         }
-        void IEWrapper.UserInfo(int reqId, string whiteBrandingId)
+        void IEWrapper.userInfo(int reqId, string whiteBrandingId)
         {
+            _ = reqId;
+            _ = whiteBrandingId;
+
+            Notify("Not implemented");
             throw new NotImplementedException();
         }
-        void IEWrapper.CompletedOrder(Contract contract, Order order, OrderState orderState)
+        void IEWrapper.completedOrder(Contract contract, Order order, OrderState orderState)
         {
+            _ = contract;
+            _ = order;
+            _ = orderState;
+
+            Notify("Not implemented");
             throw new NotImplementedException();
         }
-        void IEWrapper.CompletedOrdersEnd()
+        void IEWrapper.completedOrdersEnd()
         {
+            Notify("Not implemented");
             throw new NotImplementedException();
         }
-        void IEWrapper.ScannerData(int reqId, int rank, ContractDetails contractDetails, string distance, string benchmark, string projection, string legsStr)
+        void IEWrapper.scannerData(int reqId, int rank, ContractDetails contractDetails, string distance, string benchmark, string projection, string legsStr)
         {
+            _ = reqId;
+            _ = rank;
+            _ = contractDetails;
+            _ = distance;
+            _ = benchmark;
+            _ = projection;
+            _ = legsStr;
+
+            Notify("Not implemented");
             throw new NotImplementedException();
         }
-        void IEWrapper.ScannerDataEnd(int reqId)
+        void IEWrapper.scannerDataEnd(int reqId)
         {
+            _ = reqId;
+            Notify("Not implemented");
             throw new NotImplementedException();
         }
     }

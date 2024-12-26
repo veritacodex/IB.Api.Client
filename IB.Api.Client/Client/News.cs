@@ -1,4 +1,5 @@
 using System;
+using IB.Api.Client.Client.Model;
 using IBApi;
 
 namespace IB.Api.Client
@@ -7,20 +8,30 @@ namespace IB.Api.Client
     public partial class IBClient
     {
         public event EventHandler<NewsProvider[]> NewsProvidersUpdateReceived;
+        public event EventHandler<NewsItem> NewsItemReceived;
         public void GetNewsProviders()
         {
-            ClientSocket.ReqNewsProviders();
+            ClientSocket.reqNewsProviders();
         }
 
-        void IEWrapper.NewsProviders(NewsProvider[] newsProviders)
+        void IEWrapper.newsProviders(NewsProvider[] newsProviders)
         {
             NewsProvidersUpdateReceived?.Invoke(this, newsProviders);
         }
-        void IEWrapper.TickNews(int tickerId, long timeStamp, string providerCode, string articleId, string headline, string extraData)
+        void IEWrapper.tickNews(int tickerId, long timeStamp, string providerCode, string articleId, string headline, string extraData)
         {
-            _ = string.Empty;
+            var newsItem = new NewsItem
+            {
+                TickerId = tickerId,
+                TimeStamp = timeStamp,
+                ProviderCode = providerCode,
+                ArticleId = articleId,
+                Headline = headline,
+                ExtraData = extraData
+            };
+            NewsItemReceived?.Invoke(this, newsItem);
         }
-        void IEWrapper.UpdateNewsBulletin(int msgId, int msgType, string message, string origExchange)
+        void IEWrapper.updateNewsBulletin(int msgId, int msgType, string message, string origExchange)
         {
             var output = $"MsgId:{msgId} MsType:{msgType} Message:{message} Origin:{origExchange}";
             Notify(output);

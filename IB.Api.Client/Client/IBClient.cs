@@ -18,11 +18,11 @@ namespace IB.Api.Client
             return ClientSocket.IsConnected();
         }
 
-        void IEWrapper.ConnectAck()
+        void IEWrapper.connectAck()
         {
             Notify("Connection Acknowledged");
         }
-        void IEWrapper.ConnectionClosed()
+        void IEWrapper.connectionClosed()
         {
             Notify("Connection Closed");
         }

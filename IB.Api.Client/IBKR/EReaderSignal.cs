@@ -6,7 +6,7 @@ namespace IBApi
     /**
     * @brief Notifies the thread reading information from the TWS whenever there are messages ready to be consumed. Not currently used in Python API.
     */
-    public interface EReaderSignal
+    public interface IEReaderSignal
     {
         /**
          * @brief Issues a signal to the consuming thread when there are things to be consumed.
