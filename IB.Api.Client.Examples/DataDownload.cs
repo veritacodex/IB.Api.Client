@@ -21,9 +21,7 @@ namespace IB.Api.Client.Examples
             ibClient.HistoricalDataUpdateReceived += new EventHandler<BarUpdate>(HistoricalDataUpdateEndReceived);
             ConnectionHelper.StartIbClient(ibClient, connectionDetails);
 
-            var duration = Duration.GetDuration(1, DurationType.D);
-            var barSize = BarSize.GetBarSize(5, BarSizeType.min);
-            ibClient.GetHistoricalData(1005, _contract, duration, barSize, WhatToShow.MIDPOINT, Rth.No, false);
+            ibClient.GetHistoricalData(1005, _contract, 1, DurationType.D, 5, BarSizeType.min, WhatToShow.MIDPOINT, Rth.No, false);
         }
         public static void RunDownloadWithUpdates(ConnectionDetails connectionDetails)
         {
@@ -32,10 +30,8 @@ namespace IB.Api.Client.Examples
             ibClient.HistoricalDataUpdateReceived += new EventHandler<BarUpdate>(HistoricalDataUpdateEndReceived);
             ibClient.BarUpdateReceived += new EventHandler<RealTimeBarUpdate>(BarUpdateReceived);
             ConnectionHelper.StartIbClient(ibClient, connectionDetails);
-
-            var duration = Duration.GetDuration(1, DurationType.D);
-            var barSize = BarSize.GetBarSize(5, BarSizeType.min);
-            ibClient.GetHistoricalData(1005, _contract, duration, barSize, WhatToShow.MIDPOINT, Rth.No, true);
+            
+            ibClient.GetHistoricalData(1005, _contract, 1, DurationType.D, 5, BarSizeType.min, WhatToShow.MIDPOINT, Rth.No, true);
         }       
 
         public static void RunGetTimeAndSales(ConnectionDetails connectionDetails)

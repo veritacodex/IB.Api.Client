@@ -192,11 +192,19 @@ namespace IB.Api.Client
 
         void IEWrapper.tickString(int tickerId, int field, string value)
         {
-            Notify("empty method");
+            _ = tickerId;
+            _ = field;
+            _ = value;
+
+            Notify("tickString -> empty method");
         }
         void IEWrapper.tickGeneric(int tickerId, int field, double value)
         {
-            Notify("empty method");
+            _ = tickerId;
+            _ = field;
+            _ = value;
+            
+            Notify("tickGeneric -> empty method");
         }
         void IEWrapper.realtimeBar(int reqId, long date, double open, double high, double low, double close, decimal volume, decimal WAP, int count)
         {

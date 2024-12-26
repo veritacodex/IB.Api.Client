@@ -51,6 +51,7 @@ namespace IB.Api.Client
         {
             ExecutionUpdateReceived?.Invoke(this, new ExecutionUpdate
             {
+                ReqId = reqId,
                 Account = execution.AcctNumber,
                 Symbol = contract.Symbol,
                 SecType = contract.SecType,
@@ -62,7 +63,7 @@ namespace IB.Api.Client
         }
         void IEWrapper.execDetailsEnd(int reqId)
         {
-            _ = string.Empty;
+            _ = reqId;
         }
         void IEWrapper.openOrderEnd()
         {

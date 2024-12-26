@@ -24,81 +24,134 @@ namespace IB.Api.Client
         }
         void IEWrapper.deltaNeutralValidation(int reqId, DeltaNeutralContract deltaNeutralContract)
         {
+            _ = reqId;
+            _ = deltaNeutralContract;
+            
             Notify("Not implemented");
             throw new NotImplementedException();
         }
         void IEWrapper.displayGroupList(int reqId, string groups)
         {
+            _ = reqId;
+            _ = groups;
+
             Notify("Not implemented");
             throw new NotImplementedException();
         }
         void IEWrapper.displayGroupUpdated(int reqId, string contractInfo)
         {
+            _ = reqId;
+            _ = contractInfo;
+
             Notify("Not implemented");
             throw new NotImplementedException();
         }
         void IEWrapper.familyCodes(FamilyCode[] familyCodes)
         {
+            _ = familyCodes;
+
             Notify("Not implemented");
             throw new NotImplementedException();
         }
         void IEWrapper.fundamentalData(int reqId, string data)
         {
+            _ = reqId;
+            _ = data;
+
             Notify("Not implemented");
             throw new NotImplementedException();
         }
         void IEWrapper.headTimestamp(int reqId, string headTimestamp)
         {
+            _ = reqId;
+            _ = headTimestamp;
+
             Notify("Not implemented");
             throw new NotImplementedException();
         }
         void IEWrapper.histogramData(int reqId, HistogramEntry[] data)
         {
+            _ = reqId;
+            _ = data;
+
             Notify("Not implemented");
             throw new NotImplementedException();
         }
         void IEWrapper.mktDepthExchanges(DepthMktDataDescription[] depthMktDataDescriptions)
         {
+            _= depthMktDataDescriptions;
+
             Notify("Not implemented");
             throw new NotImplementedException();
         }
         void IEWrapper.pnl(int reqId, double dailyPnL, double unrealizedPnL, double realizedPnL)
         {
+            _ = reqId;
+            _ = dailyPnL;
+            _ = unrealizedPnL;
+            _ = realizedPnL;
+
             Notify("Not implemented");
             throw new NotImplementedException();
         }
         void IEWrapper.pnlSingle(int reqId, decimal pos, double dailyPnL, double unrealizedPnL, double realizedPnL, double value)
         {
+            _ = reqId; 
+            _ = pos;
+            _ = dailyPnL;
+            _ = unrealizedPnL;
+            _ = realizedPnL;
+            _ = value;
+
             Notify("Not implemented");
             throw new NotImplementedException();
         }
         void IEWrapper.receiveFA(int faDataType, string faXmlData)
         {
+            _ = faDataType;
+            _ = faXmlData;
             Notify("Not implemented");
             throw new NotImplementedException();
         }
         void IEWrapper.rerouteMktDataReq(int reqId, int conId, string exchange)
         {
+            _ = reqId;
+            _ = conId;
+            _ = exchange;
+
             Notify("Not implemented");
             throw new NotImplementedException();
         }
         void IEWrapper.rerouteMktDepthReq(int reqId, int conId, string exchange)
         {
+            _ = reqId;
+            _ = conId;
+            _ = exchange;
+
             Notify("Not implemented");
             throw new NotImplementedException();
         }
         void IEWrapper.smartComponents(int reqId, Dictionary<int, KeyValuePair<string, char>> theMap)
         {
+            _ = reqId;
+            _ = theMap;
+
             Notify("Not implemented");
             throw new NotImplementedException();
         }
         void IEWrapper.softDollarTiers(int reqId, SoftDollarTier[] tiers)
         {
+            _ = reqId;
+            _ = tiers;
+
             Notify("Not implemented");
             throw new NotImplementedException();
         }
         void IEWrapper.symbolSamples(int reqId, ContractDescription[] contractDescriptions)
         {
+            _ = reqId;
+            _ = contractDescriptions;
+
             Notify("Not implemented");
             throw new NotImplementedException();
         }
@@ -179,6 +232,7 @@ namespace IB.Api.Client
             _ = size;
             _ = tickAttribLast;
             _ = exchange;
+            _ = specialConditions;
 
             Notify("Not implemented");
             throw new NotImplementedException();
@@ -223,6 +277,7 @@ namespace IB.Api.Client
             _ = side;
             _ = price;
             _ = size;
+            _ = isSmartDepth;
 
             Notify("Not implemented");
             throw new NotImplementedException();

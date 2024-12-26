@@ -43,6 +43,7 @@ namespace IB.Api.Client
         }
         void IEWrapper.updateAccountValue(string key, string value, string currency, string accountName)
         {
+            _ = accountName;
             _accountUpdate.SetValue(key, value, currency);
         }
     }
