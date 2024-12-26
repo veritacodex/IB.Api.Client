@@ -26,7 +26,7 @@ namespace IB.Api.Client
         {
             _ = reqId;
             _ = deltaNeutralContract;
-            
+
             Notify("Not implemented");
             throw new NotImplementedException();
         }
@@ -79,7 +79,7 @@ namespace IB.Api.Client
         }
         void IEWrapper.mktDepthExchanges(DepthMktDataDescription[] depthMktDataDescriptions)
         {
-            _= depthMktDataDescriptions;
+            _ = depthMktDataDescriptions;
 
             Notify("Not implemented");
             throw new NotImplementedException();
@@ -96,7 +96,7 @@ namespace IB.Api.Client
         }
         void IEWrapper.pnlSingle(int reqId, decimal pos, double dailyPnL, double unrealizedPnL, double realizedPnL, double value)
         {
-            _ = reqId; 
+            _ = reqId;
             _ = pos;
             _ = dailyPnL;
             _ = unrealizedPnL;
@@ -125,8 +125,8 @@ namespace IB.Api.Client
         void IEWrapper.rerouteMktDepthReq(int reqId, int conId, string exchange)
         {
             _ = reqId;
-            _ = conId;
             _ = exchange;
+            _ = conId;
 
             Notify("Not implemented");
             throw new NotImplementedException();
@@ -173,8 +173,8 @@ namespace IB.Api.Client
         }
         void IEWrapper.verifyCompleted(bool isSuccessful, string errorText)
         {
-            _ = isSuccessful;
             _ = errorText;
+            _ = isSuccessful;            
 
             Notify("Not implemented");
             throw new NotImplementedException();
@@ -195,7 +195,7 @@ namespace IB.Api.Client
         }
         void IEWrapper.accountUpdateMulti(int requestId, string account, string modelCode, string key, string value, string currency)
         {
-            _= requestId;
+            _ = requestId;
             _ = account;
             _ = modelCode;
             _ = key;
