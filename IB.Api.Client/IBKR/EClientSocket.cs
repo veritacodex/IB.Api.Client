@@ -3,8 +3,12 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Net.Sockets;
+using System.Runtime.CompilerServices;
+using System.Runtime.Versioning;
 using System.Text;
 
 namespace IBApi
@@ -67,9 +71,13 @@ namespace IBApi
         protected virtual Stream createClientStream(string host, int port)
         {
             tcpClient = new TcpClient(host, port);
+            SetKeepAlive(true, 2000, 100);
             tcpClient.NoDelay = true;
+
             return tcpClient.GetStream();
         }
+
+
 
         /**
          * @brief Establishes a connection to the designated Host.
@@ -203,6 +211,23 @@ namespace IBApi
             }
             tcpClient = null;
             base.eDisconnect(resetState);
+        }
+
+        /**
+         * @brief Sets the KeepAlive to tcpClient.Client.
+         * @param on if set to true [on].
+         * @param keepAliveTime Specifies the timeout in milliseconds, with no activity until the first keep-alive packet is sent.
+         * @param keepAliveInterval Specifies the interval in milliseconds of resending interval if no response. After 10 not successful sends the connection will be considered broken and next call to Write/Read/Poll will fail.
+         */
+        private void SetKeepAlive(bool on, uint keepAliveTime, uint keepAliveInterval)
+        {
+            int size = System.Runtime.InteropServices.Marshal.SizeOf(new uint());
+            var inOptionValues = new byte[size * 3];
+
+            BitConverter.GetBytes((on ? 1u : 0u)).CopyTo(inOptionValues, 0);
+            BitConverter.GetBytes(keepAliveTime).CopyTo(inOptionValues, size);
+            BitConverter.GetBytes(keepAliveInterval).CopyTo(inOptionValues, size * 2);
+            tcpClient.Client.IOControl(IOControlCode.KeepAliveValues, inOptionValues, null);
         }
 
         /**
