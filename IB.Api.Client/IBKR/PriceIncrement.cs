@@ -20,9 +20,7 @@ namespace IBApi
          */
         public double Increment { get; set; }
 
-        public PriceIncrement()
-        {
-        }
+        public PriceIncrement() { }
 
         public PriceIncrement(double lowEdge, double increment)
         {

@@ -3,7 +3,7 @@
 
 namespace IBApi
 {
-    public interface IETransport
+    public interface ETransport
     {
         void Send(EMessage msg);
     }

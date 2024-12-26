@@ -2,9 +2,9 @@
  * and conditions of the IB API Non-Commercial License or the IB API Commercial License, as applicable. */
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.IO;
-using IB.Api.Client;
+using System.Net.Sockets;
+using System.Threading;
 
 namespace IBApi
 {
@@ -13,23 +13,17 @@ namespace IBApi
     */
     public class EReader
     {
-        readonly EClientSocket eClientSocket;
-        readonly IEReaderSignal eReaderSignal;
-        readonly Queue<EMessage> msgQueue = new();
-        readonly EDecoder processMsgsDecoder;
-        const int defaultInBufSize = ushort.MaxValue / 8;
+        private readonly EClientSocket eClientSocket;
+        private readonly EReaderSignal eReaderSignal;
+        private readonly Queue<EMessage> msgQueue = new Queue<EMessage>();
+        private readonly EDecoder processMsgsDecoder;
+        private const int defaultInBufSize = ushort.MaxValue / 8;
 
-        bool UseV100Plus
-        {
-            get
-            {
-                return eClientSocket.UseV100Plus;
-            }
-        }
+        private bool UseV100Plus => eClientSocket.UseV100Plus;
 
-        static readonly IEWrapper defaultWrapper = new IBClient();
+        private static readonly EWrapper defaultWrapper = new DefaultEWrapper();
 
-        public EReader(EClientSocket clientSocket, IEReaderSignal signal)
+        public EReader(EClientSocket clientSocket, EReaderSignal signal)
         {
             eClientSocket = clientSocket;
             eReaderSignal = signal;
@@ -39,84 +33,91 @@ namespace IBApi
         public void Start()
         {
             new Thread(() =>
-            {
-                try
                 {
-                    while (eClientSocket.IsConnected())
+                    try
                     {
-                        if (!eClientSocket.IsDataAvailable())
+                        while (eClientSocket.IsConnected())
                         {
-                            Thread.Sleep(1);
-                            continue;
+                            if (eClientSocket.IsDataAvailable() && !putMessageToQueue())
+                            {
+                                eClientSocket.eDisconnect();
+                                break;
+                            }
+
+                            // Poll here will return true if new data is available or connection is broken.
+                            if (eClientSocket.Poll(1000) && !eClientSocket.IsDataAvailable()) // The connection is broken.
+                            {
+                                // Throw 10054 socket error - An existing connection was forcibly closed by the remote host.
+                                throw new System.Net.Sockets.SocketException(10054);
+                            }
                         }
-
-                        if (!PutMessageToQueue())
-                            break;
                     }
-                }
-                catch (Exception ex)
-                {
-                    eClientSocket.Wrapper.Error(ex);
-                    eClientSocket.EDisconnect();
-                }
-
-                eReaderSignal.IssueSignal();
-            }) { IsBackground = true }.Start();
+                    catch (Exception ex)
+                    {
+                        if (eClientSocket.IsConnected())
+                        {
+                            eClientSocket.Wrapper.error(ex);
+                            eClientSocket.eDisconnect();
+                        }
+                    }
+                    eReaderSignal.issueSignal();
+                })
+                { IsBackground = true }.Start();
         }
 
-        EMessage GetMsg()
+        private EMessage getMsg()
         {
             lock (msgQueue)
+            {
                 return msgQueue.Count == 0 ? null : msgQueue.Dequeue();
+            }
         }
 
-        public void ProcessMsgs()
+        public void processMsgs()
         {
-            EMessage msg = GetMsg();
+            var msg = getMsg();
 
             while (msg != null && processMsgsDecoder.ParseAndProcessMsg(msg.GetBuf()) > 0)
-                msg = GetMsg();
+            {
+                msg = getMsg();
+            }
         }
 
-        public bool PutMessageToQueue()
+        public bool putMessageToQueue()
         {
             try
             {
-                EMessage msg = ReadSingleMessage();
+                var msg = readSingleMessage();
 
-                if (msg == null)
-                    return false;
+                if (msg == null) return false;
 
                 lock (msgQueue)
+                {
                     msgQueue.Enqueue(msg);
+                }
 
-                eReaderSignal.IssueSignal();
+                eReaderSignal.issueSignal();
 
                 return true;
             }
             catch (Exception ex)
             {
-                if (eClientSocket.IsConnected())
-                    eClientSocket.Wrapper.Error(ex);
+                if (eClientSocket.IsConnected()) eClientSocket.Wrapper.error(ex);
 
                 return false;
             }
         }
 
-        readonly List<byte> inBuf = new(defaultInBufSize);
+        private readonly List<byte> inBuf = new List<byte>(defaultInBufSize);
 
-        private EMessage ReadSingleMessage()
+        private EMessage readSingleMessage()
         {
-            var msgSize = 0;
-
+            int msgSize;
             if (UseV100Plus)
             {
                 msgSize = eClientSocket.ReadInt();
 
-                if (msgSize > Constants.MaxMsgSize)
-                {
-                    throw new EClientException(EClientErrors.BAD_LENGTH);
-                }
+                if (msgSize > Constants.MaxMsgSize) throw new EClientException(EClientErrors.BAD_LENGTH);
 
                 return new EMessage(eClientSocket.ReadByteArray(msgSize));
             }
@@ -125,6 +126,7 @@ namespace IBApi
                 AppendInBuf();
 
             while (true)
+            {
                 try
                 {
                     msgSize = new EDecoder(eClientSocket.ServerVersion, defaultWrapper).ParseAndProcessMsg(inBuf.ToArray());
@@ -132,25 +134,22 @@ namespace IBApi
                 }
                 catch (EndOfStreamException)
                 {
-                    if (inBuf.Count >= inBuf.Capacity * 3/4)
-                        inBuf.Capacity *= 2;
+                    if (inBuf.Count >= inBuf.Capacity * 3 / 4) inBuf.Capacity *= 2;
+
                     AppendInBuf();
                 }
+            }
 
             var msgBuf = new byte[msgSize];
 
             inBuf.CopyTo(0, msgBuf, 0, msgSize);
             inBuf.RemoveRange(0, msgSize);
 
-            if (inBuf.Count < defaultInBufSize && inBuf.Capacity > defaultInBufSize)
-                inBuf.Capacity = defaultInBufSize;
+            if (inBuf.Count < defaultInBufSize && inBuf.Capacity > defaultInBufSize) inBuf.Capacity = defaultInBufSize;
 
             return new EMessage(msgBuf);
         }
 
-        private void AppendInBuf()
-        {
-            inBuf.AddRange(eClientSocket.ReadAtLeastNBytes(inBuf.Capacity - inBuf.Count));
-        }
+        private void AppendInBuf() => inBuf.AddRange(eClientSocket.ReadAtLeastNBytes(inBuf.Capacity - inBuf.Count));
     }
 }

@@ -20,10 +20,7 @@ namespace IBApi
          */
         public string ProviderName { get; set; }
 
-        public NewsProvider()
-        {
-
-        }
+        public NewsProvider() { }
 
         public NewsProvider(string providerCode, string providerName)
         {

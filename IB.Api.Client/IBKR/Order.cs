@@ -1,7 +1,6 @@
-/* Copyright (C) 2019 Interactive Brokers LLC. All rights reserved. This code is subject to the terms
+/* Copyright (C) 2024 Interactive Brokers LLC. All rights reserved. This code is subject to the terms
  * and conditions of the IB API Non-Commercial License or the IB API Commercial License, as applicable. */
 
-using System;
 using System.Collections.Generic;
 
 namespace IBApi
@@ -13,20 +12,20 @@ namespace IBApi
      */
     public class Order
     {
-        public const int CUSTOMER = 0;
-        public const int FIRM = 1;
-        public const char OPT_UNKNOWN = '?';
-        public const char OPT_BROKER_DEALER = 'b';
-        public const char OPT_CUSTOMER = 'c';
-        public const char OPT_FIRM = 'f';
-        public const char OPT_ISEMM = 'm';
-        public const char OPT_FARMM = 'n';
-        public const char OPT_SPECIALIST = 'y';
-        public const int AUCTION_MATCH = 1;
-        public const int AUCTION_IMPROVEMENT = 2;
-        public const int AUCTION_TRANSPARENT = 3;
-        public const string EMPTY_STR = "";
-        public const double COMPETE_AGAINST_BEST_OFFSET_UP_TO_MID = double.PositiveInfinity;
+        public static int CUSTOMER = 0;
+        public static int FIRM = 1;
+        public static char OPT_UNKNOWN = '?';
+        public static char OPT_BROKER_DEALER = 'b';
+        public static char OPT_CUSTOMER = 'c';
+        public static char OPT_FIRM = 'f';
+        public static char OPT_ISEMM = 'm';
+        public static char OPT_FARMM = 'n';
+        public static char OPT_SPECIALIST = 'y';
+        public static int AUCTION_MATCH = 1;
+        public static int AUCTION_IMPROVEMENT = 2;
+        public static int AUCTION_TRANSPARENT = 3;
+        public static string EMPTY_STR = "";
+        public static double COMPETE_AGAINST_BEST_OFFSET_UP_TO_MID = double.PositiveInfinity;
 
         // main order fields
         // extended order fields
@@ -83,8 +82,8 @@ namespace IBApi
          */
         public int OrderId { get; set; }
 
-	/**
-         * @brief The Solicited field should be used for orders initiated or recommended by the broker or adviser that were approved by the client (by phone, email, chat, 	verbally, etc.) prior to entry. Please note that orders that the adviser or broker placed without specifically discussing with the client are discretionary orders, not	solicited.
+        /**
+         * @brief The Solicited field should be used for orders initiated or recommended by the broker or adviser that were approved by the client (by phone, email, chat, verbally, etc.) prior to entry. Please note that orders that the adviser or broker placed without specifically discussing with the client are discretionary orders, not solicited.
          */
         public bool Solicited { get; set; }
 
@@ -101,10 +100,10 @@ namespace IBApi
         /**
          * @brief Identifies the side. \n
          * Generally available values are <b>BUY</b> and <b>SELL</b>. \n
-	       * Additionally, <b>SSHORT</b> and <b>SLONG</b> are available in some institutional-accounts only. \n
-	       * For general account types, a <b>SELL</b> order will be able to enter a short position automatically if the order quantity is larger than your current long position. \n
+         * Additionally, <b>SSHORT</b> and <b>SLONG</b> are available in some institutional-accounts only. \n
+         * For general account types, a <b>SELL</b> order will be able to enter a short position automatically if the order quantity is larger than your current long position. \n
          * <b>SSHORT</b> is only supported for institutional account configured with Long/Short account segments or clearing with a separate account. \n
-	       * <b>SLONG</b> is available in specially-configured institutional accounts to indicate that long position not yet delivered is being sold.
+         * <b>SLONG</b> is available in specially-configured institutional accounts to indicate that long position not yet delivered is being sold.
          */
         public string Action { get; set; }
 
@@ -130,21 +129,21 @@ namespace IBApi
         public double AuxPrice { get; set; }
 
         /**
-        * @brief The time in force.\n
-        * Valid values are: \n
-        *      <b>DAY</b> - Valid for the day only.\n
-        *      <b>GTC</b> - Good until canceled. The order will continue to work within the system and in the marketplace until it executes or is canceled. GTC orders will be automatically be cancelled under the following conditions: \n
-        *          \t\t If a corporate action on a security results in a stock split (forward or reverse), exchange for shares, or distribution of shares.
-        *          \t\t If you do not log into your IB account for 90 days. \n
-        *          \t\t At the end of the calendar quarter following the current quarter. For example, an order placed during the third quarter of 2011 will be canceled at the end of the first quarter of 2012. If the last day is a non-trading day, the cancellation will occur at the close of the final trading day of that quarter. For example, if the last day of the quarter is Sunday, the orders will be cancelled on the preceding Friday.\n
-        *          \t\t Orders that are modified will be assigned a new “Auto Expire” date consistent with the end of the calendar quarter following the current quarter.\n
-        *          \t\t Orders submitted to IB that remain in force for more than one day will not be reduced for dividends. To allow adjustment to your order price on ex-dividend date, consider using a Good-Til-Date/Time (GTD) or Good-after-Time/Date (GAT) order type, or a combination of the two.\n
-        *      <b>IOC</b> - Immediate or Cancel. Any portion that is not filled as soon as it becomes available in the market is canceled.\n
-        *      <b>GTD</b> - Good until Date. It will remain working within the system and in the marketplace until it executes or until the close of the market on the date specified\n
-        *      <b>OPG</b> - Use OPG to send a market-on-open (MOO) or limit-on-open (LOO) order.\n
-        *      <b>FOK</b> - If the entire Fill-or-Kill order does not execute as soon as it becomes available, the entire order is canceled.\n
-        *      <b>DTC</b> - Day until Canceled.
-        */
+         * @brief The time in force.\n
+         * Valid values are: \n
+         *      <b>DAY</b> - Valid for the day only.\n
+         *      <b>GTC</b> - Good until canceled. The order will continue to work within the system and in the marketplace until it executes or is canceled. GTC orders will be automatically be cancelled under the following conditions: \n
+         *          \t\t If a corporate action on a security results in a stock split (forward or reverse), exchange for shares, or distribution of shares.
+         *          \t\t If you do not log into your IB account for 90 days. \n
+         *          \t\t At the end of the calendar quarter following the current quarter. For example, an order placed during the third quarter of 2011 will be canceled at the end of the first quarter of 2012. If the last day is a non-trading day, the cancellation will occur at the close of the final trading day of that quarter. For example, if the last day of the quarter is Sunday, the orders will be cancelled on the preceding Friday.\n
+         *          \t\t Orders that are modified will be assigned a new “Auto Expire” date consistent with the end of the calendar quarter following the current quarter.\n
+         *          \t\t Orders submitted to IB that remain in force for more than one day will not be reduced for dividends. To allow adjustment to your order price on ex-dividend date, consider using a Good-Til-Date/Time (GTD) or Good-after-Time/Date (GAT) order type, or a combination of the two.\n
+         *      <b>IOC</b> - Immediate or Cancel. Any portion that is not filled as soon as it becomes available in the market is canceled.\n
+         *      <b>GTD</b> - Good until Date. It will remain working within the system and in the marketplace until it executes or until the close of the market on the date specified\n
+         *      <b>OPG</b> - Use OPG to send a market-on-open (MOO) or limit-on-open (LOO) order.\n
+         *      <b>FOK</b> - If the entire Fill-or-Kill order does not execute as soon as it becomes available, the entire order is canceled.\n
+         *      <b>DTC</b> - Day until Canceled.
+         */
         public string Tif { get; set; }
 
 
@@ -284,11 +283,6 @@ namespace IBApi
         public string FaGroup { get; set; }
 
         /**
-         * @brief The Financial Advisor allocation profile the trade will be allocated to. <i>Use an empty string if not applicable.</i>
-         */
-        public string FaProfile { get; set; }
-
-        /**
          * @brief The Financial Advisor allocation method the trade will be allocated to. <i>Use an empty string if not applicable.</i>
          */
         public string FaMethod { get; set; }
@@ -302,8 +296,8 @@ namespace IBApi
         /**
          * @brief For institutional customers only. Valid values are <b>O (open) and C (close).</b>\n
          * Available for institutional clients to determine if this order is to open or close a position.\n
-		     * When Action = "BUY" and OpenClose = "O" this will open a new position.\n
-		     * When Action = "BUY" and OpenClose = "C" this will close and existing short position.
+         * When Action = "BUY" and OpenClose = "O" this will open a new position.\n
+         * When Action = "BUY" and OpenClose = "C" this will close and existing short position.
          */
         public string OpenClose { get; set; }
 
@@ -331,13 +325,13 @@ namespace IBApi
 
         /**
          * @brief Only available with IB Execution-Only accounts with applicable securities. \n
-	       * Mark order as exempt from short sale uptick rule
+         * Mark order as exempt from short sale uptick rule
          */
         public int ExemptCode { get; set; }
 
         /**
-          * @brief The amount off the limit price allowed for discretionary orders.
-          */
+         * @brief The amount off the limit price allowed for discretionary orders.
+         */
         public double DiscretionaryAmt { get; set; }
 
         /**
@@ -375,9 +369,9 @@ namespace IBApi
         public double Delta { get; set; }
 
         /**
-          * @brief The lower value for the acceptable underlying stock price range.\n
-          * <i>For price improvement option orders on BOX and VOL orders with dynamic management.</i>
-          */
+         * @brief The lower value for the acceptable underlying stock price range.\n
+         * <i>For price improvement option orders on BOX and VOL orders with dynamic management.</i>
+         */
         public double StockRangeLower { get; set; }
 
         /**
@@ -516,8 +510,8 @@ namespace IBApi
         public int ScaleInitPosition { get; set; }
 
         /**
-          * @brief Specifies the initial quantity to be filled. <i>For extended scale orders.</i>
-          */
+         * @brief Specifies the initial quantity to be filled. <i>For extended scale orders.</i>
+         */
         public int ScaleInitFillQty { get; set; }
 
         /**
@@ -558,10 +552,10 @@ namespace IBApi
         public string ClearingAccount { get; set; }
 
         /**
-        * @brief For execution-only clients to know where do they want their shares to be cleared at.\n
-        * Valid values are:\n
-        * <b>IB</b>, <b>Away</b>, and <b>PTA</b> (post trade allocation).
-        */
+         * @brief For execution-only clients to know where do they want their shares to be cleared at.\n
+         * Valid values are:\n
+         * <b>IB</b>, <b>Away</b>, and <b>PTA</b> (post trade allocation).
+         */
         public string ClearingIntent { get; set; }
 
         /**
@@ -572,74 +566,74 @@ namespace IBApi
          *      <b>PctVol</b> - Percentage of Volume \n
          *      <b>Twap</b> - TWAP (Time Weighted Average Price) \n
          *      <b>Vwap</b> - VWAP (Volume Weighted Average Price) \n
-         * <b>For more information about IB's API algorithms, refer to https://www.interactivebrokers.com/en/software/api/apiguide/tables/ibalgo_parameters.htm</b>
-        */
+         * <b>For more information about IB's API algorithms, refer to https://interactivebrokers.github.io/tws-api/ibalgos.html</b>
+         */
         public string AlgoStrategy { get; set; }
 
         /**
-        * @brief The list of parameters for the IB algorithm.\n
-        * <b>For more information about IB's API algorithms, refer to https://www.interactivebrokers.com/en/software/api/apiguide/tables/ibalgo_parameters.htm</b>
-        */
+         * @brief The list of parameters for the IB algorithm.\n
+         * <b>For more information about IB's API algorithms, refer to https://interactivebrokers.github.io/tws-api/ibalgos.html</b>
+         */
         public List<TagValue> AlgoParams { get; set; }
 
         /**
-        * @brief Allows to retrieve the commissions and margin information.\n
-        * When placing an order with this attribute set to true, the order will not be placed as such. Instead it will used to request the commissions and margin information that would result from this order.
-        */
+         * @brief Allows to retrieve the commissions and margin information.\n
+         * When placing an order with this attribute set to true, the order will not be placed as such. Instead it will used to request the commissions and margin information that would result from this order.
+         */
         public bool WhatIf { get; set; }
 
         /**
-        * @brief Identifies orders generated by algorithmic trading.
-        */
+         * @brief Identifies orders generated by algorithmic trading.
+         */
         public string AlgoId { get; set; }
 
         /**
-        * @brief Orders routed to IBDARK are tagged as “post only” and are held in IB's order book, where incoming SmartRouted orders from other IB customers are eligible to trade against them.\n
-        * <i>For IBDARK orders only.</i>
-        */
+         * @brief Orders routed to IBDARK are tagged as “post only” and are held in IB's order book, where incoming SmartRouted orders from other IB customers are eligible to trade against them.\n
+         * <i>For IBDARK orders only.</i>
+         */
         public bool NotHeld { get; set; }
 
         /**
          * @brief Advanced parameters for Smart combo routing. \n
          * These features are for both guaranteed and nonguaranteed combination orders routed to Smart, and are available based on combo type and order type.
-		 * SmartComboRoutingParams is similar to AlgoParams in that it makes use of tag/value pairs to add parameters to combo orders. \n
-		 * Make sure that you fully understand how Advanced Combo Routing works in TWS itself first: https://www.interactivebrokers.com/en/software/tws/usersguidebook/specializedorderentry/advanced_combo_routing.htm \n
-		 * The parameters cover the following capabilities:
-		 *  - Non-Guaranteed - Determine if the combo order is Guaranteed or Non-Guaranteed. \n
-		 *    Tag = NonGuaranteed \n
-		 *    Value = 0: The order is guaranteed \n
-		 *    Value = 1: The order is non-guaranteed \n
-		 * \n
-		 *  - Select Leg to Fill First - User can specify which leg to be executed first. \n
-		 *    Tag = LeginPrio \n
-		 *    Value = -1: No priority is assigned to either combo leg \n
-		 *    Value = 0: Priority is assigned to the first leg being added to the comboLeg \n
-		 *    Value = 1: Priority is assigned to the second leg being added to the comboLeg \n
-		 *    Note: The LeginPrio parameter can only be applied to two-legged combo. \n
-		 * \n
-		 *  - Maximum Leg-In Combo Size - Specify the maximum allowed leg-in size per segment \n
-		 *    Tag = MaxSegSize \n
-		 *    Value = Unit of combo size \n
-		 * \n
-		 *  - Do Not Start Next Leg-In if Previous Leg-In Did Not Finish - Specify whether or not the system should attempt to fill the next segment before the current segment fills. \n
-		 *    Tag = DontLeginNext \n
-		 *    Value = 0: Start next leg-in even if previous leg-in did not finish \n
-		 *    Value = 1: Do not start next leg-in if previous leg-in did not finish \n
-		 * \n
-		 *  - Price Condition - Combo order will be rejected or cancelled if the leg market price is outside of the specified price range [CondPriceMin, CondPriceMax] \n
-		 *    Tag = PriceCondConid: The ContractID of the combo leg to specify price condition on \n
-		 *    Value = The ContractID \n
-		 *    Tag = CondPriceMin: The lower price range of the price condition \n
-		 *    Value = The lower price \n
-		 *    Tag = CondPriceMax: The upper price range of the price condition \n
-		 *    Value = The upper price \n
-		 * \n
+         * SmartComboRoutingParams is similar to AlgoParams in that it makes use of tag/value pairs to add parameters to combo orders. \n
+         * Make sure that you fully understand how Advanced Combo Routing works in TWS itself first: https://www.interactivebrokers.com/en/software/tws/usersguidebook/specializedorderentry/advanced_combo_routing.htm \n
+         * The parameters cover the following capabilities:
+         *  - Non-Guaranteed - Determine if the combo order is Guaranteed or Non-Guaranteed. \n
+         *    Tag = NonGuaranteed \n
+         *    Value = 0: The order is guaranteed \n
+         *    Value = 1: The order is non-guaranteed \n
+         * \n
+         *  - Select Leg to Fill First - User can specify which leg to be executed first. \n
+         *    Tag = LeginPrio \n
+         *    Value = -1: No priority is assigned to either combo leg \n
+         *    Value = 0: Priority is assigned to the first leg being added to the comboLeg \n
+         *    Value = 1: Priority is assigned to the second leg being added to the comboLeg \n
+         *    Note: The LeginPrio parameter can only be applied to two-legged combo. \n
+         * \n
+         *  - Maximum Leg-In Combo Size - Specify the maximum allowed leg-in size per segment \n
+         *    Tag = MaxSegSize \n
+         *    Value = Unit of combo size \n
+         * \n
+         *  - Do Not Start Next Leg-In if Previous Leg-In Did Not Finish - Specify whether or not the system should attempt to fill the next segment before the current segment fills. \n
+         *    Tag = DontLeginNext \n
+         *    Value = 0: Start next leg-in even if previous leg-in did not finish \n
+         *    Value = 1: Do not start next leg-in if previous leg-in did not finish \n
+         * \n
+         *  - Price Condition - Combo order will be rejected or cancelled if the leg market price is outside of the specified price range [CondPriceMin, CondPriceMax] \n
+         *    Tag = PriceCondConid: The ContractID of the combo leg to specify price condition on \n
+         *    Value = The ContractID \n
+         *    Tag = CondPriceMin: The lower price range of the price condition \n
+         *    Value = The lower price \n
+         *    Tag = CondPriceMax: The upper price range of the price condition \n
+         *    Value = The upper price \n
+         * \n
          */
         public List<TagValue> SmartComboRoutingParams { get; set; }
 
         /**
-        * @brief List of Per-leg price following the same sequence combo legs are added. The combo price must be left unspecified when using per-leg prices.
-        */
+         * @brief List of Per-leg price following the same sequence combo legs are added. The combo price must be left unspecified when using per-leg prices.
+         */
         public List<OrderComboLeg> OrderComboLegs { get; set; } = new List<OrderComboLeg>();
 
         /**
@@ -653,8 +647,8 @@ namespace IBApi
         public string ActiveStartTime { get; set; }
 
         /**
-        * @brief Defines the stop time of GTC orders.
-        */
+         * @brief Defines the stop time of GTC orders.
+         */
         public string ActiveStopTime { get; set; }
 
         /**
@@ -680,22 +674,22 @@ namespace IBApi
         /**
          * @brief Identifies a person as the responsible party for investment decisions within the firm. Orders covered by MiFID 2 (Markets in Financial Instruments Directive 2) must include either Mifid2DecisionMaker or Mifid2DecisionAlgo field (but not both). <i>Requires TWS 969+.</i>
          */
-		    public string Mifid2DecisionMaker { get; set; }
+        public string Mifid2DecisionMaker { get; set; }
 
-		    /**
+        /**
          * @brief Identifies the algorithm responsible for investment decisions within the firm. Orders covered under MiFID 2 must include either Mifid2DecisionMaker or Mifid2DecisionAlgo, but cannot have both. <i>Requires TWS 969+.</i>
          */
-		    public string Mifid2DecisionAlgo { get; set; }
+        public string Mifid2DecisionAlgo { get; set; }
 
-		    /**
+        /**
          * @brief For MiFID 2 reporting; identifies a person as the responsible party for the execution of a transaction within the firm. <i>Requires TWS 969+.</i>
          */
-		    public string Mifid2ExecutionTrader { get; set; }
+        public string Mifid2ExecutionTrader { get; set; }
 
-		    /**
+        /**
          * @brief For MiFID 2 reporting; identifies the algorithm responsible for the execution of a transaction within the firm. <i>Requires TWS 969+.</i>
          */
-		    public string Mifid2ExecutionAlgo { get; set; }
+        public string Mifid2ExecutionAlgo { get; set; }
 
         /**
          * @brief Don't use auto price for hedge
@@ -777,6 +771,31 @@ namespace IBApi
          * @brief This offset is applied when the spread is an odd number of cents wide. This offset must be in half-penny increments. <i>For IBKRATS orders.</i>
          */
         public double MidOffsetAtHalf { get; set; }
+
+        /**
+         * @brief Customer account
+         */
+        public string CustomerAccount { get; set; }
+
+        /**
+         * @brief Professional customer
+         */
+        public bool ProfessionalCustomer { get; set; }
+
+        /**
+         * @brief Bond accrued interest
+         */
+        public string BondAccruedInterest { get; set; }
+
+        /**
+         * @brief External User Id
+         */
+        public string ExternalUserId { get; set; }
+
+        /**
+         * @brief Manual Order Indicator
+         */
+        public int ManualOrderIndicator { get; set; }
 
         public Order()
         {
@@ -860,17 +879,21 @@ namespace IBApi
             CompeteAgainstBestOffset = double.MaxValue;
             MidOffsetAtWhole = double.MaxValue;
             MidOffsetAtHalf = double.MaxValue;
-    }
+            CustomerAccount = EMPTY_STR;
+            ProfessionalCustomer = false;
+            BondAccruedInterest = EMPTY_STR;
+            ExternalUserId = EMPTY_STR;
+            ManualOrderIndicator = int.MaxValue;
+        }
 
         // Note: Two orders can be 'equivalent' even if all fields do not match. This function is not intended to be used with Order objects returned from TWS.
-        public override bool Equals(object obj)
+        public override bool Equals(object p_other)
         {
-            if (this == obj)
+            if (this == p_other)
                 return true;
 
-            Order l_theOther = obj as Order;
 
-            if (l_theOther == null)
+            if (!(p_other is Order l_theOther))
                 return false;
 
             if (PermId == l_theOther.PermId)
@@ -953,7 +976,9 @@ namespace IBApi
                 MinCompeteSize != l_theOther.MinCompeteSize ||
                 CompeteAgainstBestOffset != l_theOther.CompeteAgainstBestOffset ||
                 MidOffsetAtWhole != l_theOther.MidOffsetAtWhole ||
-                MidOffsetAtHalf != l_theOther.MidOffsetAtHalf)
+                MidOffsetAtHalf != l_theOther.MidOffsetAtHalf ||
+                ProfessionalCustomer != l_theOther.ProfessionalCustomer ||
+                ManualOrderIndicator != l_theOther.ManualOrderIndicator)
             {
                 return false;
             }
@@ -969,7 +994,6 @@ namespace IBApi
                 Util.StringCompare(GoodTillDate, l_theOther.GoodTillDate) != 0 ||
                 Util.StringCompare(Rule80A, l_theOther.Rule80A) != 0 ||
                 Util.StringCompare(FaGroup, l_theOther.FaGroup) != 0 ||
-                Util.StringCompare(FaProfile, l_theOther.FaProfile) != 0 ||
                 Util.StringCompare(FaMethod, l_theOther.FaMethod) != 0 ||
                 Util.StringCompare(FaPercentage, l_theOther.FaPercentage) != 0 ||
                 Util.StringCompare(OpenClose, l_theOther.OpenClose) != 0 ||
@@ -994,7 +1018,10 @@ namespace IBApi
                 Util.StringCompare(AutoCancelDate, l_theOther.AutoCancelDate) != 0 ||
                 Util.StringCompare(Shareholder, l_theOther.Shareholder) != 0 ||
                 Util.StringCompare(AdvancedErrorOverride, l_theOther.AdvancedErrorOverride) != 0 ||
-                Util.StringCompare(ManualOrderTime, l_theOther.ManualOrderTime) != 0)
+                Util.StringCompare(ManualOrderTime, l_theOther.ManualOrderTime) != 0 ||
+                Util.StringCompare(CustomerAccount, l_theOther.CustomerAccount) != 0 ||
+                Util.StringCompare(BondAccruedInterest, l_theOther.BondAccruedInterest) != 0 ||
+                Util.StringCompare(ExternalUserId, l_theOther.ExternalUserId) != 0)
             {
                 return false;
             }
@@ -1021,142 +1048,146 @@ namespace IBApi
         public override int GetHashCode()
         {
             var hashCode = 1040337091;
-            hashCode = hashCode * -1521134295 + OrderId.GetHashCode();
-            hashCode = hashCode * -1521134295 + Solicited.GetHashCode();
-            hashCode = hashCode * -1521134295 + ClientId.GetHashCode();
-            hashCode = hashCode * -1521134295 + PermId.GetHashCode();
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Action);
-            hashCode = hashCode * -1521134295 + TotalQuantity.GetHashCode();
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(OrderType);
-            hashCode = hashCode * -1521134295 + LmtPrice.GetHashCode();
-            hashCode = hashCode * -1521134295 + AuxPrice.GetHashCode();
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Tif);
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(OcaGroup);
-            hashCode = hashCode * -1521134295 + OcaType.GetHashCode();
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(OrderRef);
-            hashCode = hashCode * -1521134295 + Transmit.GetHashCode();
-            hashCode = hashCode * -1521134295 + ParentId.GetHashCode();
-            hashCode = hashCode * -1521134295 + BlockOrder.GetHashCode();
-            hashCode = hashCode * -1521134295 + SweepToFill.GetHashCode();
-            hashCode = hashCode * -1521134295 + DisplaySize.GetHashCode();
-            hashCode = hashCode * -1521134295 + TriggerMethod.GetHashCode();
-            hashCode = hashCode * -1521134295 + OutsideRth.GetHashCode();
-            hashCode = hashCode * -1521134295 + Hidden.GetHashCode();
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(GoodAfterTime);
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(GoodTillDate);
-            hashCode = hashCode * -1521134295 + OverridePercentageConstraints.GetHashCode();
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Rule80A);
-            hashCode = hashCode * -1521134295 + AllOrNone.GetHashCode();
-            hashCode = hashCode * -1521134295 + MinQty.GetHashCode();
-            hashCode = hashCode * -1521134295 + PercentOffset.GetHashCode();
-            hashCode = hashCode * -1521134295 + TrailStopPrice.GetHashCode();
-            hashCode = hashCode * -1521134295 + TrailingPercent.GetHashCode();
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(FaGroup);
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(FaProfile);
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(FaMethod);
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(FaPercentage);
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(OpenClose);
-            hashCode = hashCode * -1521134295 + Origin.GetHashCode();
-            hashCode = hashCode * -1521134295 + ShortSaleSlot.GetHashCode();
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(DesignatedLocation);
-            hashCode = hashCode * -1521134295 + ExemptCode.GetHashCode();
-            hashCode = hashCode * -1521134295 + DiscretionaryAmt.GetHashCode();
-            hashCode = hashCode * -1521134295 + OptOutSmartRouting.GetHashCode();
-            hashCode = hashCode * -1521134295 + AuctionStrategy.GetHashCode();
-            hashCode = hashCode * -1521134295 + StartingPrice.GetHashCode();
-            hashCode = hashCode * -1521134295 + StockRefPrice.GetHashCode();
-            hashCode = hashCode * -1521134295 + Delta.GetHashCode();
-            hashCode = hashCode * -1521134295 + StockRangeLower.GetHashCode();
-            hashCode = hashCode * -1521134295 + StockRangeUpper.GetHashCode();
-            hashCode = hashCode * -1521134295 + Volatility.GetHashCode();
-            hashCode = hashCode * -1521134295 + VolatilityType.GetHashCode();
-            hashCode = hashCode * -1521134295 + ContinuousUpdate.GetHashCode();
-            hashCode = hashCode * -1521134295 + ReferencePriceType.GetHashCode();
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(DeltaNeutralOrderType);
-            hashCode = hashCode * -1521134295 + DeltaNeutralAuxPrice.GetHashCode();
-            hashCode = hashCode * -1521134295 + DeltaNeutralConId.GetHashCode();
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(DeltaNeutralSettlingFirm);
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(DeltaNeutralClearingAccount);
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(DeltaNeutralClearingIntent);
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(DeltaNeutralOpenClose);
-            hashCode = hashCode * -1521134295 + DeltaNeutralShortSale.GetHashCode();
-            hashCode = hashCode * -1521134295 + DeltaNeutralShortSaleSlot.GetHashCode();
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(DeltaNeutralDesignatedLocation);
-            hashCode = hashCode * -1521134295 + BasisPoints.GetHashCode();
-            hashCode = hashCode * -1521134295 + BasisPointsType.GetHashCode();
-            hashCode = hashCode * -1521134295 + ScaleInitLevelSize.GetHashCode();
-            hashCode = hashCode * -1521134295 + ScaleSubsLevelSize.GetHashCode();
-            hashCode = hashCode * -1521134295 + ScalePriceIncrement.GetHashCode();
-            hashCode = hashCode * -1521134295 + ScalePriceAdjustValue.GetHashCode();
-            hashCode = hashCode * -1521134295 + ScalePriceAdjustInterval.GetHashCode();
-            hashCode = hashCode * -1521134295 + ScaleProfitOffset.GetHashCode();
-            hashCode = hashCode * -1521134295 + ScaleAutoReset.GetHashCode();
-            hashCode = hashCode * -1521134295 + ScaleInitPosition.GetHashCode();
-            hashCode = hashCode * -1521134295 + ScaleInitFillQty.GetHashCode();
-            hashCode = hashCode * -1521134295 + ScaleRandomPercent.GetHashCode();
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(HedgeType);
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(HedgeParam);
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Account);
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(SettlingFirm);
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(ClearingAccount);
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(ClearingIntent);
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(AlgoStrategy);
-            hashCode = hashCode * -1521134295 + EqualityComparer<List<TagValue>>.Default.GetHashCode(AlgoParams);
-            hashCode = hashCode * -1521134295 + WhatIf.GetHashCode();
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(AlgoId);
-            hashCode = hashCode * -1521134295 + NotHeld.GetHashCode();
-            hashCode = hashCode * -1521134295 + EqualityComparer<List<TagValue>>.Default.GetHashCode(SmartComboRoutingParams);
-            hashCode = hashCode * -1521134295 + EqualityComparer<List<OrderComboLeg>>.Default.GetHashCode(OrderComboLegs);
-            hashCode = hashCode * -1521134295 + EqualityComparer<List<TagValue>>.Default.GetHashCode(OrderMiscOptions);
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(ActiveStartTime);
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(ActiveStopTime);
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(ScaleTable);
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(ModelCode);
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(ExtOperator);
-            hashCode = hashCode * -1521134295 + CashQty.GetHashCode();
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Mifid2DecisionMaker);
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Mifid2DecisionAlgo);
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Mifid2ExecutionTrader);
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Mifid2ExecutionAlgo);
-            hashCode = hashCode * -1521134295 + DontUseAutoPriceForHedge.GetHashCode();
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(AutoCancelDate);
-            hashCode = hashCode * -1521134295 + FilledQuantity.GetHashCode();
-            hashCode = hashCode * -1521134295 + RefFuturesConId.GetHashCode();
-            hashCode = hashCode * -1521134295 + AutoCancelParent.GetHashCode();
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Shareholder);
-            hashCode = hashCode * -1521134295 + ImbalanceOnly.GetHashCode();
-            hashCode = hashCode * -1521134295 + RouteMarketableToBbo.GetHashCode();
-            hashCode = hashCode * -1521134295 + ParentPermId.GetHashCode();
-            hashCode = hashCode * -1521134295 + RandomizeSize.GetHashCode();
-            hashCode = hashCode * -1521134295 + RandomizePrice.GetHashCode();
-            hashCode = hashCode * -1521134295 + ReferenceContractId.GetHashCode();
-            hashCode = hashCode * -1521134295 + IsPeggedChangeAmountDecrease.GetHashCode();
-            hashCode = hashCode * -1521134295 + PeggedChangeAmount.GetHashCode();
-            hashCode = hashCode * -1521134295 + ReferenceChangeAmount.GetHashCode();
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(ReferenceExchange);
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(AdjustedOrderType);
-            hashCode = hashCode * -1521134295 + TriggerPrice.GetHashCode();
-            hashCode = hashCode * -1521134295 + LmtPriceOffset.GetHashCode();
-            hashCode = hashCode * -1521134295 + AdjustedStopPrice.GetHashCode();
-            hashCode = hashCode * -1521134295 + AdjustedStopLimitPrice.GetHashCode();
-            hashCode = hashCode * -1521134295 + AdjustedTrailingAmount.GetHashCode();
-            hashCode = hashCode * -1521134295 + AdjustableTrailingUnit.GetHashCode();
-            hashCode = hashCode * -1521134295 + EqualityComparer<List<OrderCondition>>.Default.GetHashCode(Conditions);
-            hashCode = hashCode * -1521134295 + ConditionsIgnoreRth.GetHashCode();
-            hashCode = hashCode * -1521134295 + ConditionsCancelOrder.GetHashCode();
-            hashCode = hashCode * -1521134295 + EqualityComparer<SoftDollarTier>.Default.GetHashCode(Tier);
-            hashCode = hashCode * -1521134295 + IsOmsContainer.GetHashCode();
-            hashCode = hashCode * -1521134295 + DiscretionaryUpToLimitPrice.GetHashCode();
-            hashCode = hashCode * -1521134295 + EqualityComparer<bool?>.Default.GetHashCode(UsePriceMgmtAlgo);
-            hashCode = hashCode * -1521134295 + Duration.GetHashCode();
-            hashCode = hashCode * -1521134295 + PostToAts.GetHashCode();
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(AdvancedErrorOverride);
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(ManualOrderTime);
-            hashCode = hashCode * -1521134295 + MinTradeQty.GetHashCode();
-            hashCode = hashCode * -1521134295 + MinCompeteSize.GetHashCode();
-            hashCode = hashCode * -1521134295 + CompeteAgainstBestOffset.GetHashCode();
-            hashCode = hashCode * -1521134295 + MidOffsetAtWhole.GetHashCode();
-            hashCode = hashCode * -1521134295 + MidOffsetAtHalf.GetHashCode();
+            hashCode *= -1521134295 + OrderId.GetHashCode();
+            hashCode *= -1521134295 + Solicited.GetHashCode();
+            hashCode *= -1521134295 + ClientId.GetHashCode();
+            hashCode *= -1521134295 + PermId.GetHashCode();
+            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(Action);
+            hashCode *= -1521134295 + TotalQuantity.GetHashCode();
+            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(OrderType);
+            hashCode *= -1521134295 + LmtPrice.GetHashCode();
+            hashCode *= -1521134295 + AuxPrice.GetHashCode();
+            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(Tif);
+            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(OcaGroup);
+            hashCode *= -1521134295 + OcaType.GetHashCode();
+            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(OrderRef);
+            hashCode *= -1521134295 + Transmit.GetHashCode();
+            hashCode *= -1521134295 + ParentId.GetHashCode();
+            hashCode *= -1521134295 + BlockOrder.GetHashCode();
+            hashCode *= -1521134295 + SweepToFill.GetHashCode();
+            hashCode *= -1521134295 + DisplaySize.GetHashCode();
+            hashCode *= -1521134295 + TriggerMethod.GetHashCode();
+            hashCode *= -1521134295 + OutsideRth.GetHashCode();
+            hashCode *= -1521134295 + Hidden.GetHashCode();
+            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(GoodAfterTime);
+            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(GoodTillDate);
+            hashCode *= -1521134295 + OverridePercentageConstraints.GetHashCode();
+            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(Rule80A);
+            hashCode *= -1521134295 + AllOrNone.GetHashCode();
+            hashCode *= -1521134295 + MinQty.GetHashCode();
+            hashCode *= -1521134295 + PercentOffset.GetHashCode();
+            hashCode *= -1521134295 + TrailStopPrice.GetHashCode();
+            hashCode *= -1521134295 + TrailingPercent.GetHashCode();
+            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(FaGroup);
+            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(FaMethod);
+            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(FaPercentage);
+            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(OpenClose);
+            hashCode *= -1521134295 + Origin.GetHashCode();
+            hashCode *= -1521134295 + ShortSaleSlot.GetHashCode();
+            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(DesignatedLocation);
+            hashCode *= -1521134295 + ExemptCode.GetHashCode();
+            hashCode *= -1521134295 + DiscretionaryAmt.GetHashCode();
+            hashCode *= -1521134295 + OptOutSmartRouting.GetHashCode();
+            hashCode *= -1521134295 + AuctionStrategy.GetHashCode();
+            hashCode *= -1521134295 + StartingPrice.GetHashCode();
+            hashCode *= -1521134295 + StockRefPrice.GetHashCode();
+            hashCode *= -1521134295 + Delta.GetHashCode();
+            hashCode *= -1521134295 + StockRangeLower.GetHashCode();
+            hashCode *= -1521134295 + StockRangeUpper.GetHashCode();
+            hashCode *= -1521134295 + Volatility.GetHashCode();
+            hashCode *= -1521134295 + VolatilityType.GetHashCode();
+            hashCode *= -1521134295 + ContinuousUpdate.GetHashCode();
+            hashCode *= -1521134295 + ReferencePriceType.GetHashCode();
+            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(DeltaNeutralOrderType);
+            hashCode *= -1521134295 + DeltaNeutralAuxPrice.GetHashCode();
+            hashCode *= -1521134295 + DeltaNeutralConId.GetHashCode();
+            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(DeltaNeutralSettlingFirm);
+            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(DeltaNeutralClearingAccount);
+            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(DeltaNeutralClearingIntent);
+            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(DeltaNeutralOpenClose);
+            hashCode *= -1521134295 + DeltaNeutralShortSale.GetHashCode();
+            hashCode *= -1521134295 + DeltaNeutralShortSaleSlot.GetHashCode();
+            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(DeltaNeutralDesignatedLocation);
+            hashCode *= -1521134295 + BasisPoints.GetHashCode();
+            hashCode *= -1521134295 + BasisPointsType.GetHashCode();
+            hashCode *= -1521134295 + ScaleInitLevelSize.GetHashCode();
+            hashCode *= -1521134295 + ScaleSubsLevelSize.GetHashCode();
+            hashCode *= -1521134295 + ScalePriceIncrement.GetHashCode();
+            hashCode *= -1521134295 + ScalePriceAdjustValue.GetHashCode();
+            hashCode *= -1521134295 + ScalePriceAdjustInterval.GetHashCode();
+            hashCode *= -1521134295 + ScaleProfitOffset.GetHashCode();
+            hashCode *= -1521134295 + ScaleAutoReset.GetHashCode();
+            hashCode *= -1521134295 + ScaleInitPosition.GetHashCode();
+            hashCode *= -1521134295 + ScaleInitFillQty.GetHashCode();
+            hashCode *= -1521134295 + ScaleRandomPercent.GetHashCode();
+            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(HedgeType);
+            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(HedgeParam);
+            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(Account);
+            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(SettlingFirm);
+            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(ClearingAccount);
+            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(ClearingIntent);
+            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(AlgoStrategy);
+            hashCode *= -1521134295 + EqualityComparer<List<TagValue>>.Default.GetHashCode(AlgoParams);
+            hashCode *= -1521134295 + WhatIf.GetHashCode();
+            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(AlgoId);
+            hashCode *= -1521134295 + NotHeld.GetHashCode();
+            hashCode *= -1521134295 + EqualityComparer<List<TagValue>>.Default.GetHashCode(SmartComboRoutingParams);
+            hashCode *= -1521134295 + EqualityComparer<List<OrderComboLeg>>.Default.GetHashCode(OrderComboLegs);
+            hashCode *= -1521134295 + EqualityComparer<List<TagValue>>.Default.GetHashCode(OrderMiscOptions);
+            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(ActiveStartTime);
+            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(ActiveStopTime);
+            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(ScaleTable);
+            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(ModelCode);
+            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(ExtOperator);
+            hashCode *= -1521134295 + CashQty.GetHashCode();
+            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(Mifid2DecisionMaker);
+            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(Mifid2DecisionAlgo);
+            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(Mifid2ExecutionTrader);
+            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(Mifid2ExecutionAlgo);
+            hashCode *= -1521134295 + DontUseAutoPriceForHedge.GetHashCode();
+            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(AutoCancelDate);
+            hashCode *= -1521134295 + FilledQuantity.GetHashCode();
+            hashCode *= -1521134295 + RefFuturesConId.GetHashCode();
+            hashCode *= -1521134295 + AutoCancelParent.GetHashCode();
+            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(Shareholder);
+            hashCode *= -1521134295 + ImbalanceOnly.GetHashCode();
+            hashCode *= -1521134295 + RouteMarketableToBbo.GetHashCode();
+            hashCode *= -1521134295 + ParentPermId.GetHashCode();
+            hashCode *= -1521134295 + RandomizeSize.GetHashCode();
+            hashCode *= -1521134295 + RandomizePrice.GetHashCode();
+            hashCode *= -1521134295 + ReferenceContractId.GetHashCode();
+            hashCode *= -1521134295 + IsPeggedChangeAmountDecrease.GetHashCode();
+            hashCode *= -1521134295 + PeggedChangeAmount.GetHashCode();
+            hashCode *= -1521134295 + ReferenceChangeAmount.GetHashCode();
+            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(ReferenceExchange);
+            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(AdjustedOrderType);
+            hashCode *= -1521134295 + TriggerPrice.GetHashCode();
+            hashCode *= -1521134295 + LmtPriceOffset.GetHashCode();
+            hashCode *= -1521134295 + AdjustedStopPrice.GetHashCode();
+            hashCode *= -1521134295 + AdjustedStopLimitPrice.GetHashCode();
+            hashCode *= -1521134295 + AdjustedTrailingAmount.GetHashCode();
+            hashCode *= -1521134295 + AdjustableTrailingUnit.GetHashCode();
+            hashCode *= -1521134295 + EqualityComparer<List<OrderCondition>>.Default.GetHashCode(Conditions);
+            hashCode *= -1521134295 + ConditionsIgnoreRth.GetHashCode();
+            hashCode *= -1521134295 + ConditionsCancelOrder.GetHashCode();
+            hashCode *= -1521134295 + EqualityComparer<SoftDollarTier>.Default.GetHashCode(Tier);
+            hashCode *= -1521134295 + IsOmsContainer.GetHashCode();
+            hashCode *= -1521134295 + DiscretionaryUpToLimitPrice.GetHashCode();
+            hashCode *= -1521134295 + EqualityComparer<bool?>.Default.GetHashCode(UsePriceMgmtAlgo);
+            hashCode *= -1521134295 + Duration.GetHashCode();
+            hashCode *= -1521134295 + PostToAts.GetHashCode();
+            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(AdvancedErrorOverride);
+            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(ManualOrderTime);
+            hashCode *= -1521134295 + MinTradeQty.GetHashCode();
+            hashCode *= -1521134295 + MinCompeteSize.GetHashCode();
+            hashCode *= -1521134295 + CompeteAgainstBestOffset.GetHashCode();
+            hashCode *= -1521134295 + MidOffsetAtWhole.GetHashCode();
+            hashCode *= -1521134295 + MidOffsetAtHalf.GetHashCode();
+            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(CustomerAccount);
+            hashCode *= -1521134295 + ProfessionalCustomer.GetHashCode();
+            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(BondAccruedInterest);
+            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(ExternalUserId);
+            hashCode *= -1521134295 + ManualOrderIndicator.GetHashCode();
 
             return hashCode;
         }
@@ -1172,33 +1203,33 @@ namespace IBApi
         public bool RandomizePrice { get; set; }
 
         /**
-        * @brief Pegged-to-benchmark orders: this attribute will contain the conId of the contract against which the order will be pegged.
-        */
+         * @brief Pegged-to-benchmark orders: this attribute will contain the conId of the contract against which the order will be pegged.
+         */
         public int ReferenceContractId { get; set; }
 
         /**
-        * @brief Pegged-to-benchmark orders: indicates whether the order's pegged price should increase or decreases.
-        */
+         * @brief Pegged-to-benchmark orders: indicates whether the order's pegged price should increase or decreases.
+         */
         public bool IsPeggedChangeAmountDecrease { get; set; }
 
         /**
-        * @brief Pegged-to-benchmark orders: amount by which the order's pegged price should move.
-        */
+         * @brief Pegged-to-benchmark orders: amount by which the order's pegged price should move.
+         */
         public double PeggedChangeAmount { get; set; }
 
         /**
-        * @brief Pegged-to-benchmark orders: the amount the reference contract needs to move to adjust the pegged order.
-        */
+         * @brief Pegged-to-benchmark orders: the amount the reference contract needs to move to adjust the pegged order.
+         */
         public double ReferenceChangeAmount { get; set; }
 
         /**
-        * @brief Pegged-to-benchmark orders: the exchange against which we want to observe the reference contract.
-        */
+         * @brief Pegged-to-benchmark orders: the exchange against which we want to observe the reference contract.
+         */
         public string ReferenceExchange { get; set; }
 
         /**
-        * @brief Adjusted Stop orders: the parent order will be adjusted to the given type when the adjusted trigger price is penetrated.
-        */
+         * @brief Adjusted Stop orders: the parent order will be adjusted to the given type when the adjusted trigger price is penetrated.
+         */
         public string AdjustedOrderType { get; set; }
 
         /**
@@ -1212,18 +1243,18 @@ namespace IBApi
         public double LmtPriceOffset { get; set; }
 
         /**
-        * @brief Adjusted Stop orders: specifies the stop price of the adjusted (STP) parent
-        */
+         * @brief Adjusted Stop orders: specifies the stop price of the adjusted (STP) parent
+         */
         public double AdjustedStopPrice { get; set; }
 
         /**
-        * @brief Adjusted Stop orders: specifies the stop limit price of the adjusted (STPL LMT) parent
-        */
+         * @brief Adjusted Stop orders: specifies the stop limit price of the adjusted (STPL LMT) parent
+         */
         public double AdjustedStopLimitPrice { get; set; }
 
         /**
-        * @brief Adjusted Stop orders: specifies the trailing amount of the adjusted (TRAIL) parent
-        */
+         * @brief Adjusted Stop orders: specifies the trailing amount of the adjusted (TRAIL) parent
+         */
         public double AdjustedTrailingAmount { get; set; }
 
         /**
@@ -1232,17 +1263,17 @@ namespace IBApi
         public int AdjustableTrailingUnit { get; set; }
 
         /**
-       * @brief Conditions determining when the order will be activated or canceled
-       */
+         * @brief Conditions determining when the order will be activated or canceled
+         */
         public List<OrderCondition> Conditions { get; set; }
         /**
-        * @brief Indicates whether or not conditions will also be valid outside Regular Trading Hours
-        */
+         * @brief Indicates whether or not conditions will also be valid outside Regular Trading Hours
+         */
         public bool ConditionsIgnoreRth { get; set; }
 
         /**
-        * @brief Conditions can determine if an order should become active or canceled.
-        */
+         * @brief Conditions can determine if an order should become active or canceled.
+         */
         public bool ConditionsCancelOrder { get; set; }
 
         /**
@@ -1250,30 +1281,29 @@ namespace IBApi
         */
         public SoftDollarTier Tier { get; set; }
 
-		    /**
-		    * @brief Set to true to create tickets from API orders when TWS is used as an OMS
-		    */
+        /**
+         * @brief Set to true to create tickets from API orders when TWS is used as an OMS
+         */
         public bool IsOmsContainer { get; set; }
 
         /**
-        * @brief Set to true to convert order of type 'Primary Peg' to 'D-Peg'
-        */
+         * @brief Set to true to convert order of type 'Primary Peg' to 'D-Peg'
+         */
         public bool DiscretionaryUpToLimitPrice { get; set; }
 
         /**
-        * @brief Specifies wether to use Price Management Algo. <i>CTCI users only.</i>
-        */
+         * @brief Specifies wether to use Price Management Algo. <i>CTCI users only.</i>
+         */
         public bool? UsePriceMgmtAlgo { get; set; }
 
         /**
-        * @brief Specifies the duration of the order. Format: yyyymmdd hh:mm:ss TZ. <i>For GTD orders.</i>
-        */
+         * @brief Specifies the duration of the order. Format: yyyymmdd hh:mm:ss TZ. <i>For GTD orders.</i>
+         */
         public int Duration { get; set; }
 
         /**
-        * @brief Value must be positive, and it is number of seconds that SMART order would be parked for at IBKRATS before being routed to exchange.
-        */
+         * @brief Value must be positive, and it is number of seconds that SMART order would be parked for at IBKRATS before being routed to exchange.
+         */
         public int PostToAts { get; set; }
-
     }
 }

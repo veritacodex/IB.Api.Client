@@ -10,24 +10,15 @@ namespace IBApi
     */
     public class MarginCondition : OperatorCondition
     {
-        const string header = "the margin cushion percent";
+        private const string header = "the margin cushion percent";
 
         protected override string Value
         {
-            get
-            {
-                return Percent.ToString(System.Globalization.NumberFormatInfo.InvariantInfo);
-            }
-            set
-            {
-                Percent = int.Parse(value, System.Globalization.NumberFormatInfo.InvariantInfo);
-            }
+            get => Percent.ToString(System.Globalization.NumberFormatInfo.InvariantInfo);
+            set => Percent = int.Parse(value, System.Globalization.NumberFormatInfo.InvariantInfo);
         }
 
-        public override string ToString()
-        {
-            return header + base.ToString();
-        }
+        public override string ToString() => header + base.ToString();
 
         /**
         * @brief Margin percent to trigger condition.
@@ -36,8 +27,7 @@ namespace IBApi
 
         protected override bool TryParse(string cond)
         {
-            if (!cond.StartsWith(header))
-                return false;
+            if (!cond.StartsWith(header)) return false;
 
             cond = cond.Replace(header, "");
 

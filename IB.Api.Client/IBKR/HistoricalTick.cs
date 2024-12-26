@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 
 namespace IBApi
 {
-	/**
+    /**
      * @class HistoricalTick
      * @brief The historical tick's description. Used when requesting historical tick data with whatToShow = MIDPOINT
      * @sa EClient, EWrapper
@@ -13,9 +13,7 @@ namespace IBApi
     [ComVisible(true)]
     public class HistoricalTick
     {
-        public HistoricalTick()
-        {
-        }
+        public HistoricalTick() { }
 
         public HistoricalTick(long time, double price, decimal size)
         {
@@ -23,8 +21,8 @@ namespace IBApi
             Price = price;
             Size = size;
         }
-		
-		/**
+
+        /**
          * @brief The UNIX timestamp of the historical tick 
          */
         public long Time
@@ -34,13 +32,13 @@ namespace IBApi
             [param: MarshalAs(UnmanagedType.I8)]
             private set;
         }
-		
-		/**
+
+        /**
          * @brief The historical tick price
          */
         public double Price { get; private set; }
-		
-		/**
+
+        /**
          * @brief The historical tick size
          */
         public decimal Size
