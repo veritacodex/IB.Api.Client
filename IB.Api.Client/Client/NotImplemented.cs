@@ -190,7 +190,7 @@ namespace IB.Api.Client
         {
             _ = reqId;
 
-            Notify("Not implemented");
+            Notify("accountSummaryEnd Not implemented");
             throw new NotImplementedException();
         }
         void IEWrapper.accountUpdateMulti(int requestId, string account, string modelCode, string key, string value, string currency)
@@ -426,7 +426,7 @@ namespace IB.Api.Client
         void IEWrapper.scannerDataEnd(int reqId)
         {
             _ = reqId;
-            Notify("Not implemented");
+            Notify("scannerDataEnd Not implemented");
             throw new NotImplementedException();
         }
     }
