@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
 using System.Threading;
+using IB.Api.Client;
 
 namespace IBApi
 {
@@ -19,6 +20,7 @@ namespace IBApi
         private readonly EDecoder processMsgsDecoder;
         private const int defaultInBufSize = ushort.MaxValue / 8;
         private bool UseV100Plus => eClientSocket.UseV100Plus;
+        static readonly IEWrapper defaultWrapper = new IBClient();
 
         public EReader(EClientSocket clientSocket, IEReaderSignal signal)
         {
@@ -126,7 +128,7 @@ namespace IBApi
             {
                 try
                 {
-                    msgSize = new EDecoder(eClientSocket.ServerVersion, new IEWrapper()).ParseAndProcessMsg(inBuf.ToArray());
+                    msgSize = new EDecoder(eClientSocket.ServerVersion, defaultWrapper).ParseAndProcessMsg(inBuf.ToArray());
                     break;
                 }
                 catch (EndOfStreamException)
