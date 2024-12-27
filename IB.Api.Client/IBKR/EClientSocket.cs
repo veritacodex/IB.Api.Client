@@ -66,12 +66,22 @@ namespace IBApi
 
         protected virtual Stream createClientStream(string host, int port)
         {
-            return new TcpClient(host, port).GetStream();
+            tcpClient = new TcpClient(host, port);
+            tcpClient.NoDelay = true;
+
+            return tcpClient.GetStream();
         }
 
+        
+
         /**
-        * @brief Creates socket connection to TWS/IBG.
-        */
+         * @brief Establishes a connection to the designated Host.
+         * After establishing a connection successfully, the Host will provide the next valid order id, server's current time, managed accounts and open orders among others depending on the Host version.
+         * @param host the Host's IP address. Leave blank for localhost.
+         * @param port the Host's port. 7496 by default for the TWS, 4001 by default on the Gateway.
+         * @param clientId Every API client program requires a unique id which can be any integer. Note that up to 32 clients can be connected simultaneously to a single Host.
+         * @sa EWrapper, EWrapper::nextValidId, EWrapper::currentTime
+         */
         public void eConnect(string host, int port, int clientId, bool extraAuth)
         {
             try
@@ -194,8 +204,19 @@ namespace IBApi
             {
                 redirectCount = 0;
             }
-
+            tcpClient = null;
             base.eDisconnect(resetState);
+        }
+
+        /**
+         * @brief Determines the status of the tcpClient with SelectMode.SelectRead.
+         * @param timeout The time to wait for a response, in microseconds.
+         * @returns true if any of the following conditions occur before the timeout expires, otherwise, false.
+         * @sa EWrapper::connectionClosed
+         */
+        internal bool Poll(int timeout)
+        {
+            return tcpClient.Client.Poll(timeout, SelectMode.SelectRead);
         }
     }
 }
