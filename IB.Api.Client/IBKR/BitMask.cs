@@ -5,24 +5,15 @@ using System;
 
 namespace IBApi
 {
-    class BitMask
+    internal class BitMask
     {
         private int m_mask;
 
-        public BitMask(int p)
-        {
-            m_mask = p;
-        }
+        public BitMask(int p) => m_mask = p;
 
-        public int GetMask()
-        {
-            return m_mask;
-        }
+        public int GetMask() => m_mask;
 
-        public void Clear()
-        {
-            m_mask = 0;
-        }
+        public void Clear() => m_mask = 0;
 
         public bool this[int index]
         {
@@ -30,7 +21,7 @@ namespace IBApi
             {
                 if (index >= 32)
                 {
-                    throw new ArgumentOutOfRangeException(index.ToString());
+                    throw new IndexOutOfRangeException();
                 }
 
                 return (m_mask & (1 << index)) != 0;
@@ -39,7 +30,7 @@ namespace IBApi
             {
                 if (index >= 32)
                 {
-                    throw new ArgumentOutOfRangeException(index.ToString());
+                    throw new IndexOutOfRangeException();
                 }
 
                 if (value)

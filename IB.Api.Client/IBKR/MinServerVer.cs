@@ -1,11 +1,10 @@
-/* Copyright (C) 2019 Interactive Brokers LLC. All rights reserved. This code is subject to the terms
+/* Copyright (C) 2024 Interactive Brokers LLC. All rights reserved. This code is subject to the terms
  * and conditions of the IB API Non-Commercial License or the IB API Commercial License, as applicable. */
 
 namespace IBApi
 {
     public static class MinServerVer
     {
-        
         public const int MIN_VERSION = 38;
 
         //shouldn't these all be deprecated?
@@ -130,5 +129,16 @@ namespace IBApi
         public const int MIN_SERVER_VER_INSTRUMENT_TIMEZONE = 174;
         public const int MIN_SERVER_VER_HMDS_MARKET_DATA_IN_SHARES = 175;
         public const int MIN_SERVER_VER_BOND_ISSUERID = 176;
+        public const int MIN_SERVER_VER_FA_PROFILE_DESUPPORT = 177;
+        public const int MIN_SERVER_VER_PENDING_PRICE_REVISION = 178;
+        public const int MIN_SERVER_VER_FUND_DATA_FIELDS = 179;
+        public const int MIN_SERVER_VER_MANUAL_ORDER_TIME_EXERCISE_OPTIONS = 180;
+        public const int MIN_SERVER_VER_OPEN_ORDER_AD_STRATEGY = 181;
+        public const int MIN_SERVER_VER_LAST_TRADE_DATE = 182;
+        public const int MIN_SERVER_VER_CUSTOMER_ACCOUNT = 183;
+        public const int MIN_SERVER_VER_PROFESSIONAL_CUSTOMER = 184;
+        public const int MIN_SERVER_VER_BOND_ACCRUED_INTEREST = 185;
+        public const int MIN_SERVER_VER_INELIGIBILITY_REASONS = 186;
+        public const int MIN_SERVER_VER_RFQ_FIELDS = 187;
     }
 }

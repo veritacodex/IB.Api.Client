@@ -50,22 +50,21 @@ namespace IBApi
             YieldRedemptionDate = 0;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object p_other)
         {
             bool l_bRetVal;
-            CommissionReport l_theOther = obj as CommissionReport;
 
-            if (l_theOther == null)
+            if (!(p_other is CommissionReport l_theOther))
             {
                 l_bRetVal = false;
             }
-            else if (this == obj)
+            else if (this == p_other)
             {
                 l_bRetVal = true;
             }
             else
             {
-                l_bRetVal = ExecId.Equals(l_theOther.ExecId);
+                l_bRetVal = ExecId.Equals(l_theOther.ExecId, System.StringComparison.Ordinal);
             }
             return l_bRetVal;
         }
@@ -73,12 +72,12 @@ namespace IBApi
         public override int GetHashCode()
         {
             var hashCode = 662669467;
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(ExecId);
-            hashCode = hashCode * -1521134295 + Commission.GetHashCode();
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Currency);
-            hashCode = hashCode * -1521134295 + RealizedPNL.GetHashCode();
-            hashCode = hashCode * -1521134295 + Yield.GetHashCode();
-            hashCode = hashCode * -1521134295 + YieldRedemptionDate.GetHashCode();
+            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(ExecId);
+            hashCode *= -1521134295 + Commission.GetHashCode();
+            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(Currency);
+            hashCode *= -1521134295 + RealizedPNL.GetHashCode();
+            hashCode *= -1521134295 + Yield.GetHashCode();
+            hashCode *= -1521134295 + YieldRedemptionDate.GetHashCode();
             return hashCode;
         }
     }
