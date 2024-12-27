@@ -10,7 +10,7 @@ namespace IB.Api.Client.Helper
     {
         public static void StartIbClient(IBClient ibClient, ConnectionDetails connectionDetails)
         {
-            ibClient.ClientSocket.EConnect(connectionDetails.Host, connectionDetails.Port, connectionDetails.ClientId);
+            ibClient.ClientSocket.eConnect(connectionDetails.Host, connectionDetails.Port, connectionDetails.ClientId);
             var reader = new EReader(ibClient.ClientSocket, ibClient.Signal);
             reader.Start();
             new Thread(() =>
@@ -18,7 +18,7 @@ namespace IB.Api.Client.Helper
                 while (ibClient.ClientSocket.IsConnected())
                 {
                     ibClient.Signal.waitForSignal();
-                    reader.ProcessMsgs();
+                    reader.processMsgs();
                 }
             })
             { IsBackground = true }.Start();
