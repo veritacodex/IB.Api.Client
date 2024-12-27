@@ -107,6 +107,8 @@ namespace IB.Api.Client.Implementation
         }
         void EWrapper.tickPrice(int tickerId, int field, double price, TickAttrib attribs)
         {
+            _ = attribs;
+
             switch (field)
             {
                 case 1:
@@ -191,9 +193,19 @@ namespace IB.Api.Client.Implementation
 
         void EWrapper.tickString(int tickerId, int field, string value)
         {
+            _ = tickerId;
+            _ = field;
+            _ = value;
+
+            Notify("");
         }
         void EWrapper.tickGeneric(int tickerId, int field, double value)
         {
+            _ = tickerId;
+            _ = value;
+            _ = field;
+
+            Notify("");
         }
         void EWrapper.realtimeBar(int reqId, long date, double open, double high, double low, double close, decimal volume, decimal WAP, int count)
         {
@@ -232,11 +244,15 @@ namespace IB.Api.Client.Implementation
             _priceUpdates[tickerId].Delta = delta;
             _priceUpdates[tickerId].Vega = vega;
             _priceUpdates[tickerId].Theta = theta;
+            _priceUpdates[tickerId].TickAttrib = tickAttrib;
+            _priceUpdates[tickerId].ImpliedVolatility = impliedVolatility;
+            _priceUpdates[tickerId].PvDividend = pvDividend;
         }
         void EWrapper.securityDefinitionOptionParameter(int reqId, string exchange, int underlyingConId, string tradingClass, string multiplier, HashSet<string> expirations, HashSet<double> strikes)
         {
             _optionParameterDefinitions.Add(new OptionParameterDefinition
             {
+                ReqId = reqId,
                 Exchange = exchange,
                 UnderlyingConId = underlyingConId,
                 TradingClass = tradingClass,
@@ -247,6 +263,7 @@ namespace IB.Api.Client.Implementation
         }
         void EWrapper.securityDefinitionOptionParameterEnd(int reqId)
         {
+            _ = reqId;
             OptionParametersReceived?.Invoke(this, _optionParameterDefinitions);
         }
     }

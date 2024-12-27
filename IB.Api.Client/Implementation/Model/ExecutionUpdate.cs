@@ -2,6 +2,7 @@ namespace IB.Api.Client.Implementation.Model
 {
     public class ExecutionUpdate
     {
+        public int ReqId { get; internal set; }
         public string Symbol { get; internal set; }
         public string SecType { get; internal set; }
         public string ExecutionId { get; internal set; }

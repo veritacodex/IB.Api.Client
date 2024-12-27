@@ -11,6 +11,7 @@ namespace IB.Api.Client.Implementation.Model
         public string Multiplier { get; internal set; }
         public HashSet<string> Expirations { get; internal set; }
         public HashSet<double> Strikes { get; internal set; }
+        public int ReqId { get; internal set; }
 
         public override string ToString()
         {

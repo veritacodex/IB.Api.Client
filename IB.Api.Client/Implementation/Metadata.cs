@@ -33,10 +33,12 @@ namespace IB.Api.Client.Implementation
 
         void EWrapper.contractDetails(int reqId, ContractDetails contractDetails)
         {
+            _ = reqId;
             _contracts.Add(contractDetails);
         }
         void EWrapper.contractDetailsEnd(int reqId)
         {
+            _ = reqId;
             ContractDetailsReceived?.Invoke(this, _contracts);
         }
         void EWrapper.marketRule(int marketRuleId, PriceIncrement[] priceIncrements)

@@ -36,11 +36,13 @@ namespace IB.Api.Client.Implementation
         }
         void EWrapper.updateAccountTime(string timestamp)
         {
+            _ = timestamp;
             _accountUpdate.UpdatedOn = DateTime.Now;
             AccountUpdateReceived?.Invoke(this, _accountUpdate);
         }
         void EWrapper.updateAccountValue(string key, string value, string currency, string accountName)
         {
+            _ = accountName;
             _accountUpdate.SetValue(key, value, currency);
         }
     }

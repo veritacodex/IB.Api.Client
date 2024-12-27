@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using IBApi;
 
 namespace IB.Api.Client.Implementation
@@ -11,14 +12,19 @@ namespace IB.Api.Client.Implementation
         {
             ClientSocket.reqNewsProviders();
         }
-
         void EWrapper.newsProviders(NewsProvider[] newsProviders)
         {
             NewsProvidersUpdateReceived?.Invoke(this, newsProviders);
-        }
+        }        
         void EWrapper.tickNews(int tickerId, long timeStamp, string providerCode, string articleId, string headline, string extraData)
         {
-            _ = string.Empty;
+            _ = tickerId;
+            _ = timeStamp;
+            _ = providerCode;
+            _ = articleId;
+            _ = headline;
+            _ = extraData;
+            Notify("");
         }
         void EWrapper.updateNewsBulletin(int msgId, int msgType, string message, string origExchange)
         {

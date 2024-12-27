@@ -83,6 +83,9 @@ namespace IB.Api.Client.Implementation
         }
         void EWrapper.historicalDataEnd(int reqId, string start, string end)
         {
+            _ = start;
+            _ = end;
+            
             var data = _historicalData[reqId];
             HistoricalDataReceived?.Invoke(this, new Tuple<int, List<Bar>>(reqId, data));
         }

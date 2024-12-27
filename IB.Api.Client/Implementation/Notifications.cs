@@ -71,8 +71,8 @@ namespace IB.Api.Client.Implementation
             var notification = new Notification
             {
                 At = DateTime.Now,
-                Id = 0,
-                Code = -1,
+                Id = id,
+                Code = errorCode,
                 Message = errorMsg,
                 NotificationType = GetNotificationType(errorMsg),
                 AdvancedOrderRejectJson = advancedOrderRejectJson

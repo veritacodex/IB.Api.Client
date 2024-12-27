@@ -51,6 +51,7 @@ namespace IB.Api.Client.Implementation
         {
             ExecutionUpdateReceived?.Invoke(this, new ExecutionUpdate
             {
+                ReqId = reqId,
                 Account = execution.AcctNumber,
                 Symbol = contract.Symbol,
                 SecType = contract.SecType,
@@ -62,11 +63,12 @@ namespace IB.Api.Client.Implementation
         }
         void EWrapper.execDetailsEnd(int reqId)
         {
-            _ = string.Empty;
+            _ = reqId;
+            Notify("");
         }
         void EWrapper.openOrderEnd()
         {
-            _ = string.Empty;
+            Notify("");
         }
         void EWrapper.orderStatus(int orderId, string status, decimal filled, decimal remaining, double avgFillPrice,
             int permId, int parentId, double lastFillPrice, int clientId, string whyHeld, double mktCapPrice)
