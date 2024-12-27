@@ -33,29 +33,36 @@ namespace IBApi
         public void Start()
         {
             new Thread(() =>
-            {
-                try
                 {
-                    while (eClientSocket.IsConnected())
+                    try
                     {
-                        if (!eClientSocket.IsDataAvailable())
+                        while (eClientSocket.IsConnected())
                         {
-                            Thread.Sleep(1);
-                            continue;
+                            if (eClientSocket.IsDataAvailable() && !putMessageToQueue())
+                            {
+                                eClientSocket.eDisconnect();
+                                break;
+                            }
+
+                            // Poll here will return true if new data is available or connection is broken.
+                            if (eClientSocket.Poll(1000) && !eClientSocket.IsDataAvailable()) // The connection is broken.
+                            {
+                                // Throw 10054 socket error - An existing connection was forcibly closed by the remote host.
+                                throw new System.Net.Sockets.SocketException(10054);
+                            }
                         }
-
-                        if (!putMessageToQueue())
-                            break;
                     }
-                }
-                catch (Exception ex)
-                {
-                    eClientSocket.Wrapper.error(ex);
-                    eClientSocket.eDisconnect();
-                }
-
-                eReaderSignal.issueSignal();
-            }) { IsBackground = true }.Start();
+                    catch (Exception ex)
+                    {
+                        if (eClientSocket.IsConnected())
+                        {
+                            eClientSocket.Wrapper.error(ex);
+                            eClientSocket.eDisconnect();
+                        }
+                    }
+                    eReaderSignal.issueSignal();
+                })
+                { IsBackground = true }.Start();
         }
 
         private EMessage getMsg()
