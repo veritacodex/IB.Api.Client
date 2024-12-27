@@ -85,7 +85,9 @@ namespace IBApi
                 if (msg == null) return false;
 
                 lock (msgQueue)
+                {
                     msgQueue.Enqueue(msg);
+                }
 
                 eReaderSignal.issueSignal();
 
@@ -117,6 +119,7 @@ namespace IBApi
                 AppendInBuf();
 
             while (true)
+            {
                 try
                 {
                     msgSize = new EDecoder(eClientSocket.ServerVersion, defaultWrapper).ParseAndProcessMsg(inBuf.ToArray());
@@ -124,10 +127,11 @@ namespace IBApi
                 }
                 catch (EndOfStreamException)
                 {
-                    if (inBuf.Count >= inBuf.Capacity * 3/4)
-                        inBuf.Capacity *= 2;
+                    if (inBuf.Count >= inBuf.Capacity * 3 / 4) inBuf.Capacity *= 2;
+
                     AppendInBuf();
                 }
+            }
 
             var msgBuf = new byte[msgSize];
 

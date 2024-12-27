@@ -1,4 +1,4 @@
-﻿/* Copyright (C) 2019 Interactive Brokers LLC. All rights reserved. This code is subject to the terms
+/* Copyright (C) 2024 Interactive Brokers LLC. All rights reserved. This code is subject to the terms
  * and conditions of the IB API Non-Commercial License or the IB API Commercial License, as applicable. */
 using System;
 using System.Collections.Generic;
@@ -17,6 +17,7 @@ namespace IBApi
     public class EClientSocket : EClient, EClientMsgSink
     {
         private int port;
+        private TcpClient tcpClient;
 
         public EClientSocket(EWrapper wrapper, EReaderSignal eReaderSignal) :
             base(wrapper) => this.eReaderSignal = eReaderSignal;
@@ -73,6 +74,16 @@ namespace IBApi
         */
         public void eConnect(string host, int port, int clientId, bool extraAuth)
         {
+            try
+            {
+                validateInvalidSymbols(host);
+            }
+            catch (EClientException e)
+            {
+                wrapper.error(IncomingMessage.NotValid, e.Err.Code, e.Err.Message + e.Text, "");
+                return;
+            }
+
             if (isConnected)
             {
                 wrapper.error(IncomingMessage.NotValid, EClientErrors.AlreadyConnected.Code, EClientErrors.AlreadyConnected.Message, "");
