@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using IB.Api.Client.Implementation.Model;
 using IBApi;
 
-namespace IB.Api.Client
+namespace IB.Api.Client.Implementation
 {
     //Acounts
     public partial class IBClient

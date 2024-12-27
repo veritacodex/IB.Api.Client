@@ -4,7 +4,7 @@ using IB.Api.Client.Helper;
 using IBApi;
 using IB.Api.Client.Implementation.Model;
 
-namespace IB.Api.Client
+namespace IB.Api.Client.Implementation
 {
     public partial class IBClient
     {

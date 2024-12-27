@@ -2,6 +2,7 @@ using System;
 using IB.Api.Client.Helper;
 using IBApi;
 using IB.Api.Client.Implementation.Model;
+using IB.Api.Client.Implementation;
 
 namespace IB.Api.Client.Examples
 {

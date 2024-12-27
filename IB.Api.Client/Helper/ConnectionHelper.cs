@@ -1,5 +1,6 @@
 using System;
 using System.Threading;
+using IB.Api.Client.Implementation;
 using IB.Api.Client.Implementation.Model;
 using IBApi;
 

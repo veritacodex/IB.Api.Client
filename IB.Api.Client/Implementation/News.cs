@@ -1,7 +1,7 @@
 using System;
 using IBApi;
 
-namespace IB.Api.Client
+namespace IB.Api.Client.Implementation
 {
     //News
     public partial class IBClient

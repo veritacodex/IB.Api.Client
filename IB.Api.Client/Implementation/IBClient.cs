@@ -1,6 +1,6 @@
 using IBApi;
 
-namespace IB.Api.Client
+namespace IB.Api.Client.Implementation
 {
     //Main
     public partial class IBClient : EWrapper

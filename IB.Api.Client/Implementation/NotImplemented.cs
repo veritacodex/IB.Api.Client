@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using IBApi;
 
-namespace IB.Api.Client
+namespace IB.Api.Client.Implementation
 {
     //Not implemented
     public partial class IBClient

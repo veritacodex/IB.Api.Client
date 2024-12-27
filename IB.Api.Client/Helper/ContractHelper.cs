@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using IB.Api.Client.Implementation;
 using IB.Api.Client.Implementation.Model;
 using IBApi;
 

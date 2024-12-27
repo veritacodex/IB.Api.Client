@@ -5,7 +5,7 @@ using IBApi;
 using IB.Api.Client.Helper;
 using IB.Api.Client.Implementation.Model;
 
-namespace IB.Api.Client
+namespace IB.Api.Client.Implementation
 {
     //MarketData
     public partial class IBClient

@@ -2,7 +2,7 @@ using System;
 using IB.Api.Client.Implementation.Model;
 using IBApi;
 
-namespace IB.Api.Client
+namespace IB.Api.Client.Implementation
 {
     public partial class IBClient
     {

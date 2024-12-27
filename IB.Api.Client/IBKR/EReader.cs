@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.IO;
-using IB.Api.Client;
+using IB.Api.Client.Implementation;
 
 namespace IBApi
 {
