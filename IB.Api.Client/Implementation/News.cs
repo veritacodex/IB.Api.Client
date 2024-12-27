@@ -17,13 +17,7 @@ namespace IB.Api.Client.Implementation
         }        
         void EWrapper.tickNews(int tickerId, long timeStamp, string providerCode, string articleId, string headline, string extraData)
         {
-            _ = tickerId;
-            _ = timeStamp;
-            _ = providerCode;
-            _ = articleId;
-            _ = headline;
-            _ = extraData;
-            Notify("");
+            DiscardImplementation(tickerId, timeStamp, providerCode, articleId, headline, extraData);
         }
         void EWrapper.updateNewsBulletin(int msgId, int msgType, string message, string origExchange)
         {

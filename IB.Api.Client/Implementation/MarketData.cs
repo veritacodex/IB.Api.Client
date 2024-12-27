@@ -188,19 +188,11 @@ namespace IB.Api.Client.Implementation
         }
         void EWrapper.tickString(int tickerId, int field, string value)
         {
-            _ = tickerId;
-            _ = field;
-            _ = value;
-
-            Notify("");
+            DiscardImplementation(tickerId, field, value);
         }
         void EWrapper.tickGeneric(int tickerId, int field, double value)
         {
-            _ = tickerId;
-            _ = value;
-            _ = field;
-
-            Notify("");
+            DiscardImplementation(field, tickerId, value);
         }
         void EWrapper.realtimeBar(int reqId, long date, double open, double high, double low, double close, decimal volume, decimal WAP, int count)
         {
