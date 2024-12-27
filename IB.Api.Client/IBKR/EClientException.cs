@@ -9,8 +9,15 @@ namespace IBApi
         public CodeMsgPair Err { get; private set; }
         public string Text { get; private set; }
 
-        public EClientException(CodeMsgPair err) => Err = err;
+        public EClientException(CodeMsgPair err)
+        {
+            Err = err;
+        }
 
-        public EClientException(CodeMsgPair err, string text) : this(err) => Text = text;
+        public EClientException(CodeMsgPair err, string text) : this(err)
+        {
+            Text = text;
+        }
+
     }
 }

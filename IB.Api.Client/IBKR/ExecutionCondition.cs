@@ -6,10 +6,10 @@ using System.IO;
 namespace IBApi
 {
     /**
-     * @class ExecutionCondition
-     * @brief This class represents a condition requiring a specific execution event to be fulfilled.
-     * Orders can be activated or canceled if a set of given conditions is met. An ExecutionCondition is met whenever a trade occurs on a certain product at the given exchange.
-     */
+    * @class ExecutionCondition
+    * @brief This class represents a condition requiring a specific execution event to be fulfilled.
+    * Orders can be activated or canceled if a set of given conditions is met. An ExecutionCondition is met whenever a trade occurs on a certain product at the given exchange.
+    */
     public class ExecutionCondition : OrderCondition
     {
         /**
@@ -27,12 +27,15 @@ namespace IBApi
         */
         public string Symbol { get; set; }
 
-        private const string header = "trade occurs for ";
-        private const string symbolSuffix = " symbol on ";
-        private const string exchangeSuffix = " exchange for ";
-        private const string secTypeSuffix = " security type";
+        const string header = "trade occurs for ",
+                     symbolSuffix = " symbol on ",
+                     exchangeSuffix = " exchange for ",
+                     secTypeSuffix = " security type";
 
-        public override string ToString() => header + Symbol + symbolSuffix + Exchange + exchangeSuffix + SecType + secTypeSuffix;
+        public override string ToString()
+        {
+            return header + Symbol + symbolSuffix + Exchange + exchangeSuffix + SecType + secTypeSuffix;
+        }
 
         protected override bool TryParse(string cond)
         {
@@ -47,7 +50,8 @@ namespace IBApi
                 Exchange = parser.GetNextSuffixedValue(exchangeSuffix);
                 SecType = parser.GetNextSuffixedValue(secTypeSuffix);
 
-                if (!string.IsNullOrWhiteSpace(parser.Rest)) return base.TryParse(parser.Rest);
+                if (!string.IsNullOrWhiteSpace(parser.Rest))
+                    return base.TryParse(parser.Rest);
             }
             catch
             {
@@ -77,15 +81,20 @@ namespace IBApi
 
         public override bool Equals(object obj)
         {
-            if (!(obj is ExecutionCondition other))
+            var other = obj as ExecutionCondition;
+
+            if (other == null)
                 return false;
 
-            return base.Equals(obj)
-                && Exchange.Equals(other.Exchange, System.StringComparison.Ordinal)
-                && SecType.Equals(other.SecType, System.StringComparison.Ordinal)
-                && Symbol.Equals(other.Symbol, System.StringComparison.Ordinal);
+            return base.Equals(obj) 
+                && Exchange.Equals(other.Exchange)
+                && SecType.Equals(other.SecType)
+                && Symbol.Equals(other.Symbol);
         }
 
-        public override int GetHashCode() => base.GetHashCode() + Exchange.GetHashCode() + SecType.GetHashCode() + Symbol.GetHashCode();
+        public override int GetHashCode()
+        {
+            return base.GetHashCode() + Exchange.GetHashCode() + SecType.GetHashCode() + Symbol.GetHashCode();
+        }
     }
 }

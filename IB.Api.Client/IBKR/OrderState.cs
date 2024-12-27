@@ -121,7 +121,6 @@ namespace IBApi
                 double maxCommission, string commissionCurrency, string warningText,
                 string completedTime, string completedStatus)
         {
-            Status = status;
             InitMarginBefore = initMarginBefore;
             MaintMarginBefore = maintMarginBefore;
             EquityWithLoanBefore = equityWithLoanBefore;
@@ -140,14 +139,15 @@ namespace IBApi
             CompletedStatus = completedStatus;
         }
 
-        public override bool Equals(object other)
+        public override bool Equals(object obj)
         {
-            if (this == other)
+            if (this == obj)
                 return true;
 
+            OrderState state = obj as OrderState;
 
-            if (!(other is OrderState state))
-                return false;
+            if (state == null)
+                return false; 
 
             if (Commission != state.Commission ||
                 MinCommission != state.MinCommission ||
@@ -179,23 +179,23 @@ namespace IBApi
         public override int GetHashCode()
         {
             var hashCode = 1754944475;
-            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(Status);
-            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(InitMarginBefore);
-            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(MaintMarginBefore);
-            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(EquityWithLoanBefore);
-            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(InitMarginChange);
-            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(MaintMarginChange);
-            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(EquityWithLoanChange);
-            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(InitMarginAfter);
-            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(MaintMarginAfter);
-            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(EquityWithLoanAfter);
-            hashCode *= -1521134295 + Commission.GetHashCode();
-            hashCode *= -1521134295 + MinCommission.GetHashCode();
-            hashCode *= -1521134295 + MaxCommission.GetHashCode();
-            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(CommissionCurrency);
-            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(WarningText);
-            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(CompletedTime);
-            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(CompletedStatus);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Status);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(InitMarginBefore);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(MaintMarginBefore);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(EquityWithLoanBefore);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(InitMarginChange);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(MaintMarginChange);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(EquityWithLoanChange);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(InitMarginAfter);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(MaintMarginAfter);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(EquityWithLoanAfter);
+            hashCode = hashCode * -1521134295 + Commission.GetHashCode();
+            hashCode = hashCode * -1521134295 + MinCommission.GetHashCode();
+            hashCode = hashCode * -1521134295 + MaxCommission.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(CommissionCurrency);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(WarningText);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(CompletedTime);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(CompletedStatus);
             return hashCode;
         }
     }

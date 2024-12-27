@@ -23,7 +23,10 @@ namespace IBApi
         /**
          * @brief Returns string to display. 
          */
-        public override string ToString() => (BidPastLow ? "bidPastLow " : "") +
-                                             (AskPastHigh ? "askPastHigh " : "");
+        public override string ToString()
+        {
+            return (BidPastLow ? "bidPastLow " : "") +
+                (AskPastHigh ? "askPastHigh " : "");
+        }
     }
 }

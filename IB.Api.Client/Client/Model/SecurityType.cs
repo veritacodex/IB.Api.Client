@@ -11,10 +11,10 @@ namespace IB.Api.Client.Model
         OPT,
         FOP,
         BOND,
-        BAG,
         FUND,
         CMDTY,
         WAR,
-        IOPT
+        IOPT,
+        BAG
     }
 }

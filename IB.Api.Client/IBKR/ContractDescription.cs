@@ -15,12 +15,15 @@ namespace IBApi
          */
         public Contract Contract { get; set; }
 
-        /**
+         /**
          * @brief A list of derivative security types
          */
         public string[] DerivativeSecTypes { get; set; }
 
-        public ContractDescription() => Contract = new Contract();
+         public ContractDescription()
+        {
+            Contract = new Contract();
+        }
 
         public ContractDescription(Contract contract, string[] derivativeSecTypes)
         {
@@ -28,6 +31,9 @@ namespace IBApi
             DerivativeSecTypes = derivativeSecTypes;
         }
 
-        public override string ToString() => $"{Contract} derivativeSecTypes [{string.Join(", ", DerivativeSecTypes)}]";
+        public override string ToString()
+        {
+            return Contract.ToString() + " derivativeSecTypes [" + string.Join(", ", DerivativeSecTypes) + "]";
+        }
     }
 }

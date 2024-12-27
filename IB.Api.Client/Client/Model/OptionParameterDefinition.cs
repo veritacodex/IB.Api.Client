@@ -5,7 +5,6 @@ namespace IB.Api.Client.Model
 {
     public class OptionParameterDefinition
     {
-        public int ReqId { get; internal set; }
         public string Exchange { get; internal set; }
         public int UnderlyingConId { get; internal set; }
         public string TradingClass { get; internal set; }

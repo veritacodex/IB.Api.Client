@@ -11,11 +11,11 @@ namespace IBApi
         /**
          * @brief Issues a signal to the consuming thread when there are things to be consumed.
          */
-        void issueSignal();
+        void IssueSignal();
 
         /**
          * @brief Makes the consuming thread waiting until a signal is issued.
          */
-        void waitForSignal();
+        void WaitForSignal();
     }
 }

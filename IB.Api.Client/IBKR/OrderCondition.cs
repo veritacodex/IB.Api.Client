@@ -60,11 +60,17 @@ namespace IBApi
             return rval;
         }
 
-        public virtual void Serialize(BinaryWriter outStream) => outStream.AddParameter(IsConjunctionConnection ? "a" : "o");
+        public virtual void Serialize(BinaryWriter outStream)
+        {
+            outStream.AddParameter(IsConjunctionConnection ? "a" : "o");
+        }
 
-        public virtual void Deserialize(IDecoder inStream) => IsConjunctionConnection = inStream.ReadString() == "a";
+        public virtual void Deserialize(IDecoder inStream)
+        {
+            IsConjunctionConnection = inStream.ReadString() == "a";
+        }
 
-        protected virtual bool TryParse(string cond)
+        virtual protected bool TryParse(string cond)
         {
             IsConjunctionConnection = cond == " and";
 
@@ -75,29 +81,40 @@ namespace IBApi
         {
             var conditions = Enum.GetValues(typeof(OrderConditionType)).OfType<OrderConditionType>().Select(t => Create(t)).ToList();
 
-            return conditions.FirstOrDefault(c => c.TryParse(cond));
+            return conditions.Find(c => c.TryParse(cond));
         }
 
         public override bool Equals(object obj)
         {
-            if (!(obj is OrderCondition other))
+            var other = obj as OrderCondition;
+
+            if (other == null)
                 return false;
 
             return IsConjunctionConnection == other.IsConjunctionConnection && Type == other.Type;
         }
 
-        public override int GetHashCode() => IsConjunctionConnection.GetHashCode() + Type.GetHashCode();
+        public override int GetHashCode()
+        {
+            return IsConjunctionConnection.GetHashCode() + Type.GetHashCode();
+        }
     }
 
-    internal class StringSuffixParser
+    class StringSuffixParser
     {
-        public StringSuffixParser(string str) => Rest = str;
+        public StringSuffixParser(string str)
+        {
+            Rest = str;
+        }
 
-        private string SkipSuffix(string perfix) => Rest.Substring(Rest.IndexOf(perfix) + perfix.Length);
+        string SkipSuffix(string perfix)
+        {
+            return Rest[(Rest.IndexOf(perfix) + perfix.Length)..];
+        }
 
         public string GetNextSuffixedValue(string perfix)
         {
-            var rval = Rest.Substring(0, Rest.IndexOf(perfix));
+            var rval = Rest[..Rest.IndexOf(perfix)];
             Rest = SkipSuffix(perfix);
 
             return rval;

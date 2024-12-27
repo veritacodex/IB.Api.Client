@@ -48,9 +48,13 @@ namespace IBApi
         */
         public string Side { get; set; }
 
-        public ExecutionFilter() => ClientId = 0;
+        public ExecutionFilter()
+        {
+            ClientId = 0;
+        }
 
-        public ExecutionFilter(int clientId, string acctCode, string time, string symbol, string secType, string exchange, string side)
+        public ExecutionFilter(int clientId, string acctCode, string time,
+                string symbol, string secType, string exchange, string side)
         {
             ClientId = clientId;
             AcctCode = acctCode;
@@ -61,26 +65,28 @@ namespace IBApi
             Side = side;
         }
 
-        public override bool Equals(object other)
+        public override bool Equals(object obj)
         {
-            bool l_bRetVal;
-            if (!(other is ExecutionFilter l_theOther))
+            bool l_bRetVal = false;
+            ExecutionFilter l_theOther = obj as ExecutionFilter;
+
+            if (l_theOther == null)
             {
                 l_bRetVal = false;
             }
-            else if (this == other)
+            else if (this == obj)
             {
                 l_bRetVal = true;
             }
             else
             {
                 l_bRetVal = ClientId == l_theOther.ClientId &&
-                            string.Equals(AcctCode, l_theOther.AcctCode, System.StringComparison.OrdinalIgnoreCase) &&
-                            string.Equals(Time, l_theOther.Time, System.StringComparison.OrdinalIgnoreCase) &&
-                            string.Equals(Symbol, l_theOther.Symbol, System.StringComparison.OrdinalIgnoreCase) &&
-                            string.Equals(SecType, l_theOther.SecType, System.StringComparison.OrdinalIgnoreCase) &&
-                            string.Equals(Exchange, l_theOther.Exchange, System.StringComparison.OrdinalIgnoreCase) &&
-                            string.Equals(Side, l_theOther.Side, System.StringComparison.OrdinalIgnoreCase);
+                    string.Compare(AcctCode, l_theOther.AcctCode, true) == 0 &&
+                    string.Compare(Time, l_theOther.Time, true) == 0 &&
+                    string.Compare(Symbol, l_theOther.Symbol, true) == 0 &&
+                    string.Compare(SecType, l_theOther.SecType, true) == 0 &&
+                    string.Compare(Exchange, l_theOther.Exchange, true) == 0 &&
+                    string.Compare(Side, l_theOther.Side, true) == 0;
             }
             return l_bRetVal;
         }
@@ -88,13 +94,13 @@ namespace IBApi
         public override int GetHashCode()
         {
             var hashCode = 82934527;
-            hashCode *= -1521134295 + ClientId.GetHashCode();
-            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(AcctCode);
-            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(Time);
-            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(Symbol);
-            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(SecType);
-            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(Exchange);
-            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(Side);
+            hashCode = hashCode * -1521134295 + ClientId.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(AcctCode);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Time);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Symbol);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(SecType);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Exchange);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Side);
             return hashCode;
         }
     }

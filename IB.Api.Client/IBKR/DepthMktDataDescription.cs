@@ -34,7 +34,9 @@ namespace IBApi
          */
         public int AggGroup { get; set; }
 
-        public DepthMktDataDescription() { }
+        public DepthMktDataDescription()
+        {
+        }
 
         public DepthMktDataDescription(string exchange, string secType, string listingExch, string serviceDataType, int aggGroup)
         {

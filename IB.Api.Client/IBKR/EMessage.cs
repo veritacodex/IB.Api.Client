@@ -5,10 +5,16 @@ namespace IBApi
 {
     public class EMessage
     {
-        private readonly byte[] buf;
+        readonly byte[] buf;
 
-        public EMessage(byte[] buf) => this.buf = buf;
+        public EMessage(byte[] buf)
+        {
+            this.buf = buf;
+        }
 
-        public byte[] GetBuf() => buf;
+        public byte[] GetBuf()
+        {
+            return buf;
+        }
     }
 }

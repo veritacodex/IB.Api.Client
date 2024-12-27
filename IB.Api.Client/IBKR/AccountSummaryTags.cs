@@ -39,6 +39,12 @@ namespace IBApi
         public const string DayTradesRemaining = "DayTradesRemaining";
         public const string Leverage = "Leverage";
 
-        public static string GetAllTags() => $"{AccountType},{NetLiquidation},{TotalCashValue},{SettledCash},{AccruedCash},{BuyingPower},{EquityWithLoanValue},{PreviousDayEquityWithLoanValue},{GrossPositionValue},{ReqTEquity},{ReqTMargin},{SMA},{InitMarginReq},{MaintMarginReq},{AvailableFunds},{ExcessLiquidity},{Cushion},{FullInitMarginReq},{FullMaintMarginReq},{FullAvailableFunds},{FullExcessLiquidity},{LookAheadNextChange},{LookAheadInitMarginReq},{LookAheadMaintMarginReq},{LookAheadAvailableFunds},{LookAheadExcessLiquidity},{HighestSeverity},{DayTradesRemaining},{Leverage}";
+        public static string GetAllTags()
+        {
+            return AccountType + "," + NetLiquidation + "," + TotalCashValue + "," + SettledCash + "," + AccruedCash + "," + BuyingPower + "," + EquityWithLoanValue + "," + PreviousDayEquityWithLoanValue + "," + GrossPositionValue + "," + ReqTEquity
+                + "," + ReqTMargin + "," + SMA + "," + InitMarginReq + "," + MaintMarginReq + "," + AvailableFunds + "," + ExcessLiquidity + "," + Cushion + "," + FullInitMarginReq + "," + FullMaintMarginReq + "," + FullAvailableFunds + "," + FullExcessLiquidity
+                + "," + LookAheadNextChange + "," + LookAheadInitMarginReq + "," + LookAheadMaintMarginReq + "," + LookAheadAvailableFunds + "," + LookAheadExcessLiquidity + "," + HighestSeverity + "," + DayTradesRemaining + "," + Leverage;
+        }
+
     }
 }

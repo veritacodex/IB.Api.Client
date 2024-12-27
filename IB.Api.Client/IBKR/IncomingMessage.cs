@@ -3,7 +3,7 @@
 
 namespace IBApi
 {
-    public class IncomingMessage
+    public static class IncomingMessage
     {
         public const int NotValid = -1;
         public const int TickPrice = 1;
@@ -29,7 +29,7 @@ namespace IBApi
         public const int TickOptionComputation = 21;
         public const int TickGeneric = 45;
         public const int Tickstring = 46;
-        public const int TickEFP = 47; //TICK EFP 47
+        public const int TickEFP = 47;//TICK EFP 47
         public const int CurrentTime = 49;
         public const int RealTimeBars = 50;
         public const int FundamentalData = 51;

@@ -13,7 +13,9 @@ namespace IBApi
     [ComVisible(true)]
     public class HistoricalSession
     {
-        public HistoricalSession() { }
+        public HistoricalSession()
+        {
+        }
 
         public HistoricalSession(string startDateTime, string endDateTime, string refDate)
         {

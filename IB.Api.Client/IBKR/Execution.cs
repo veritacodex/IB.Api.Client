@@ -1,4 +1,4 @@
-/* Copyright (C) 2023 Interactive Brokers LLC. All rights reserved. This code is subject to the terms
+﻿/* Copyright (C) 2019 Interactive Brokers LLC. All rights reserved. This code is subject to the terms
  * and conditions of the IB API Non-Commercial License or the IB API Commercial License, as applicable. */
 
 using System.Collections.Generic;
@@ -14,28 +14,32 @@ namespace IBApi
     public class Liquidity
     {
         /**
-         * @brief The enum of available liquidity flag types.
-         *       0 = Unknown
-         *       1 = Added liquidity
-         *       2 = Removed liquidity
-         *       3 = Liquidity routed out
+         * @brief The enum of available liquidity flag types. 
+         * 0 = Unknown, 1 = Added liquidity, 2 = Removed liquidity, 3 = Liquidity routed out
          */
-        private static readonly Dictionary<int, string> Values = new Dictionary<int, string>
-        {
-            {0, "None"},
-            {1, "Added Liquidity"},
-            {2, "Removed Liquidity"},
+
+        static readonly Dictionary<int, string> Values = new Dictionary<int, string> 
+        { 
+            {0, "None"}, 
+            {1, "Added Liquidity"}, 
+            {2, "Removed Liquidity"}, 
             {3, "Liquidity Routed Out" }
         };
 
-        public Liquidity(int p) => Value = Values.ContainsKey(p) ? p : 0;
+        public Liquidity(int p)
+        {
+            Value = Values.ContainsKey(p) ? p : 0;
+        }
 
         /**
          * @brief The value of the liquidity type.
          */
         public int Value { get; set; }
 
-        public override string ToString() => Values[Value];
+        public override string ToString()
+        {
+            return Values[Value];
+        }
     }
 
     /**
@@ -57,8 +61,8 @@ namespace IBApi
 
         /**
          * @brief The execution's identifier. Each partial fill has a separate ExecId. 
-         * A correction is indicated by an ExecId which differs from a previous ExecId in only the digits after the final period,
-         * e.g. an ExecId ending in ".02" would be a correction of a previous execution with an ExecId ending in ".01"
+		 * A correction is indicated by an ExecId which differs from a previous ExecId in only the digits after the final period,
+		 * e.g. an ExecId ending in ".02" would be a correction of a previous execution with an ExecId ending in ".01"
          */
         public string ExecId { get; set; }
 
@@ -142,11 +146,6 @@ namespace IBApi
          */
         public Liquidity LastLiquidity { get; set; }
 
-        /**
-         * @brief pending price revision
-         */
-        public bool PendingPriceRevision { get; set; }
-
         public Execution()
         {
             OrderId = 0;
@@ -159,14 +158,13 @@ namespace IBApi
             AvgPrice = 0;
             EvMultiplier = 0;
             LastLiquidity = new Liquidity(0);
-            PendingPriceRevision = false;
         }
 
         public Execution(int orderId, int clientId, string execId, string time,
                           string acctNumber, string exchange, string side, decimal shares,
                           double price, int permId, int liquidation, decimal cumQty,
                           double avgPrice, string orderRef, string evRule, double evMultiplier,
-                          string modelCode, Liquidity lastLiquidity, bool pendingPriceRevision)
+                          string modelCode, Liquidity lastLiquidity)
         {
             OrderId = orderId;
             ClientId = clientId;
@@ -186,23 +184,24 @@ namespace IBApi
             EvMultiplier = evMultiplier;
             ModelCode = modelCode;
             LastLiquidity = lastLiquidity;
-            PendingPriceRevision = pendingPriceRevision;
         }
 
-        public override bool Equals(object p_other)
+        public override bool Equals(object obj)
         {
-            bool l_bRetVal;
-            if (!(p_other is Execution l_theOther))
-            {
+            bool l_bRetVal = false;
+            Execution l_theOther = obj as Execution;
+
+            if (l_theOther == null)
+            { 
                 l_bRetVal = false;
             }
-            else if (this == p_other)
+            else if (this == obj)
             {
                 l_bRetVal = true;
             }
             else
             {
-                l_bRetVal = string.Equals(ExecId, l_theOther.ExecId, System.StringComparison.OrdinalIgnoreCase);
+                l_bRetVal = string.Compare(ExecId, l_theOther.ExecId, true) == 0;
             }
             return l_bRetVal;
         }
@@ -210,25 +209,24 @@ namespace IBApi
         public override int GetHashCode()
         {
             var hashCode = 926796717;
-            hashCode *= -1521134295 + OrderId.GetHashCode();
-            hashCode *= -1521134295 + ClientId.GetHashCode();
-            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(ExecId);
-            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(Time);
-            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(AcctNumber);
-            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(Exchange);
-            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(Side);
-            hashCode *= -1521134295 + Shares.GetHashCode();
-            hashCode *= -1521134295 + Price.GetHashCode();
-            hashCode *= -1521134295 + PermId.GetHashCode();
-            hashCode *= -1521134295 + Liquidation.GetHashCode();
-            hashCode *= -1521134295 + CumQty.GetHashCode();
-            hashCode *= -1521134295 + AvgPrice.GetHashCode();
-            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(OrderRef);
-            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(EvRule);
-            hashCode *= -1521134295 + EvMultiplier.GetHashCode();
-            hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(ModelCode);
-            hashCode *= -1521134295 + EqualityComparer<Liquidity>.Default.GetHashCode(LastLiquidity);
-            hashCode *= -1521134295 + PendingPriceRevision.GetHashCode();
+            hashCode = hashCode * -1521134295 + OrderId.GetHashCode();
+            hashCode = hashCode * -1521134295 + ClientId.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(ExecId);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Time);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(AcctNumber);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Exchange);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Side);
+            hashCode = hashCode * -1521134295 + Shares.GetHashCode();
+            hashCode = hashCode * -1521134295 + Price.GetHashCode();
+            hashCode = hashCode * -1521134295 + PermId.GetHashCode();
+            hashCode = hashCode * -1521134295 + Liquidation.GetHashCode();
+            hashCode = hashCode * -1521134295 + CumQty.GetHashCode();
+            hashCode = hashCode * -1521134295 + AvgPrice.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(OrderRef);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(EvRule);
+            hashCode = hashCode * -1521134295 + EvMultiplier.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(ModelCode);
+            hashCode = hashCode * -1521134295 + EqualityComparer<Liquidity>.Default.GetHashCode(LastLiquidity);
             return hashCode;
         }
     }

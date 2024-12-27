@@ -73,11 +73,5 @@ namespace IB.Api.Client.Model
 
         [JsonPropertyName("tetha")]
         public double Theta { get; internal set; }
-
-        [JsonPropertyName("tickAttrib")]
-        public int TickAttrib { get; internal set; }
-
-        [JsonPropertyName("impliedVolatility")]
-        public double ImpliedVolatility { get; internal set; }
     }
 }

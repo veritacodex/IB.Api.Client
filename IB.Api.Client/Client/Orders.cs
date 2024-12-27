@@ -16,42 +16,41 @@ namespace IB.Api.Client
         
         public void RequestOrders()
         {
-            ClientSocket.reqAllOpenOrders();
+            ClientSocket.ReqAllOpenOrders();
         }
         public void PlaceOrder(int orderId, Contract contract, Order order)
         {
-            ClientSocket.placeOrder(orderId, contract, order);
+            ClientSocket.PlaceOrder(orderId, contract, order);
         }
         public void WhatIf(int orderId, Contract contract, Order order)
         {
             order.WhatIf = true;
-            ClientSocket.placeOrder(orderId, contract, order);
+            ClientSocket.PlaceOrder(orderId, contract, order);
         }
         public void CancelOrder(int orderId)
         {
             Notify($"Cancel Order Id ({orderId}) requested");
-            ClientSocket.cancelOrder(orderId, new OrderCancel());
+            ClientSocket.CancelOrder(orderId, string.Empty);
         }
         public void CancellAllOrders()
         {
-            ClientSocket.reqGlobalCancel();
+            ClientSocket.ReqGlobalCancel();
         }
         public void RequestExecutions(int reqId)
         {
-            ClientSocket.reqExecutions(reqId, new ExecutionFilter());
+            ClientSocket.ReqExecutions(reqId, new ExecutionFilter());
         }
 
-        void IEWrapper.nextValidId(int orderId)
+        void IEWrapper.NextValidId(int orderId)
         {
             NextOrderId = orderId;
             Notify($"Next valid Order Id ({orderId})");
         }
         
-        void IEWrapper.execDetails(int reqId, Contract contract, Execution execution)
+        void IEWrapper.ExecDetails(int reqId, Contract contract, Execution execution)
         {
             ExecutionUpdateReceived?.Invoke(this, new ExecutionUpdate
             {
-                ReqId = reqId,
                 Account = execution.AcctNumber,
                 Symbol = contract.Symbol,
                 SecType = contract.SecType,
@@ -61,15 +60,15 @@ namespace IB.Api.Client
                 AvgPrice = execution.AvgPrice
             });
         }
-        void IEWrapper.execDetailsEnd(int reqId)
-        {
-            _ = reqId;
-        }
-        void IEWrapper.openOrderEnd()
+        void IEWrapper.ExecDetailsEnd(int reqId)
         {
             _ = string.Empty;
         }
-        void IEWrapper.orderStatus(int orderId, string status, decimal filled, decimal remaining, double avgFillPrice,
+        void IEWrapper.OpenOrderEnd()
+        {
+            _ = string.Empty;
+        }
+        void IEWrapper.OrderStatus(int orderId, string status, decimal filled, decimal remaining, double avgFillPrice,
             int permId, int parentId, double lastFillPrice, int clientId, string whyHeld, double mktCapPrice)
         {
             var orderUpdate = new OrderUpdate
@@ -88,7 +87,7 @@ namespace IB.Api.Client
             };
             OrderUpdateReceived?.Invoke(this, orderUpdate);
         }
-        void IEWrapper.commissionReport(CommissionReport commissionReport)
+        void IEWrapper.CommissionReport(CommissionReport commissionReport)
         {
             CommissionUpdateReceived?.Invoke(this, new CommissionUpdate
             {
@@ -96,7 +95,7 @@ namespace IB.Api.Client
                 Commission = commissionReport.Commission
             });
         }
-        void IEWrapper.openOrder(int orderId, Contract contract, Order order, OrderState orderState)
+        void IEWrapper.OpenOrder(int orderId, Contract contract, Order order, OrderState orderState)
         {
             if (order.WhatIf)
                 WhatIfOpenOrderUpdateReceived?.Invoke(this, new OpenOrderUpdate
