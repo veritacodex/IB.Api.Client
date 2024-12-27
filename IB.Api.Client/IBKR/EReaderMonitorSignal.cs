@@ -5,12 +5,12 @@ using System.Threading;
 
 namespace IBApi
 {
-    public class EReaderMonitorSignal : IEReaderSignal
+    public class EReaderMonitorSignal : EReaderSignal
     {
-        readonly object cs = new();
-        bool open;
+        private readonly object cs = new object();
+        private bool open;
 
-        public void IssueSignal()
+        public void issueSignal()
         {
             lock (cs)
             {
@@ -20,12 +20,11 @@ namespace IBApi
             }
         }
 
-        public void WaitForSignal()
+        public void waitForSignal()
         {
             lock (cs)
             {
-                while (!open)
-                    Monitor.Wait(cs);
+                while (!open) Monitor.Wait(cs);
 
                 open = false;
             }
