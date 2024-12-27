@@ -18,11 +18,8 @@ namespace IBApi
     {
         private int port;
 
-        internal EClientSocket(EWrapper wrapper, EReaderSignal eReaderSignal) :
-            base(wrapper)
-        {
-            this.eReaderSignal = eReaderSignal;
-        }
+        public EClientSocket(EWrapper wrapper, EReaderSignal eReaderSignal) :
+            base(wrapper) => this.eReaderSignal = eReaderSignal;
 
         void EClientMsgSink.serverVersion(int version, string time)
         {
