@@ -7,7 +7,7 @@ namespace IBApi
      * @class AccountSummaryTags
      * @brief class containing all existing values being reported by EClientSocket::reqAccountSummary
      */
-    public static class AccountSummaryTags
+    public class AccountSummaryTags
     {
         public const string AccountType = "AccountType";
         public const string NetLiquidation = "NetLiquidation";
