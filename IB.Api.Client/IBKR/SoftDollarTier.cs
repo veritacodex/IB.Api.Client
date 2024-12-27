@@ -31,29 +31,23 @@ namespace IBApi
             DisplayName = displayName;
         }
 
-        public SoftDollarTier()
-            : this(null, null, null)
-        {
-        }
+        public SoftDollarTier() : this(null, null, null) { }
 
         public override bool Equals(object obj)
         {
-            SoftDollarTier b = obj as SoftDollarTier;
+            var b = obj as SoftDollarTier;
 
-            if (Equals(b, null))
-                return false;
+            if (Equals(b, null)) return false;
 
-            return string.Compare(Name, b.Name, true) == 0 && string.Compare(Value, b.Value, true) == 0;
+            return string.Equals(Name, b.Name, System.StringComparison.OrdinalIgnoreCase) && string.Equals(Value, b.Value, System.StringComparison.OrdinalIgnoreCase);
         }
 
-        public override int GetHashCode()
-        {
-            return (Name ?? "").GetHashCode() + (Value ?? "").GetHashCode();
-        }
+        public override int GetHashCode() => (Name ?? "").GetHashCode() + (Value ?? "").GetHashCode();
 
-        public override string ToString()
-        {
-            return DisplayName;
-        }
+        public static bool operator ==(SoftDollarTier left, SoftDollarTier right) => left.Equals(right);
+
+        public static bool operator !=(SoftDollarTier left, SoftDollarTier right) => !left.Equals(right);
+
+        public override string ToString() => DisplayName;
     }
 }

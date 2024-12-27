@@ -8,29 +8,21 @@ namespace IBApi
         protected abstract string Value { get; set; }
         public bool IsMore { get; set; }
 
-        const string header = " is ";
+        private const string header = " is ";
 
-        public override string ToString()
-        {
-            return header + (IsMore ? ">= " : "<= ") + Value;
-        }
+        public override string ToString() => header + (IsMore ? ">= " : "<= ") + Value;
 
         public override bool Equals(object obj)
         {
-            var other = obj as OperatorCondition;
-
-            if (other == null)
+            if (!(obj is OperatorCondition other))
                 return false;
 
             return base.Equals(obj)
-                && Value.Equals(other.Value)
+                && Value.Equals(other.Value, System.StringComparison.Ordinal)
                 && IsMore == other.IsMore;
         }
 
-        public override int GetHashCode()
-        {
-            return base.GetHashCode() + Value.GetHashCode() + IsMore.GetHashCode();
-        }
+        public override int GetHashCode() => base.GetHashCode() + Value.GetHashCode() + IsMore.GetHashCode();
 
         protected override bool TryParse(string cond)
         {
@@ -46,10 +38,10 @@ namespace IBApi
 
                 IsMore = cond.StartsWith(">=");
 
-                if (base.TryParse(cond[cond.LastIndexOf(' ')..]))
-                    cond = cond[..cond.LastIndexOf(' ')];
+                if (base.TryParse(cond.Substring(cond.LastIndexOf(" "))))
+                    cond = cond.Substring(0, cond.LastIndexOf(" "));
 
-                Value = cond[3..];
+                Value = cond.Substring(3);
             }
             catch
             {

@@ -20,10 +20,7 @@ namespace IBApi
          */
         public string FamilyCodeStr { get; set; }
 
-        public FamilyCode()
-        {
-
-        }
+        public FamilyCode() { }
 
         public FamilyCode(string accountID, string familyCodeStr)
         {

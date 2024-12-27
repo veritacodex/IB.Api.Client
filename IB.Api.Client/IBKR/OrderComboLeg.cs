@@ -15,25 +15,18 @@ namespace IBApi
          */
         public double Price { get; set; }
 
-        public OrderComboLeg()
-        {
-            Price = double.MaxValue;
-        }
+        public OrderComboLeg() => Price = double.MaxValue;
 
-        public OrderComboLeg(double p_price)
-        {
-            Price = p_price;
-        }
+        public OrderComboLeg(double p_price) => Price = p_price;
 
-        public override bool Equals(object obj)
+        public override bool Equals(object other)
         {
-            OrderComboLeg theOther = obj as OrderComboLeg;
-            if (theOther == null)
+            if (!(other is OrderComboLeg theOther))
             {
                 return false;
             }
-            
-            if (this == obj)
+
+            if (this == other)
             {
                 return true;
             }
@@ -41,9 +34,6 @@ namespace IBApi
             return Price == theOther.Price;
         }
 
-        public override int GetHashCode()
-        {
-            return -814345894 + Price.GetHashCode();
-        }
+        public override int GetHashCode() => -814345894 + Price.GetHashCode();
     }
 }

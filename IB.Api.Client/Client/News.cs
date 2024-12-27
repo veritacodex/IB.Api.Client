@@ -9,18 +9,18 @@ namespace IB.Api.Client
         public event EventHandler<NewsProvider[]> NewsProvidersUpdateReceived;
         public void GetNewsProviders()
         {
-            ClientSocket.ReqNewsProviders();
+            ClientSocket.reqNewsProviders();
         }
 
-        void IEWrapper.NewsProviders(NewsProvider[] newsProviders)
+        void EWrapper.newsProviders(NewsProvider[] newsProviders)
         {
             NewsProvidersUpdateReceived?.Invoke(this, newsProviders);
         }
-        void IEWrapper.TickNews(int tickerId, long timeStamp, string providerCode, string articleId, string headline, string extraData)
+        void EWrapper.tickNews(int tickerId, long timeStamp, string providerCode, string articleId, string headline, string extraData)
         {
             _ = string.Empty;
         }
-        void IEWrapper.UpdateNewsBulletin(int msgId, int msgType, string message, string origExchange)
+        void EWrapper.updateNewsBulletin(int msgId, int msgType, string message, string origExchange)
         {
             var output = $"MsgId:{msgId} MsType:{msgType} Message:{message} Origin:{origExchange}";
             Notify(output);

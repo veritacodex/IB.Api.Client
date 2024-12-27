@@ -27,7 +27,7 @@ namespace IBApi
             }
         }
 
-        static readonly IEWrapper defaultWrapper = new IBClient();
+        static readonly EWrapper defaultWrapper = new IBClient();
 
         public EReader(EClientSocket clientSocket, IEReaderSignal signal)
         {
@@ -56,8 +56,8 @@ namespace IBApi
                 }
                 catch (Exception ex)
                 {
-                    eClientSocket.Wrapper.Error(ex);
-                    eClientSocket.EDisconnect();
+                    eClientSocket.Wrapper.error(ex);
+                    eClientSocket.eDisconnect();
                 }
 
                 eReaderSignal.IssueSignal();
@@ -97,7 +97,7 @@ namespace IBApi
             catch (Exception ex)
             {
                 if (eClientSocket.IsConnected())
-                    eClientSocket.Wrapper.Error(ex);
+                    eClientSocket.Wrapper.error(ex);
 
                 return false;
             }

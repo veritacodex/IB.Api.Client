@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 
 namespace IBApi
 {
-	/**
+    /**
      * @class HistoricalTickBidAsk
      * @brief The historical tick's description. Used when requesting historical tick data with whatToShow = BID_ASK
      * @sa EClient, EWrapper
@@ -16,30 +16,30 @@ namespace IBApi
         /**
          * @brief The UNIX timestamp of the historical tick 
          */
-        public long Time 
+        public long Time
         {
-            [return:MarshalAs(UnmanagedType.I8)]
+            [return: MarshalAs(UnmanagedType.I8)]
             get;
-            [param:MarshalAs(UnmanagedType.I8)]
-            set; 
+            [param: MarshalAs(UnmanagedType.I8)]
+            set;
         }
-		
-		/**
+
+        /**
          * @brief Tick attribs of historical bid/ask tick
          */
         public TickAttribBidAsk TickAttribBidAsk { get; set; }
-		
-		/**
+
+        /**
          * @brief The bid price of the historical tick
          */
         public double PriceBid { get; set; }
-		
-		/**
+
+        /**
          * @brief The ask price of the historical tick 
          */
         public double PriceAsk { get; set; }
-		
-		/**
+
+        /**
          * @brief The bid size of the historical tick 
          */
         public decimal SizeBid
@@ -49,8 +49,8 @@ namespace IBApi
             [param: MarshalAs(UnmanagedType.I8)]
             set;
         }
-		
-		/**
+
+        /**
          * @brief The ask size of the historical tick 
          */
         public decimal SizeAsk
@@ -61,9 +61,7 @@ namespace IBApi
             set;
         }
 
-        public HistoricalTickBidAsk()
-        {
-        }
+        public HistoricalTickBidAsk() { }
 
         public HistoricalTickBidAsk(long time, TickAttribBidAsk tickAttribBidAsk, double priceBid, double priceAsk, decimal sizeBid, decimal sizeAsk)
         {

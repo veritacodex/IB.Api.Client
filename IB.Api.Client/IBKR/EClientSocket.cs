@@ -14,17 +14,17 @@ namespace IBApi
      * @brief TWS/Gateway client class
      * This client class contains all the available methods to communicate with IB. Up to 32 clients can be connected to a single instance of the TWS/Gateway simultaneously. From herein, the TWS/Gateway will be referred to as the Host.
      */
-    public class EClientSocket : EClient, IEClientMsgSink
+    public class EClientSocket : EClient, EClientMsgSink
     {
         private int port;
 
-        internal EClientSocket(IEWrapper wrapper, IEReaderSignal eReaderSignal) :
+        internal EClientSocket(EWrapper wrapper, IEReaderSignal eReaderSignal) :
             base(wrapper)
         {
             this.eReaderSignal = eReaderSignal;
         }
 
-        void IEClientMsgSink.ServerVersion(int version, string time)
+        void EClientMsgSink.serverVersion(int version, string time)
         {
             base.serverVersion = version;
 
@@ -38,7 +38,7 @@ namespace IBApi
             }
             else if (serverVersion < Constants.MinVersion || serverVersion > Constants.MaxVersion)
             {
-                wrapper.Error(clientId, EClientErrors.UNSUPPORTED_VERSION.Code, EClientErrors.UNSUPPORTED_VERSION.Message, "");
+                wrapper.error(clientId, EClientErrors.UNSUPPORTED_VERSION.Code, EClientErrors.UNSUPPORTED_VERSION.Message, "");
                 return;
             }
 
@@ -55,7 +55,7 @@ namespace IBApi
             isConnected = true;
 
             if (!AsyncEConnect)
-                StartApi();
+                startApi();
         }
 
         protected virtual Stream CreateClientStream(string host, int port)
@@ -78,7 +78,7 @@ namespace IBApi
         {
             if (isConnected)
             {
-                wrapper.Error(IncomingMessage.NotValid, EClientErrors.AlreadyConnected.Code, EClientErrors.AlreadyConnected.Message, "");
+                wrapper.error(IncomingMessage.NotValid, EClientErrors.AlreadyConnected.Code, EClientErrors.AlreadyConnected.Message, "");
                 return;
             }
             try
@@ -90,7 +90,7 @@ namespace IBApi
                 this.clientId = clientId;
                 this.extraAuth = extraAuth;
 
-                SendConnectRequest();
+                sendConnectRequest();
 
                 if (!AsyncEConnect)
                 {
@@ -105,28 +105,28 @@ namespace IBApi
             }
             catch (ArgumentNullException ane)
             {
-                wrapper.Error(ane);
+                wrapper.error(ane);
             }
             catch (SocketException se)
             {
-                wrapper.Error(se);
+                wrapper.error(se);
             }
             catch (EClientException e)
             {
                 var cmp = e.Err;
 
-                wrapper.Error(-1, cmp.Code, cmp.Message, "");
+                wrapper.error(-1, cmp.Code, cmp.Message, "");
             }
             catch (Exception e)
             {
-                wrapper.Error(e);
+                wrapper.error(e);
             }
         }
 
         private readonly IEReaderSignal eReaderSignal;
         private int redirectCount;
 
-        protected override uint PrepareBuffer(BinaryWriter paramsList)
+        protected override uint prepareBuffer(BinaryWriter paramsList)
         {
             var rval = (uint)paramsList.BaseStream.Position;
 
@@ -155,11 +155,11 @@ namespace IBApi
         /**
         * @brief Redirects connection to different host. 
         */
-        public void Redirect(string host)
+        public void redirect(string host)
         {
             if (!AllowRedirect)
             {
-                wrapper.Error(clientId, EClientErrors.CONNECT_FAIL.Code, EClientErrors.CONNECT_FAIL.Message, "");
+                wrapper.error(clientId, EClientErrors.CONNECT_FAIL.Code, EClientErrors.CONNECT_FAIL.Message, "");
                 return;
             }
 
@@ -174,23 +174,23 @@ namespace IBApi
 
             if (redirectCount > Constants.REDIRECT_COUNT_MAX)
             {
-                EDisconnect();
-                wrapper.Error(clientId, EClientErrors.CONNECT_FAIL.Code, "Redirect count exceeded", "");
+                eDisconnect();
+                wrapper.error(clientId, EClientErrors.CONNECT_FAIL.Code, "Redirect count exceeded", "");
                 return;
             }
 
-            EDisconnect(false);
+            eDisconnect(false);
             EConnect(srv[0], port, clientId, extraAuth);
         }
 
-        public override void EDisconnect(bool resetState = true)
+        public override void eDisconnect(bool resetState = true)
         {
             if (resetState)
             {
                 redirectCount = 0;
             }
 
-            base.EDisconnect(resetState);
+            base.eDisconnect(resetState);
         }
     }
 }

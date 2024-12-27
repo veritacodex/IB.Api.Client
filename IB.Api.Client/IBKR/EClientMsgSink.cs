@@ -3,9 +3,9 @@
 
 namespace IBApi
 {
-    interface IEClientMsgSink
+    internal interface EClientMsgSink
     {
-        void ServerVersion(int version, string time);
-        void Redirect(string host);
+        void serverVersion(int version, string time);
+        void redirect(string host);
     }
 }

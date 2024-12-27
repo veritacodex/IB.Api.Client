@@ -16,30 +16,30 @@ namespace IB.Api.Client
         {
             _accountUpdate = new AccountUpdate();
             Notify($"Account:{accountId} updates requested");
-            ClientSocket.ReqAccountUpdates(true, accountId);
+            ClientSocket.reqAccountUpdates(true, accountId);
         }
         public void SubscribeToDefaultAccountUpdates()
         {
             _accountUpdate = new AccountUpdate();
             Notify($"Default account updates requested");
-            ClientSocket.ReqAccountUpdates(true, null);
+            ClientSocket.reqAccountUpdates(true, null);
         }
 
-        void IEWrapper.AccountDownloadEnd(string account)
+        void EWrapper.accountDownloadEnd(string account)
         {
-            _ = string.Empty;
+            _ = account;
         }
-        void IEWrapper.ManagedAccounts(string accountsList)
+        void EWrapper.managedAccounts(string accountsList)
         {
             AccountIds = [.. accountsList.Split(',')];
             Notify($"Managed accounts ({accountsList})");
         }
-        void IEWrapper.UpdateAccountTime(string timestamp)
+        void EWrapper.updateAccountTime(string timestamp)
         {
             _accountUpdate.UpdatedOn = DateTime.Now;
             AccountUpdateReceived?.Invoke(this, _accountUpdate);
         }
-        void IEWrapper.UpdateAccountValue(string key, string value, string currency, string accountName)
+        void EWrapper.updateAccountValue(string key, string value, string currency, string accountName)
         {
             _accountUpdate.SetValue(key, value, currency);
         }

@@ -5,7 +5,7 @@ using System.IO;
 
 namespace IBApi
 {
-    class ESocket : IETransport, IDisposable
+    class ESocket : ETransport, IDisposable
     {
         readonly BinaryWriter tcpWriter;
         readonly object tcpWriterLock = new();
