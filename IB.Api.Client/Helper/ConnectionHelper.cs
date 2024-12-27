@@ -17,7 +17,7 @@ namespace IB.Api.Client.Helper
             {
                 while (ibClient.ClientSocket.IsConnected())
                 {
-                    ibClient.Signal.WaitForSignal();
+                    ibClient.Signal.waitForSignal();
                     reader.ProcessMsgs();
                 }
             })

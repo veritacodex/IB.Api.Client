@@ -18,7 +18,7 @@ namespace IBApi
     {
         private int port;
 
-        internal EClientSocket(EWrapper wrapper, IEReaderSignal eReaderSignal) :
+        internal EClientSocket(EWrapper wrapper, EReaderSignal eReaderSignal) :
             base(wrapper)
         {
             this.eReaderSignal = eReaderSignal;
@@ -98,7 +98,7 @@ namespace IBApi
 
                     while (serverVersion == 0 && eReader.PutMessageToQueue())
                     {
-                        eReaderSignal.WaitForSignal();
+                        eReaderSignal.waitForSignal();
                         eReader.ProcessMsgs();
                     }
                 }
@@ -123,7 +123,7 @@ namespace IBApi
             }
         }
 
-        private readonly IEReaderSignal eReaderSignal;
+        private readonly EReaderSignal eReaderSignal;
         private int redirectCount;
 
         protected override uint prepareBuffer(BinaryWriter paramsList)
