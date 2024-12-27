@@ -42,13 +42,16 @@ namespace IBApi
                 return;
             }
 
-            if (serverVersion >= 3 && serverVersion < MinServerVer.LINKING)
+            if (serverVersion >= 3)
             {
-                List<byte> buf = new List<byte>();
+                if (serverVersion < MinServerVer.LINKING)
+                {
+                    var buf = new List<byte>();
 
-                buf.AddRange(Encoding.UTF8.GetBytes(clientId.ToString()));
-                buf.Add(Constants.EOL);
-                socketTransport.Send(new EMessage(buf.ToArray()));
+                    buf.AddRange(Encoding.UTF8.GetBytes(clientId.ToString()));
+                    buf.Add(Constants.EOL);
+                    socketTransport.Send(new EMessage(buf.ToArray()));
+                }
             }
 
             ServerTime = time;
