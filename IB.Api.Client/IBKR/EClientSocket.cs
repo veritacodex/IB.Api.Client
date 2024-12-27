@@ -58,23 +58,20 @@ namespace IBApi
                 startApi();
         }
 
-        protected virtual Stream CreateClientStream(string host, int port)
+        /**
+         * @brief Establishes a connection to the designated Host. This earlier version of eConnect does not have extraAuth parameter.
+         */
+        public void eConnect(string host, int port, int clientId) => eConnect(host, port, clientId, false);
+
+        protected virtual Stream createClientStream(string host, int port)
         {
             return new TcpClient(host, port).GetStream();
         }
 
         /**
-        * Creates socket connection to TWS/IBG. This earlier version of eConnect does not have extraAuth parameter.
-        */
-        public void EConnect(string host, int port, int clientId)
-        {
-            EConnect(host, port, clientId, false);
-        }
-
-        /**
         * @brief Creates socket connection to TWS/IBG.
         */
-        public void EConnect(string host, int port, int clientId, bool extraAuth)
+        public void eConnect(string host, int port, int clientId, bool extraAuth)
         {
             if (isConnected)
             {
@@ -83,7 +80,7 @@ namespace IBApi
             }
             try
             {
-                tcpStream = CreateClientStream(host, port);
+                tcpStream = createClientStream(host, port);
                 this.port = port;
                 socketTransport = new ESocket(tcpStream);
 
@@ -96,10 +93,10 @@ namespace IBApi
                 {
                     var eReader = new EReader(this, eReaderSignal);
 
-                    while (serverVersion == 0 && eReader.PutMessageToQueue())
+                    while (serverVersion == 0 && eReader.putMessageToQueue())
                     {
                         eReaderSignal.waitForSignal();
-                        eReader.ProcessMsgs();
+                        eReader.processMsgs();
                     }
                 }
             }
@@ -153,11 +150,11 @@ namespace IBApi
         }
 
         /**
-        * @brief Redirects connection to different host. 
+        * @brief Redirects connection to different host.
         */
         public void redirect(string host)
         {
-            if (!AllowRedirect)
+            if (!allowRedirect)
             {
                 wrapper.error(clientId, EClientErrors.CONNECT_FAIL.Code, EClientErrors.CONNECT_FAIL.Message, "");
                 return;
@@ -165,10 +162,7 @@ namespace IBApi
 
             var srv = host.Split(':');
 
-            if (srv.Length > 1)
-                if (!int.TryParse(srv[1], out port))
-                    throw new EClientException(EClientErrors.BAD_MESSAGE);
-
+            if (srv.Length > 1 && !int.TryParse(srv[1], out port)) throw new EClientException(EClientErrors.BAD_MESSAGE);
 
             ++redirectCount;
 
@@ -180,7 +174,7 @@ namespace IBApi
             }
 
             eDisconnect(false);
-            EConnect(srv[0], port, clientId, extraAuth);
+            eConnect(srv[0], port, clientId, extraAuth);
         }
 
         public override void eDisconnect(bool resetState = true)

@@ -13,19 +13,13 @@ namespace IBApi
     */
     public class EReader
     {
-        readonly EClientSocket eClientSocket;
-        readonly EReaderSignal eReaderSignal;
-        readonly Queue<EMessage> msgQueue = new();
-        readonly EDecoder processMsgsDecoder;
-        const int defaultInBufSize = ushort.MaxValue / 8;
+        private readonly EClientSocket eClientSocket;
+        private readonly EReaderSignal eReaderSignal;
+        private readonly Queue<EMessage> msgQueue = new Queue<EMessage>();
+        private readonly EDecoder processMsgsDecoder;
+        private const int defaultInBufSize = ushort.MaxValue / 8;
 
-        bool UseV100Plus
-        {
-            get
-            {
-                return eClientSocket.UseV100Plus;
-            }
-        }
+        private bool UseV100Plus => eClientSocket.UseV100Plus;
 
         static readonly EWrapper defaultWrapper = new IBClient();
 
@@ -50,7 +44,7 @@ namespace IBApi
                             continue;
                         }
 
-                        if (!PutMessageToQueue())
+                        if (!putMessageToQueue())
                             break;
                     }
                 }
@@ -64,28 +58,31 @@ namespace IBApi
             }) { IsBackground = true }.Start();
         }
 
-        EMessage GetMsg()
+        private EMessage getMsg()
         {
             lock (msgQueue)
+            {
                 return msgQueue.Count == 0 ? null : msgQueue.Dequeue();
+            }
         }
 
-        public void ProcessMsgs()
+        public void processMsgs()
         {
-            EMessage msg = GetMsg();
+            var msg = getMsg();
 
             while (msg != null && processMsgsDecoder.ParseAndProcessMsg(msg.GetBuf()) > 0)
-                msg = GetMsg();
+            {
+                msg = getMsg();
+            }
         }
 
-        public bool PutMessageToQueue()
+        public bool putMessageToQueue()
         {
             try
             {
-                EMessage msg = ReadSingleMessage();
+                var msg = readSingleMessage();
 
-                if (msg == null)
-                    return false;
+                if (msg == null) return false;
 
                 lock (msgQueue)
                     msgQueue.Enqueue(msg);
@@ -96,27 +93,22 @@ namespace IBApi
             }
             catch (Exception ex)
             {
-                if (eClientSocket.IsConnected())
-                    eClientSocket.Wrapper.error(ex);
+                if (eClientSocket.IsConnected()) eClientSocket.Wrapper.error(ex);
 
                 return false;
             }
         }
 
-        readonly List<byte> inBuf = new(defaultInBufSize);
+        private readonly List<byte> inBuf = new List<byte>(defaultInBufSize);
 
-        private EMessage ReadSingleMessage()
+        private EMessage readSingleMessage()
         {
-            var msgSize = 0;
-
+            int msgSize;
             if (UseV100Plus)
             {
                 msgSize = eClientSocket.ReadInt();
 
-                if (msgSize > Constants.MaxMsgSize)
-                {
-                    throw new EClientException(EClientErrors.BAD_LENGTH);
-                }
+                if (msgSize > Constants.MaxMsgSize) throw new EClientException(EClientErrors.BAD_LENGTH);
 
                 return new EMessage(eClientSocket.ReadByteArray(msgSize));
             }
@@ -142,15 +134,11 @@ namespace IBApi
             inBuf.CopyTo(0, msgBuf, 0, msgSize);
             inBuf.RemoveRange(0, msgSize);
 
-            if (inBuf.Count < defaultInBufSize && inBuf.Capacity > defaultInBufSize)
-                inBuf.Capacity = defaultInBufSize;
+            if (inBuf.Count < defaultInBufSize && inBuf.Capacity > defaultInBufSize) inBuf.Capacity = defaultInBufSize;
 
             return new EMessage(msgBuf);
         }
 
-        private void AppendInBuf()
-        {
-            inBuf.AddRange(eClientSocket.ReadAtLeastNBytes(inBuf.Capacity - inBuf.Count));
-        }
+        private void AppendInBuf() => inBuf.AddRange(eClientSocket.ReadAtLeastNBytes(inBuf.Capacity - inBuf.Count));
     }
 }
