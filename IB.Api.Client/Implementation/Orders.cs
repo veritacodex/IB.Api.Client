@@ -63,12 +63,11 @@ namespace IB.Api.Client.Implementation
         }
         void EWrapper.execDetailsEnd(int reqId)
         {
-            _ = reqId;
-            Notify("");
+            DiscardImplementation(reqId);
         }
         void EWrapper.openOrderEnd()
         {
-            Notify("");
+            DiscardImplementation();
         }
         void EWrapper.orderStatus(int orderId, string status, decimal filled, decimal remaining, double avgFillPrice,
             int permId, int parentId, double lastFillPrice, int clientId, string whyHeld, double mktCapPrice)

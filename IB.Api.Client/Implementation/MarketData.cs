@@ -77,7 +77,6 @@ namespace IB.Api.Client.Implementation
             Notify($"Derivatives parameters for symbol {contractDetails.Contract.Symbol} requested");
             ClientSocket.reqSecDefOptParams(reqId, contractDetails.Contract.Symbol, string.Empty, contractDetails.Contract.SecType, contractDetails.Contract.ConId);
         }
-
         void EWrapper.updateMktDepth(int tickerId, int position, int operation, int side, double price, decimal size)
         {
             if (side == 0)
@@ -166,9 +165,6 @@ namespace IB.Api.Client.Implementation
                     }
             }
         }
-
-
-
         private void SetPriceBar(int tickerId)
         {
             var tzi = TimeZoneInfo.FindSystemTimeZoneById("US/Central");
@@ -190,7 +186,6 @@ namespace IB.Api.Client.Implementation
                 _priceUpdates[tickerId].Low = _priceUpdates[tickerId].Bid < _priceUpdates[tickerId].Low ? _priceUpdates[tickerId].Bid : _priceUpdates[tickerId].Low;
             }
         }
-
         void EWrapper.tickString(int tickerId, int field, string value)
         {
             _ = tickerId;

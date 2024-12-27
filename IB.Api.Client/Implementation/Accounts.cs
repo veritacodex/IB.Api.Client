@@ -27,7 +27,7 @@ namespace IB.Api.Client.Implementation
 
         void EWrapper.accountDownloadEnd(string account)
         {
-            _ = account;
+            DiscardImplementation(account);
         }
         void EWrapper.managedAccounts(string accountsList)
         {

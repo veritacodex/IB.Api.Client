@@ -29,8 +29,7 @@ namespace IB.Api.Client.Implementation
                 Message = message
             };
             UiNotificationReceived?.Invoke(this, uiNotification);
-        }        
-
+        } 
         public static NotificationType GetNotificationType(string message)
         {
             if (message.Contains("data farm connection is OK"))
@@ -41,7 +40,6 @@ namespace IB.Api.Client.Implementation
 
             return NotificationType.Information;
         }
-
         void EWrapper.error(Exception e)
         {
             var notification = new Notification
