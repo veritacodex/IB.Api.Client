@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using IB.Api.Client.Model;
+using IB.Api.Client.Implementation.Model;
 namespace IB.Api.Client.Helper
 {
     public static class PortfolioHelper

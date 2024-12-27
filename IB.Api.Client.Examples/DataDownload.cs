@@ -1,7 +1,7 @@
 using System;
-using IB.Api.Client.Model;
 using IB.Api.Client.Helper;
 using IBApi;
+using IB.Api.Client.Implementation.Model;
 
 namespace IB.Api.Client.Examples
 {
