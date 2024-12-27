@@ -10,7 +10,7 @@ namespace IB.Api.Client.Examples
             var connectionDetails = new ConnectionDetails
             {
                 Host = "127.0.0.1",
-                Port = 4002,
+                Port = 4001,
                 ClientId = 0
             };
             BasicConnection.Run(connectionDetails);
