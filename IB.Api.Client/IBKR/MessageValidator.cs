@@ -2,7 +2,7 @@
  * and conditions of the IB API Non-Commercial License or the IB API Commercial License, as applicable. */
 
 //Hint. we could separate the message validation from the Socket client class...
-namespace IBApi
+namespace IB.Api.Client.IBKR
 {
     public class MessageValidator
     {

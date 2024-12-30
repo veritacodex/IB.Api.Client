@@ -7,7 +7,7 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace IBApi
+namespace IB.Api.Client.IBKR
 {
     internal class EDecoder : IDecoder
     {
@@ -1716,7 +1716,7 @@ namespace IBApi
                 ExecId = ReadString(),
                 Commission = ReadDouble(),
                 Currency = ReadString(),
-                RealizedPNL = ReadDouble(),
+                RealizedPnl = ReadDouble(),
                 Yield = ReadDouble(),
                 YieldRedemptionDate = ReadInt()
             };

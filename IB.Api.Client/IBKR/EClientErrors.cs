@@ -1,7 +1,7 @@
 /* Copyright (C) 2023 Interactive Brokers LLC. All rights reserved. This code is subject to the terms
  * and conditions of the IB API Non-Commercial License or the IB API Commercial License, as applicable. */
 
-namespace IBApi
+namespace IB.Api.Client.IBKR
 {
     /**
     * @brief Contains all possible errors occurring on the client side. This errors are not sent by the TWS but rather generated as the result of malfunction within the

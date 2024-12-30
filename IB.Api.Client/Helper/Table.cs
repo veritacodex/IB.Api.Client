@@ -5,7 +5,7 @@ using System.Text;
 
 namespace IB.Api.Client.Helper;
 
-class Table
+internal class Table
 {
     private readonly List<object> _columns;
     private readonly List<object[]> _rows;
@@ -17,7 +17,7 @@ class Table
             throw new ArgumentException("Parameter cannot be null nor empty", nameof(columns));
         }
 
-        _columns = new List<object>(columns);
+        _columns = [..columns];
         _rows = [];
     }
 
@@ -40,21 +40,18 @@ class Table
     {
         List<int> columnsLength = [];
 
-        for (int i = 0; i < _columns.Count; i++)
+        for (var i = 0; i < _columns.Count; i++)
         {
             List<object> columnRow = [];
-            int max = 0;
+            var max = 0;
 
             columnRow.Add(_columns[i]);
 
-            for (int j = 0; j < _rows.Count; j++)
-            {
-                columnRow.Add(_rows[j][i]);
-            }
+            columnRow.AddRange(_rows.Select(t => t[i]));
 
-            for (int n = 0; n < columnRow.Count; n++)
+            for (var n = 0; n < columnRow.Count; n++)
             {
-                int len = columnRow[n].ToString().Length;
+                var len = columnRow[n].ToString().Length;
 
                 if (len > max)
                 {
@@ -71,21 +68,21 @@ class Table
     public override string ToString()
     {
         StringBuilder tableString = new();
-        List<int> columnsLength = GetColumnsMaximumStringLengths();
+        var columnsLength = GetColumnsMaximumStringLengths();
 
         var rowStringFormat = Enumerable
             .Range(0, _columns.Count)
             .Select(i => " | {" + i + ",-" + columnsLength[i] + "}")
             .Aggregate((total, nextValue) => total + nextValue) + " |";
 
-        string columnHeaders = string.Format(rowStringFormat, _columns.ToArray());
-        List<string> results = _rows.Select(row => string.Format(rowStringFormat, row)).ToList();
+        var columnHeaders = string.Format(rowStringFormat, _columns.ToArray());
+        var results = _rows.Select(row => string.Format(rowStringFormat, row)).ToList();
 
-        int maximumRowLength = Math.Max(0, _rows.Count != 0 ? _rows.Max(row => string.Format(rowStringFormat, row).Length) : 0);
-        int maximumLineLength = Math.Max(maximumRowLength, columnHeaders.Length);
+        var maximumRowLength = Math.Max(0, _rows.Count != 0 ? _rows.Max(row => string.Format(rowStringFormat, row).Length) : 0);
+        var maximumLineLength = Math.Max(maximumRowLength, columnHeaders.Length);
 
-        string dividerLine = string.Join("", Enumerable.Repeat("-", maximumLineLength - 1));
-        string divider = $" {dividerLine} ";
+        var dividerLine = string.Join("", Enumerable.Repeat("-", maximumLineLength - 1));
+        var divider = $" {dividerLine} ";
 
         tableString.AppendLine(divider);
         tableString.AppendLine(columnHeaders);

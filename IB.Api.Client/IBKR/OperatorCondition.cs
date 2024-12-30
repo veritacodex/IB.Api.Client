@@ -1,20 +1,20 @@
 ﻿/* Copyright (C) 2019 Interactive Brokers LLC. All rights reserved. This code is subject to the terms
  * and conditions of the IB API Non-Commercial License or the IB API Commercial License, as applicable. */
 
-namespace IBApi
+namespace IB.Api.Client.IBKR
 {
     public abstract class OperatorCondition : OrderCondition
     {
         protected abstract string Value { get; set; }
-        public bool IsMore { get; set; }
+        private bool IsMore { get; set; }
 
-        private const string header = " is ";
+        private const string HEADER = " is ";
 
-        public override string ToString() => header + (IsMore ? ">= " : "<= ") + Value;
+        public override string ToString() => HEADER + (IsMore ? ">= " : "<= ") + Value;
 
         public override bool Equals(object obj)
         {
-            if (!(obj is OperatorCondition other))
+            if (obj is not OperatorCondition other)
                 return false;
 
             return base.Equals(obj)
@@ -26,22 +26,22 @@ namespace IBApi
 
         protected override bool TryParse(string cond)
         {
-            if (!cond.StartsWith(header))
+            if (!cond.StartsWith(HEADER))
                 return false;
 
             try
             {
-                cond = cond.Replace(header, "");
+                cond = cond.Replace(HEADER, "");
 
                 if (!cond.StartsWith(">=") && !cond.StartsWith("<="))
                     return false;
 
                 IsMore = cond.StartsWith(">=");
 
-                if (base.TryParse(cond.Substring(cond.LastIndexOf(" "))))
-                    cond = cond.Substring(0, cond.LastIndexOf(" "));
+                if (base.TryParse(cond[cond.LastIndexOf(' ')..]))
+                    cond = cond[..cond.LastIndexOf(' ')];
 
-                Value = cond.Substring(3);
+                Value = cond[3..];
             }
             catch
             {

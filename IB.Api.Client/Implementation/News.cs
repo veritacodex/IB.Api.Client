@@ -1,10 +1,10 @@
 using System;
-using IBApi;
+using IB.Api.Client.IBKR;
 
 namespace IB.Api.Client.Implementation
 {
     //News
-    public partial class IBClient
+    public partial class IbClient
     {
         public event EventHandler<NewsProvider[]> NewsProvidersUpdateReceived;
         public void GetNewsProviders()

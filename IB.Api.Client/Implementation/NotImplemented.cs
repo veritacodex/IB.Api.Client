@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
-using IBApi;
+using IB.Api.Client.IBKR;
 
 namespace IB.Api.Client.Implementation
 {
     //Not implemented
-    public partial class IBClient
+    public partial class IbClient
     {
-        void DiscardImplementation(params object[] inputs)
+        private static void DiscardImplementation(params object[] inputs)
         {
             _ = inputs;
         }

@@ -1,12 +1,13 @@
 ﻿﻿/* Copyright (C) 2019 Interactive Brokers LLC. All rights reserved. This code is subject to the terms
  * and conditions of the IB API Non-Commercial License or the IB API Commercial License, as applicable. */
-using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.IO;
-using IB.Api.Client.Implementation;
 
-namespace IBApi
+ using System;
+ using System.Collections.Generic;
+ using System.IO;
+ using System.Threading;
+ using IB.Api.Client.Implementation;
+
+ namespace IB.Api.Client.IBKR
 {
     /**
     * @brief Captures incoming messages to the API client and places them into a queue.
@@ -21,7 +22,7 @@ namespace IBApi
 
         private bool UseV100Plus => eClientSocket.UseV100Plus;
 
-        static readonly EWrapper defaultWrapper = new IBClient();
+        static readonly EWrapper defaultWrapper = new IbClient();
 
         public EReader(EClientSocket clientSocket, EReaderSignal signal)
         {

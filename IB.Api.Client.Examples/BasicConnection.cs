@@ -9,10 +9,10 @@ namespace IB.Api.Client.Examples
     {
         public static void Run(ConnectionDetails connectionDetails)
         {
-            var ibClient = new IBClient();
-            ibClient.NotificationReceived += new EventHandler<Notification>(ConnectionHelper.NotificationReceived);
-            ibClient.AccountUpdateReceived += new EventHandler<AccountUpdate>(AccountUpdateReceived);
-            ibClient.PortfolioUpdateReceived += new EventHandler<PortfolioUpdate>(PortfolioUpdateReceived);
+            var ibClient = new IbClient();
+            ibClient.NotificationReceived += ConnectionHelper.NotificationReceived;
+            ibClient.AccountUpdateReceived += AccountUpdateReceived;
+            ibClient.PortfolioUpdateReceived += PortfolioUpdateReceived;
             
             ConnectionHelper.StartIbClient(ibClient, connectionDetails);
 

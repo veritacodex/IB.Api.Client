@@ -1,7 +1,10 @@
 ﻿/* Copyright (C) 2019 Interactive Brokers LLC. All rights reserved. This code is subject to the terms
  * and conditions of the IB API Non-Commercial License or the IB API Commercial License, as applicable. */
 
-namespace IBApi
+using System;
+using IB.Api.Client.Helper;
+
+namespace IB.Api.Client.IBKR
 {
     /**
      * @class OrderComboLeg
@@ -21,7 +24,7 @@ namespace IBApi
 
         public override bool Equals(object other)
         {
-            if (!(other is OrderComboLeg theOther))
+            if (other is not OrderComboLeg theOther)
             {
                 return false;
             }
@@ -31,7 +34,7 @@ namespace IBApi
                 return true;
             }
 
-            return Price == theOther.Price;
+            return Math.Abs(Price - theOther.Price) < TypeExtensions.Tolerance;
         }
 
         public override int GetHashCode() => -814345894 + Price.GetHashCode();

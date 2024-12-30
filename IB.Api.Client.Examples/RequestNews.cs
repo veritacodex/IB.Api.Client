@@ -1,8 +1,8 @@
 using System;
 using IB.Api.Client.Helper;
+using IB.Api.Client.IBKR;
 using IB.Api.Client.Implementation;
 using IB.Api.Client.Implementation.Model;
-using IBApi;
 
 namespace IB.Api.Client.Examples
 {
@@ -10,9 +10,9 @@ namespace IB.Api.Client.Examples
     {
         public static void RunGetNewsProviders(ConnectionDetails connectionDetails)
         {
-            var ibClient = new IBClient();
-            ibClient.NotificationReceived += new EventHandler<Notification>(ConnectionHelper.NotificationReceived);
-            ibClient.NewsProvidersUpdateReceived += new EventHandler<NewsProvider[]>(NewsProvidersUpdateReceived);
+            var ibClient = new IbClient();
+            ibClient.NotificationReceived += ConnectionHelper.NotificationReceived;
+            ibClient.NewsProvidersUpdateReceived += NewsProvidersUpdateReceived;
             ConnectionHelper.StartIbClient(ibClient, connectionDetails);
             ibClient.GetNewsProviders();
         }

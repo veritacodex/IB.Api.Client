@@ -3,7 +3,7 @@
 
 using System.Globalization;
 
-namespace IBApi
+namespace IB.Api.Client.IBKR
 {
     /**
      * @brief Used with conditional orders to place or submit an order based on a percentage change of an instrument to the last close price.

@@ -1,9 +1,11 @@
 /* Copyright (C) 2024 Interactive Brokers LLC. All rights reserved. This code is subject to the terms
  * and conditions of the IB API Non-Commercial License or the IB API Commercial License, as applicable. */
 
+using System;
 using System.Collections.Generic;
+using IB.Api.Client.Helper;
 
-namespace IBApi
+namespace IB.Api.Client.IBKR
 {
     /**
      * @class Order
@@ -904,8 +906,8 @@ namespace IBApi
             if (OrderId != l_theOther.OrderId ||
                 ClientId != l_theOther.ClientId ||
                 TotalQuantity != l_theOther.TotalQuantity ||
-                LmtPrice != l_theOther.LmtPrice ||
-                AuxPrice != l_theOther.AuxPrice ||
+                Math.Abs(LmtPrice - l_theOther.LmtPrice) > TypeExtensions.Tolerance ||
+                Math.Abs(AuxPrice - l_theOther.AuxPrice) > TypeExtensions.Tolerance ||
                 OcaType != l_theOther.OcaType ||
                 Transmit != l_theOther.Transmit ||
                 ParentId != l_theOther.ParentId ||
@@ -918,35 +920,35 @@ namespace IBApi
                 OverridePercentageConstraints != l_theOther.OverridePercentageConstraints ||
                 AllOrNone != l_theOther.AllOrNone ||
                 MinQty != l_theOther.MinQty ||
-                PercentOffset != l_theOther.PercentOffset ||
-                TrailStopPrice != l_theOther.TrailStopPrice ||
-                TrailingPercent != l_theOther.TrailingPercent ||
+                Math.Abs(PercentOffset - l_theOther.PercentOffset) > TypeExtensions.Tolerance ||
+                Math.Abs(TrailStopPrice - l_theOther.TrailStopPrice) > TypeExtensions.Tolerance ||
+                Math.Abs(TrailingPercent - l_theOther.TrailingPercent) > TypeExtensions.Tolerance ||
                 Origin != l_theOther.Origin ||
                 ShortSaleSlot != l_theOther.ShortSaleSlot ||
-                DiscretionaryAmt != l_theOther.DiscretionaryAmt ||
+                Math.Abs(DiscretionaryAmt - l_theOther.DiscretionaryAmt) > TypeExtensions.Tolerance ||
                 OptOutSmartRouting != l_theOther.OptOutSmartRouting ||
                 AuctionStrategy != l_theOther.AuctionStrategy ||
-                StartingPrice != l_theOther.StartingPrice ||
-                StockRefPrice != l_theOther.StockRefPrice ||
-                Delta != l_theOther.Delta ||
-                StockRangeLower != l_theOther.StockRangeLower ||
-                StockRangeUpper != l_theOther.StockRangeUpper ||
-                Volatility != l_theOther.Volatility ||
+                Math.Abs(StartingPrice - l_theOther.StartingPrice) > TypeExtensions.Tolerance ||
+                Math.Abs(StockRefPrice - l_theOther.StockRefPrice) > TypeExtensions.Tolerance ||
+                Math.Abs(Delta - l_theOther.Delta) > TypeExtensions.Tolerance ||
+                Math.Abs(StockRangeLower - l_theOther.StockRangeLower) > TypeExtensions.Tolerance ||
+                Math.Abs(StockRangeUpper - l_theOther.StockRangeUpper) > TypeExtensions.Tolerance ||
+                Math.Abs(Volatility - l_theOther.Volatility) > TypeExtensions.Tolerance ||
                 VolatilityType != l_theOther.VolatilityType ||
                 ContinuousUpdate != l_theOther.ContinuousUpdate ||
                 ReferencePriceType != l_theOther.ReferencePriceType ||
-                DeltaNeutralAuxPrice != l_theOther.DeltaNeutralAuxPrice ||
+                Math.Abs(DeltaNeutralAuxPrice - l_theOther.DeltaNeutralAuxPrice) > TypeExtensions.Tolerance ||
                 DeltaNeutralConId != l_theOther.DeltaNeutralConId ||
                 DeltaNeutralShortSale != l_theOther.DeltaNeutralShortSale ||
                 DeltaNeutralShortSaleSlot != l_theOther.DeltaNeutralShortSaleSlot ||
-                BasisPoints != l_theOther.BasisPoints ||
+                Math.Abs(BasisPoints - l_theOther.BasisPoints) > TypeExtensions.Tolerance ||
                 BasisPointsType != l_theOther.BasisPointsType ||
                 ScaleInitLevelSize != l_theOther.ScaleInitLevelSize ||
                 ScaleSubsLevelSize != l_theOther.ScaleSubsLevelSize ||
-                ScalePriceIncrement != l_theOther.ScalePriceIncrement ||
-                ScalePriceAdjustValue != l_theOther.ScalePriceAdjustValue ||
+                Math.Abs(ScalePriceIncrement - l_theOther.ScalePriceIncrement) > TypeExtensions.Tolerance ||
+                Math.Abs(ScalePriceAdjustValue - l_theOther.ScalePriceAdjustValue) > TypeExtensions.Tolerance ||
                 ScalePriceAdjustInterval != l_theOther.ScalePriceAdjustInterval ||
-                ScaleProfitOffset != l_theOther.ScaleProfitOffset ||
+                Math.Abs(ScaleProfitOffset - l_theOther.ScaleProfitOffset) > TypeExtensions.Tolerance ||
                 ScaleAutoReset != l_theOther.ScaleAutoReset ||
                 ScaleInitPosition != l_theOther.ScaleInitPosition ||
                 ScaleInitFillQty != l_theOther.ScaleInitFillQty ||
@@ -960,7 +962,7 @@ namespace IBApi
                 ConditionsIgnoreRth != l_theOther.ConditionsIgnoreRth ||
                 ConditionsCancelOrder != l_theOther.ConditionsCancelOrder ||
                 Tier != l_theOther.Tier ||
-                CashQty != l_theOther.CashQty ||
+                Math.Abs(CashQty - l_theOther.CashQty) > TypeExtensions.Tolerance ||
                 DontUseAutoPriceForHedge != l_theOther.DontUseAutoPriceForHedge ||
                 IsOmsContainer != l_theOther.IsOmsContainer ||
                 UsePriceMgmtAlgo != l_theOther.UsePriceMgmtAlgo ||
@@ -974,9 +976,9 @@ namespace IBApi
                 PostToAts != l_theOther.PostToAts ||
                 MinTradeQty != l_theOther.MinTradeQty ||
                 MinCompeteSize != l_theOther.MinCompeteSize ||
-                CompeteAgainstBestOffset != l_theOther.CompeteAgainstBestOffset ||
-                MidOffsetAtWhole != l_theOther.MidOffsetAtWhole ||
-                MidOffsetAtHalf != l_theOther.MidOffsetAtHalf ||
+                Math.Abs(CompeteAgainstBestOffset - l_theOther.CompeteAgainstBestOffset) > TypeExtensions.Tolerance ||
+                Math.Abs(MidOffsetAtWhole - l_theOther.MidOffsetAtWhole) > TypeExtensions.Tolerance ||
+                Math.Abs(MidOffsetAtHalf - l_theOther.MidOffsetAtHalf) > TypeExtensions.Tolerance ||
                 ProfessionalCustomer != l_theOther.ProfessionalCustomer ||
                 ManualOrderIndicator != l_theOther.ManualOrderIndicator)
             {

@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using IBApi;
 using IB.Api.Client.Helper;
+using IB.Api.Client.IBKR;
 using IB.Api.Client.Implementation.Model;
 
 namespace IB.Api.Client.Implementation
 {
     //MarketData
-    public partial class IBClient
+    public partial class IbClient
     {
         private readonly Dictionary<int, PriceUpdate> _priceUpdates = [];
         private readonly Dictionary<int, OrderBookUpdate> _orderBookUpdates = [];
@@ -58,7 +58,7 @@ namespace IB.Api.Client.Implementation
                 Ratio = ratio,
                 OrderBookLines = new OrderBookLine[20]
             };
-            for (int iterator = 0; iterator < orderBookUpdate.OrderBookLines.Length; iterator++)
+            for (var iterator = 0; iterator < orderBookUpdate.OrderBookLines.Length; iterator++)
                 orderBookUpdate.OrderBookLines[iterator] = new OrderBookLine();
             _orderBookUpdates.Add(reqId, orderBookUpdate);
 

@@ -4,7 +4,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace IBApi
+namespace IB.Api.Client.IBKR
 {
     /**
      * @interface EWrapper
@@ -145,7 +145,7 @@ namespace IBApi
 
         /**
          * @brief Callback to indicate the API connection has closed.
-         * Following a API <-> TWS broken socket connection, this function is not called automatically but must be triggered by API client code.
+         * Following an API - TWS broken socket connection, this function is not called automatically but must be triggered by API client code.
          * @sa EClientSocket::eDisconnect
          */
         void connectionClosed();

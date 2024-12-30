@@ -1,13 +1,13 @@
-using IBApi;
+using IB.Api.Client.IBKR;
 
 namespace IB.Api.Client.Implementation
 {
     //Main
-    public partial class IBClient : EWrapper
+    public partial class IbClient : EWrapper
     {
         internal readonly EClientSocket ClientSocket;
         internal readonly EReaderSignal Signal;
-        public IBClient()
+        public IbClient()
         {
             Signal = new EReaderMonitorSignal();
             ClientSocket = new EClientSocket(this, Signal);

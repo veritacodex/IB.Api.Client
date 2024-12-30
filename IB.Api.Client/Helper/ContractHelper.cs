@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using IB.Api.Client.IBKR;
 using IB.Api.Client.Implementation;
 using IB.Api.Client.Implementation.Model;
-using IBApi;
 
 namespace IB.Api.Client.Helper
 {
@@ -34,7 +34,7 @@ namespace IB.Api.Client.Helper
             return output.OrderBy(x => x.Start).ToList();
         }
 
-        public static void GetMarginRequirements(IBClient ibClient, Contract contract)
+        public static void GetMarginRequirements(IbClient ibClient, Contract contract)
         {
             var nextId = ibClient.NextOrderId++;
             var order = new Order
@@ -66,7 +66,7 @@ namespace IB.Api.Client.Helper
         /// <param name="ibClient"></param>
         /// <param name="symbol"></param>
         /// <param name="currency"></param>
-        public static void RequestForexContract(IBClient ibClient, string symbol, string currency)
+        public static void RequestForexContract(IbClient ibClient, string symbol, string currency)
         {
             ibClient.GetContractDetails(new Contract
             {
@@ -77,32 +77,32 @@ namespace IB.Api.Client.Helper
             });
         }
 
-        public static void RequestStockContract(IBClient ibClient, string symbol)
+        public static void RequestStockContract(IbClient ibClient, string symbol)
         {
             ibClient.GetContractDetails(symbol, SecurityType.STK);
         }
 
-        public static void RequestFuturesContract(IBClient ibClient, string symbol)
+        public static void RequestFuturesContract(IbClient ibClient, string symbol)
         {
             ibClient.GetContractDetails(symbol, SecurityType.FUT);
         }
 
-        public static void RequestIndexContract(IBClient ibClient, string symbol)
+        public static void RequestIndexContract(IbClient ibClient, string symbol)
         {
             ibClient.GetContractDetails(symbol, SecurityType.IND);
         }
 
-        public static void RequestOptionsOnFuturesContract(IBClient ibClient, string symbol)
+        public static void RequestOptionsOnFuturesContract(IbClient ibClient, string symbol)
         {
             ibClient.GetContractDetails(symbol, SecurityType.FOP);
         }
 
-        public static void RequestOptionsContract(IBClient ibClient, string symbol)
+        public static void RequestOptionsContract(IbClient ibClient, string symbol)
         {
             ibClient.GetContractDetails(symbol, SecurityType.OPT);
         }
 
-        public static void RequestComodityContract(IBClient ibClient, string symbol, string currency)
+        public static void RequestComodityContract(IbClient ibClient, string symbol, string currency)
         {
             ibClient.GetContractDetails(new Contract
             {

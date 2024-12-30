@@ -1,10 +1,10 @@
 using System;
+using IB.Api.Client.IBKR;
 using IB.Api.Client.Implementation.Model;
-using IBApi;
 
 namespace IB.Api.Client.Implementation
 {
-    public partial class IBClient
+    public partial class IbClient
     {
         public event EventHandler<Notification> NotificationReceived;
         public event EventHandler<UiNotification> UiNotificationReceived;        

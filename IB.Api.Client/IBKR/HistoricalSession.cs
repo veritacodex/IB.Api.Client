@@ -3,7 +3,7 @@
 
 using System.Runtime.InteropServices;
 
-namespace IBApi
+namespace IB.Api.Client.IBKR
 {
     /**
      * @class HistoricalSession

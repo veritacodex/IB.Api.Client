@@ -4,7 +4,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace IBApi
+namespace IB.Api.Client.IBKR
 {
     /**
      * @class ContractDetails
@@ -323,7 +323,7 @@ namespace IBApi
         /**
          * @brief Identifies the credit rating of the issuer.
          * This field is not currently available from the TWS API.
-         * For Bonds only. A higher credit rating generally indicates a less risky investment. Bond ratings are from Moody's and S&P respectively. Not currently implemented due to bond market data restrictions.
+         * For Bonds only. A higher credit rating generally indicates a less risky investment. Bond ratings are from Moody's and SP respectively. Not currently implemented due to bond market data restrictions.
          */
         public string Ratings
         {

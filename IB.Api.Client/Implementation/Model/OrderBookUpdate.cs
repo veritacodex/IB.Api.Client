@@ -26,11 +26,11 @@ namespace IB.Api.Client.Implementation.Model
         public void ValidateOrderBook()
         {
             var valid = true;
-            for (int index = 1; index <= 9; index++)
+            for (var index = 1; index <= 9; index++)
             {
                 valid = valid && OrderBookLines[index].Price < OrderBookLines[index - 1].Price;
             }
-            for (int index = 11; index <= 19; index++)
+            for (var index = 11; index <= 19; index++)
             {
                 valid = valid && OrderBookLines[index].Price > OrderBookLines[index - 1].Price;
             }

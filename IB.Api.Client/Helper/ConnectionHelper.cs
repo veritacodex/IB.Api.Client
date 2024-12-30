@@ -1,14 +1,14 @@
 using System;
 using System.Threading;
+using IB.Api.Client.IBKR;
 using IB.Api.Client.Implementation;
 using IB.Api.Client.Implementation.Model;
-using IBApi;
 
 namespace IB.Api.Client.Helper
 {
     public static class ConnectionHelper
     {
-        public static void StartIbClient(IBClient ibClient, ConnectionDetails connectionDetails)
+        public static void StartIbClient(IbClient ibClient, ConnectionDetails connectionDetails)
         {
             ibClient.ClientSocket.eConnect(connectionDetails.Host, connectionDetails.Port, connectionDetails.ClientId);
             var reader = new EReader(ibClient.ClientSocket, ibClient.Signal);

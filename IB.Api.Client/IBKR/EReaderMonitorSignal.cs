@@ -3,7 +3,7 @@
 
 using System.Threading;
 
-namespace IBApi
+namespace IB.Api.Client.IBKR
 {
     public class EReaderMonitorSignal : EReaderSignal
     {

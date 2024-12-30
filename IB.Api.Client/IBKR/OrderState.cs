@@ -1,9 +1,11 @@
 /* Copyright (C) 2019 Interactive Brokers LLC. All rights reserved. This code is subject to the terms
  * and conditions of the IB API Non-Commercial License or the IB API Commercial License, as applicable. */
 
+using System;
 using System.Collections.Generic;
+using IB.Api.Client.Helper;
 
-namespace IBApi
+namespace IB.Api.Client.IBKR
 {
     /**
      * @class OrderState
@@ -146,12 +148,12 @@ namespace IBApi
                 return true;
 
 
-            if (!(other is OrderState state))
+            if (other is not OrderState state)
                 return false;
 
-            if (Commission != state.Commission ||
-                MinCommission != state.MinCommission ||
-                MaxCommission != state.MaxCommission)
+            if (Math.Abs(Commission - state.Commission) > TypeExtensions.Tolerance ||
+                Math.Abs(MinCommission - state.MinCommission) > TypeExtensions.Tolerance ||
+                Math.Abs(MaxCommission - state.MaxCommission) > TypeExtensions.Tolerance)
             {
                 return false;
             }

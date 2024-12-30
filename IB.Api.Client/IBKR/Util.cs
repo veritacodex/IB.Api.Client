@@ -7,22 +7,23 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using IB.Api.Client.Helper;
 
-namespace IBApi
+namespace IB.Api.Client.IBKR
 {
     public static class Util
     {
         public static bool StringIsEmpty(string str) => string.IsNullOrEmpty(str);
 
-        public static string NormalizeString(string str) => str ?? string.Empty;
+        private static string NormalizeString(string str) => str ?? string.Empty;
 
-        public static int StringCompare(string lhs, string rhs) => NormalizeString(lhs).CompareTo(NormalizeString(rhs));
+        public static int StringCompare(string lhs, string rhs) => string.Compare(NormalizeString(lhs), NormalizeString(rhs), StringComparison.Ordinal);
 
         public static int StringCompareIgnCase(string lhs, string rhs)
         {
             var normalisedLhs = NormalizeString(lhs);
             var normalisedRhs = NormalizeString(rhs);
-            return string.Compare(normalisedLhs, normalisedRhs, true);
+            return string.Compare(normalisedLhs, normalisedRhs, StringComparison.OrdinalIgnoreCase);
         }
 
         public static bool VectorEqualsUnordered<T>(List<T> lhs, List<T> rhs)
@@ -73,7 +74,7 @@ namespace IBApi
 
         public static string DoubleMaxString(double value) => DoubleMaxString(value, string.Empty);
 
-        public static string DoubleMaxString(double d, string def) => d != double.MaxValue ? d.ToString("0.########") : def;
+        public static string DoubleMaxString(double d, string def) => Math.Abs(d - double.MaxValue) > TypeExtensions.Tolerance ? d.ToString("0.########") : def;
 
         public static string DecimalMaxString(decimal value) => value == decimal.MaxValue ? string.Empty : string.Empty + value;
 

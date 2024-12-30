@@ -1,5 +1,6 @@
 /* Copyright (C) 2024 Interactive Brokers LLC. All rights reserved. This code is subject to the terms
  * and conditions of the IB API Non-Commercial License or the IB API Commercial License, as applicable. */
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,7 +8,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
-namespace IBApi
+namespace IB.Api.Client.IBKR
 {
     /**
      * @class EClientSocket
@@ -62,11 +63,11 @@ namespace IBApi
         /**
          * @brief Establishes a connection to the designated Host. This earlier version of eConnect does not have extraAuth parameter.
          */
-        public void eConnect(string host, int port, int clientId) => eConnect(host, port, clientId, false);
+        public void eConnect(string host, int lport, int lclientId) => eConnect(host, lport, lclientId, false);
 
-        protected virtual Stream createClientStream(string host, int port)
+        protected virtual Stream createClientStream(string host, int lport)
         {
-            tcpClient = new TcpClient(host, port);
+            tcpClient = new TcpClient(host, lport);
             tcpClient.NoDelay = true;
 
             return tcpClient.GetStream();
@@ -82,7 +83,7 @@ namespace IBApi
          * @param clientId Every API client program requires a unique id which can be any integer. Note that up to 32 clients can be connected simultaneously to a single Host.
          * @sa EWrapper, EWrapper::nextValidId, EWrapper::currentTime
          */
-        public void eConnect(string host, int port, int clientId, bool extraAuth)
+        private void eConnect(string host, int lport, int lclientId, bool lextraAuth)
         {
             try
             {
@@ -101,12 +102,12 @@ namespace IBApi
             }
             try
             {
-                tcpStream = createClientStream(host, port);
-                this.port = port;
+                tcpStream = createClientStream(host, lport);
+                this.port = lport;
                 socketTransport = new ESocket(tcpStream);
 
-                this.clientId = clientId;
-                this.extraAuth = extraAuth;
+                this.clientId = lclientId;
+                this.extraAuth = lextraAuth;
 
                 sendConnectRequest();
 

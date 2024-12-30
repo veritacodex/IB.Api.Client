@@ -3,7 +3,7 @@
 
 using System;
 
-namespace IBApi
+namespace IB.Api.Client.IBKR
 {
     internal class BitMask
     {

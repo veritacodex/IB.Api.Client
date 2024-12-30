@@ -3,7 +3,7 @@
 
 using System.Collections.Generic;
 
-namespace IBApi
+namespace IB.Api.Client.IBKR
 {
     /**
      * @class CommissionReport
@@ -15,58 +15,58 @@ namespace IBApi
         /**
         * @brief the execution's id this commission belongs to.
         */
-        public string ExecId { get; set; }
+        public string ExecId { get; init; }
 
         /**
          * @brief the commissions cost.
          */
-        public double Commission { get; set; }
+        public double Commission { get; init; }
 
         /**
         * @brief the reporting currency.
         */
-        public string Currency { get; set; }
+        public string Currency { get; init; }
 
         /**
         * @brief the realized profit and loss
         */
-        public double RealizedPNL { get; set; }
+        public double RealizedPnl { get; init; }
 
         /**
          * @brief The income return.
          */
-        public double Yield { get; set; }
+        public double Yield { get; init; }
 
         /**
          * @brief date expressed in yyyymmdd format.
          */
-        public int YieldRedemptionDate { get; set; }
+        public int YieldRedemptionDate { get; init; }
 
         public CommissionReport()
         {
             Commission = 0;
-            RealizedPNL = 0;
+            RealizedPnl = 0;
             Yield = 0;
             YieldRedemptionDate = 0;
         }
 
-        public override bool Equals(object p_other)
+        public override bool Equals(object pOther)
         {
-            bool l_bRetVal;
+            bool lBRetVal;
 
-            if (!(p_other is CommissionReport l_theOther))
+            if (pOther is not CommissionReport lTheOther)
             {
-                l_bRetVal = false;
+                lBRetVal = false;
             }
-            else if (this == p_other)
+            else if (this == pOther)
             {
-                l_bRetVal = true;
+                lBRetVal = true;
             }
             else
             {
-                l_bRetVal = ExecId.Equals(l_theOther.ExecId, System.StringComparison.Ordinal);
+                lBRetVal = ExecId.Equals(lTheOther.ExecId, System.StringComparison.Ordinal);
             }
-            return l_bRetVal;
+            return lBRetVal;
         }
 
         public override int GetHashCode()
@@ -75,7 +75,7 @@ namespace IBApi
             hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(ExecId);
             hashCode *= -1521134295 + Commission.GetHashCode();
             hashCode *= -1521134295 + EqualityComparer<string>.Default.GetHashCode(Currency);
-            hashCode *= -1521134295 + RealizedPNL.GetHashCode();
+            hashCode *= -1521134295 + RealizedPnl.GetHashCode();
             hashCode *= -1521134295 + Yield.GetHashCode();
             hashCode *= -1521134295 + YieldRedemptionDate.GetHashCode();
             return hashCode;

@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using IB.Api.Client.Helper;
-using IBApi;
+using IB.Api.Client.IBKR;
 using IB.Api.Client.Implementation.Model;
 
 namespace IB.Api.Client.Implementation
 {
-    public partial class IBClient
+    public partial class IbClient
     {
         private readonly List<WhatToShow> _allowedTimeAndSalesTickTypes = [WhatToShow.TRADES, WhatToShow.BID_ASK, WhatToShow.MIDPOINT];
         private readonly Dictionary<int, List<Bar>> _historicalData = [];
@@ -35,8 +35,6 @@ namespace IB.Api.Client.Implementation
         /// </summary>
         /// <param name="reqId"></param>
         /// <param name="contract"></param>
-        /// <param name="start"></param>
-        /// <param name="end"></param>
         /// <param name="whatToShow"></param>
         public void GetLatestHistoricalTimeAndSales(int reqId, Contract contract, WhatToShow whatToShow)
         {
@@ -46,7 +44,7 @@ namespace IB.Api.Client.Implementation
 
             if (_allowedTimeAndSalesTickTypes.Contains(whatToShow))
             {
-                string endTime = DateHelper.ConvertToApiDate(DateTime.Now);
+                var endTime = DateHelper.ConvertToApiDate(DateTime.Now);
                 InitializeHistoricalTickDictionary(reqId, whatToShow);
                 ClientSocket.reqHistoricalTicks(reqId, contract, null, endTime, 1000, whatToShow.ToString(), 0, true, null);
                 Notify($"Time and Sales for symbol {contract.Symbol} requested");

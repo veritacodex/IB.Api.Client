@@ -4,12 +4,12 @@ namespace IB.Api.Client.Helper
 {
     public static class TypeExtensions
     {
+        public const double Tolerance = 0.0000001;
         public static string ToRefString(this object obj)
         {
             StringBuilder sb = new();
-            foreach (System.Reflection.PropertyInfo property in obj.GetType().GetProperties())
+            foreach (var property in obj.GetType().GetProperties())
             {
-
                 sb.Append(property.Name);
                 sb.Append(": ");
                 if (property.GetIndexParameters().Length > 0)

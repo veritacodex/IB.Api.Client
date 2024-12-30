@@ -1,5 +1,6 @@
 /* Copyright (C) 2024 Interactive Brokers LLC. All rights reserved. This code is subject to the terms
  * and conditions of the IB API Non-Commercial License or the IB API Commercial License, as applicable. */
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,8 +8,9 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using IB.Api.Client.Helper;
 
-namespace IBApi
+namespace IB.Api.Client.IBKR
 {
     /**
      * @class EClient
@@ -51,7 +53,7 @@ namespace IBApi
         /**
          * @brief Ignore. Used for IB's internal purposes.
          */
-        public void SetConnectOptions(string connectOptions)
+        public void SetConnectOptions(string lConnectOptions)
         {
             if (IsConnected())
             {
@@ -59,12 +61,12 @@ namespace IBApi
                 return;
             }
 
-            this.connectOptions = connectOptions;
+            this.connectOptions = lConnectOptions;
         }
 
-        public void SetOptionalCapabilities(string optionalCapabilities)
+        public void SetOptionalCapabilities(string lOptionalCapabilities)
         {
-            this.optionalCapabilities = optionalCapabilities;
+            this.optionalCapabilities = lOptionalCapabilities;
         }
 
         /**
@@ -101,7 +103,7 @@ namespace IBApi
 
         public string ServerTime { get; protected set; }
 
-        private static readonly string encodedVersion = Constants.MinVersion + (Constants.MaxVersion != Constants.MinVersion ? $"..{Constants.MaxVersion}" : string.Empty);
+        private static readonly string encodedVersion = Constants.MinVersion + ($"..{Constants.MaxVersion}");
         protected Stream tcpStream;
 
         protected abstract uint prepareBuffer(BinaryWriter paramsList);
@@ -714,9 +716,9 @@ namespace IBApi
                 else paramsList.AddParameter((int)order.TotalQuantity);
 
                 paramsList.AddParameter(order.OrderType);
-                if (serverVersion < MinServerVer.ORDER_COMBO_LEGS_PRICE) paramsList.AddParameter(order.LmtPrice == double.MaxValue ? 0 : order.LmtPrice);
+                if (serverVersion < MinServerVer.ORDER_COMBO_LEGS_PRICE) paramsList.AddParameter(Math.Abs(order.LmtPrice - double.MaxValue) < TypeExtensions.Tolerance ? 0 : order.LmtPrice);
                 else paramsList.AddParameterMax(order.LmtPrice);
-                if (serverVersion < MinServerVer.TRAILING_PERCENT) paramsList.AddParameter(order.AuxPrice == double.MaxValue ? 0 : order.AuxPrice);
+                if (serverVersion < MinServerVer.TRAILING_PERCENT) paramsList.AddParameter(Math.Abs(order.AuxPrice - double.MaxValue) < TypeExtensions.Tolerance ? 0 : order.AuxPrice);
                 else paramsList.AddParameterMax(order.AuxPrice);
 
                 // paramsList.AddParameter extended order fields
@@ -922,7 +924,7 @@ namespace IBApi
                     paramsList.AddParameterMax(order.ScalePriceIncrement);
                 }
 
-                if (serverVersion >= MinServerVer.SCALE_ORDERS3 && order.ScalePriceIncrement > 0.0 && order.ScalePriceIncrement != double.MaxValue)
+                if (serverVersion >= MinServerVer.SCALE_ORDERS3 && order.ScalePriceIncrement > 0.0 && Math.Abs(order.ScalePriceIncrement - double.MaxValue) > TypeExtensions.Tolerance)
                 {
                     paramsList.AddParameterMax(order.ScalePriceAdjustValue);
                     paramsList.AddParameterMax(order.ScalePriceAdjustInterval);
@@ -1075,7 +1077,7 @@ namespace IBApi
                     {
                         paramsList.AddParameterMax(order.MinCompeteSize);
                         paramsList.AddParameterMax(order.CompeteAgainstBestOffset);
-                        if (order.CompeteAgainstBestOffset == Order.COMPETE_AGAINST_BEST_OFFSET_UP_TO_MID) sendMidOffsets = true;
+                        if (Math.Abs(order.CompeteAgainstBestOffset - Order.COMPETE_AGAINST_BEST_OFFSET_UP_TO_MID) < TypeExtensions.Tolerance) sendMidOffsets = true;
                     }
                     else if (Util.IsPegMidOrder(order.OrderType))
                     {
@@ -1679,7 +1681,7 @@ namespace IBApi
          *      - 106 Option Implied Volatility (currently for stocks)
          *      - 162 Index Future Premium
          *      - 165 Miscellaneous Stats
-         *      - 221 Mark Price (used in TWS P&L computations)
+         *      - 221 Mark Price (used in TWS PnL computations)
          *      - 225 Auction values (volume, price and imbalance)
          *      - 233 RTVolume - contains the last trade price, last trade size, last trade time, total volume, VWAP, and single trade flag.
          *      - 236 Shortable
@@ -2836,7 +2838,7 @@ namespace IBApi
         }
 
         /**
-         * @brief Requests historical Time&Sales data for an instrument
+         * @brief Requests historical Time and Sales data for an instrument
          * @param reqId id of the request
          * @param contract Contract object that is subject of query
          * @param startDateTime ,i.e. "20170701 12:01:00". Uses TWS timezone specified at login.
@@ -3183,7 +3185,7 @@ namespace IBApi
 
         protected bool VerifyOrder(Order order, int id, bool isBagOrder)
         {
-            if (serverVersion < MinServerVer.SCALE_ORDERS && (order.ScaleInitLevelSize != int.MaxValue || order.ScalePriceIncrement != double.MaxValue))
+            if (serverVersion < MinServerVer.SCALE_ORDERS && (order.ScaleInitLevelSize != int.MaxValue || Math.Abs(order.ScalePriceIncrement - double.MaxValue) > TypeExtensions.Tolerance))
             {
                 ReportError(id, EClientErrors.UPDATE_TWS, "  It does not support Scale orders.");
                 return false;
@@ -3249,11 +3251,11 @@ namespace IBApi
                 return false;
             }
 
-            if (serverVersion < MinServerVer.SCALE_ORDERS3 && order.ScalePriceIncrement > 0 && order.ScalePriceIncrement != double.MaxValue)
+            if (serverVersion < MinServerVer.SCALE_ORDERS3 && order.ScalePriceIncrement > 0 && Math.Abs(order.ScalePriceIncrement - double.MaxValue) > TypeExtensions.Tolerance)
             {
-                if (order.ScalePriceAdjustValue != double.MaxValue ||
+                if (Math.Abs(order.ScalePriceAdjustValue - double.MaxValue) > TypeExtensions.Tolerance ||
                     order.ScalePriceAdjustInterval != int.MaxValue ||
-                    order.ScaleProfitOffset != double.MaxValue ||
+                    Math.Abs(order.ScaleProfitOffset - double.MaxValue) > TypeExtensions.Tolerance ||
                     order.ScaleAutoReset ||
                     order.ScaleInitPosition != int.MaxValue ||
                     order.ScaleInitFillQty != int.MaxValue ||
@@ -3270,13 +3272,13 @@ namespace IBApi
                 for (var i = 0; i < order.OrderComboLegs.Count; ++i)
                 {
                     orderComboLeg = order.OrderComboLegs[i];
-                    if (orderComboLeg.Price == double.MaxValue) continue;
+                    if (Math.Abs(orderComboLeg.Price - double.MaxValue) < TypeExtensions.Tolerance) continue;
                     ReportError(id, EClientErrors.UPDATE_TWS, "  It does not support per-leg prices for order combo legs.");
                     return false;
                 }
             }
 
-            if (serverVersion < MinServerVer.TRAILING_PERCENT && order.TrailingPercent != double.MaxValue)
+            if (serverVersion < MinServerVer.TRAILING_PERCENT && Math.Abs(order.TrailingPercent - double.MaxValue) > TypeExtensions.Tolerance)
             {
                 ReportError(id, EClientErrors.UPDATE_TWS, "  It does not support trailing percent parameter.");
                 return false;
@@ -3300,7 +3302,7 @@ namespace IBApi
                 return false;
             }
 
-            if (serverVersion < MinServerVer.CASH_QTY && order.CashQty != double.MaxValue)
+            if (serverVersion < MinServerVer.CASH_QTY && Math.Abs(order.CashQty - double.MaxValue) > TypeExtensions.Tolerance)
             {
                 ReportError(id, EClientErrors.UPDATE_TWS, " It does not support cashQty parameter");
                 return false;
@@ -3376,9 +3378,9 @@ namespace IBApi
 
             if (serverVersion < MinServerVer.PEGBEST_PEGMID_OFFSETS && (order.MinTradeQty != int.MaxValue ||
                                                                         order.MinCompeteSize != int.MaxValue ||
-                                                                        order.CompeteAgainstBestOffset != double.MaxValue ||
-                                                                        order.MidOffsetAtWhole != double.MaxValue ||
-                                                                        order.MidOffsetAtHalf != double.MaxValue))
+                                                                        Math.Abs(order.CompeteAgainstBestOffset - double.MaxValue) > TypeExtensions.Tolerance ||
+                                                                        Math.Abs(order.MidOffsetAtWhole - double.MaxValue) > TypeExtensions.Tolerance ||
+                                                                        Math.Abs(order.MidOffsetAtHalf - double.MaxValue) > TypeExtensions.Tolerance))
             {
                 ReportError(id, EClientErrors.UPDATE_TWS, "  It does not support PEG BEST / PEG MID order parameters: minTradeQty, minCompeteSize, competeAgainstBestOffset, midOffsetAtWhole and midOffsetAtHalf");
                 return false;
@@ -3405,14 +3407,14 @@ namespace IBApi
             return true;
         }
 
-        private bool IsEmpty(string str) => Util.StringIsEmpty(str);
+        private static bool IsEmpty(string str) => Util.StringIsEmpty(str);
 
-        private bool StringsAreEqual(string a, string b) => string.Compare(a, b, true) == 0;
+        private static bool StringsAreEqual(string a, string b) => string.Compare(a, b, StringComparison.OrdinalIgnoreCase) == 0;
 
         public bool IsDataAvailable()
         {
             if (!isConnected) return false;
-            return !(tcpStream is NetworkStream networkStream) || networkStream.DataAvailable;
+            return tcpStream is not NetworkStream networkStream || networkStream.DataAvailable;
         }
 
         public int ReadInt() => IPAddress.NetworkToHostOrder(new BinaryReader(tcpStream).ReadInt32());

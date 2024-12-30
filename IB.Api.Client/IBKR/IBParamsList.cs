@@ -1,12 +1,14 @@
 /* Copyright (C) 2024 Interactive Brokers LLC. All rights reserved. This code is subject to the terms
  * and conditions of the IB API Non-Commercial License or the IB API Commercial License, as applicable. */
 
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text;
+using IB.Api.Client.Helper;
 
-namespace IBApi
+namespace IB.Api.Client.IBKR
 {
     public static class IBParamsList
     {
@@ -53,8 +55,8 @@ namespace IBApi
 
         public static void AddParameterMax(this BinaryWriter source, double value)
         {
-            if (value == double.MaxValue) source.Write(Constants.EOL);
-            else if (value == double.PositiveInfinity) source.AddParameter(Constants.INFINITY_STR);
+            if (Math.Abs(value - double.MaxValue) < TypeExtensions.Tolerance) source.Write(Constants.EOL);
+            else if (double.IsPositiveInfinity(value)) source.AddParameter(Constants.INFINITY_STR);
             else source.AddParameter(value);
         }
 

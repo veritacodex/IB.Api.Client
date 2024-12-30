@@ -1,7 +1,7 @@
 ﻿/* Copyright (C) 2019 Interactive Brokers LLC. All rights reserved. This code is subject to the terms
  * and conditions of the IB API Non-Commercial License or the IB API Commercial License, as applicable. */
 
-namespace IBApi
+namespace IB.Api.Client.IBKR
 {
     /**
      * @class ScannerSubscription
@@ -70,12 +70,12 @@ namespace IBApi
         public string MoodyRatingBelow { get; set; }
 
         /**
-         * @brief Filters out Contracts with a S&P rating below this value.
+         * @brief Filters out Contracts with a SP rating below this value.
          */
         public string SpRatingAbove { get; set; }
 
         /**
-         * @brief Filters out Contracts with a S&P rating above this value.
+         * @brief Filters out Contracts with a SP rating above this value.
          */
         public string SpRatingBelow { get; set; }
 

@@ -6,7 +6,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 
-namespace IBApi
+namespace IB.Api.Client.IBKR
 {
     public enum TriggerMethod
     {
@@ -76,7 +76,7 @@ namespace IBApi
             try
             {
                 TriggerMethod = CTriggerMethod.FromFriendlyString(fName);
-                cond = cond.Substring(cond.IndexOf(fName) + fName.Length + 1);
+                cond = cond[(cond.IndexOf(fName, StringComparison.Ordinal) + fName.Length + 1)..];
 
                 return base.TryParse(cond);
             }

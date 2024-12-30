@@ -5,7 +5,7 @@ using System;
 using System.IO;
 using System.Linq;
 
-namespace IBApi
+namespace IB.Api.Client.IBKR
 {
     public enum OrderConditionType
     {
@@ -73,14 +73,14 @@ namespace IBApi
 
         public static OrderCondition Parse(string cond)
         {
-            var conditions = Enum.GetValues(typeof(OrderConditionType)).OfType<OrderConditionType>().Select(t => Create(t)).ToList();
+            var conditions = Enum.GetValues(typeof(OrderConditionType)).OfType<OrderConditionType>().Select(Create).ToList();
 
             return conditions.FirstOrDefault(c => c.TryParse(cond));
         }
 
         public override bool Equals(object obj)
         {
-            if (!(obj is OrderCondition other))
+            if (obj is not OrderCondition other)
                 return false;
 
             return IsConjunctionConnection == other.IsConjunctionConnection && Type == other.Type;
@@ -93,12 +93,12 @@ namespace IBApi
     {
         public StringSuffixParser(string str) => Rest = str;
 
-        private string SkipSuffix(string perfix) => Rest.Substring(Rest.IndexOf(perfix) + perfix.Length);
+        private string SkipSuffix(string prefix) => Rest[(Rest.IndexOf(prefix, StringComparison.Ordinal) + prefix.Length)..];
 
-        public string GetNextSuffixedValue(string perfix)
+        public string GetNextSuffixedValue(string prefix)
         {
-            var rval = Rest.Substring(0, Rest.IndexOf(perfix));
-            Rest = SkipSuffix(perfix);
+            var rval = Rest[..Rest.IndexOf(prefix, StringComparison.Ordinal)];
+            Rest = SkipSuffix(prefix);
 
             return rval;
         }

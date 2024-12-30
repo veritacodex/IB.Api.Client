@@ -3,7 +3,7 @@
 
 using System.Collections.Generic;
 
-namespace IBApi
+namespace IB.Api.Client.IBKR
 {
     /**
      * @class Contract
@@ -33,10 +33,10 @@ namespace IBApi
          *      CASH - forex pair
          *      BAG - combo
          *      WAR - warrant
-         *      BOND- bond
+         *      BOND - bond
          *      CMDTY- commodity
-         *      NEWS- news
-         *      FUND- mutual fund
+         *      NEWS - news
+         *      FUND - mutual fund
          */
         public string SecType { get; set; }
 
