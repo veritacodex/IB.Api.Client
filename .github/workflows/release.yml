@@ -1,0 +1,27 @@
+ 
+name: Release
+
+on:
+  workflow_dispatch:
+
+env:
+  NET_VERSION: 8.0.100
+  PROJECT_PATH: '${{ github.workspace }}/IB.Api.Client/IB.Api.Client.csproj'
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET ${{ env.NET_VERSION }}
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: ${{ env.NET_VERSION }}
+    - name: Restore
+      run: dotnet restore
+    - name: Build and Pack
+      run: dotnet clean && dotnet build ${{ env.PROJECT_PATH }} -c Release
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1.1.1
+    - name: Publish to Nuget
+      run: nuget push **\*.nupkg -Source 'https://api.nuget.org/v3/index.json' -ApiKey ${{secrets.NUGET_API_KEY}}
