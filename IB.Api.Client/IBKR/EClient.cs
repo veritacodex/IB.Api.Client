@@ -869,8 +869,8 @@ namespace IBApi
                     paramsList.AddParameterMax(order.VolatilityType);
                     if (serverVersion < 28)
                     {
-                        var isDeltaNeutralTypeMKT = string.Compare("MKT", order.DeltaNeutralOrderType, true) == 0;
-                        paramsList.AddParameter(isDeltaNeutralTypeMKT);
+                        var isDeltaNeutralTypeMkt = String.Compare("MKT", order.DeltaNeutralOrderType, StringComparison.OrdinalIgnoreCase) == 0;
+                        paramsList.AddParameter(isDeltaNeutralTypeMkt);
                     }
                     else
                     {
