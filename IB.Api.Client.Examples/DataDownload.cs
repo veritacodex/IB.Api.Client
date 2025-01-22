@@ -48,7 +48,7 @@ namespace IB.Api.Client.Examples
             ibClient.NotificationReceived += ConnectionHelper.NotificationReceived;
             ConnectionHelper.StartIbClient(ibClient, connectionDetails);
         }
-        private static void BarUpdateReceived(object sender, RealTimeBarUpdate barUpdate)
+        private static void BarUpdateReceived(object sender, Bar barUpdate)
         {
             Console.WriteLine($"{DateTime.Now}: Open:{barUpdate.Open} High:{barUpdate.High} Close:{barUpdate.Close} Low:{barUpdate.Low}");
         }

@@ -16,7 +16,7 @@ namespace IB.Api.Client.Implementation
         public event EventHandler<OrderBookUpdate> OrderBookUpdateReceived;
         public event EventHandler<PriceUpdate> PriceUpdateReceived;
         public event EventHandler<HistoricalTickBidAsk> TimeAndSalesUpdateReceived;
-        public event EventHandler<RealTimeBarUpdate> BarUpdateReceived;
+        public event EventHandler<Bar> BarUpdateReceived;
         public event EventHandler<List<OptionParameterDefinition>> OptionParametersReceived;
         public void SubscribeToTimeAndSales(int reqId, Contract contract)
         {
@@ -194,21 +194,11 @@ namespace IB.Api.Client.Implementation
         {
             DiscardImplementation(field, tickerId, value);
         }
-        void EWrapper.realtimeBar(int reqId, long date, double open, double high, double low, double close, decimal volume, decimal WAP, int count)
+        void EWrapper.realtimeBar(int reqId, long date, double open, double high, double low, double close, decimal volume, decimal wap, int count)
         {
             _ = reqId;
-            var realtimeBarUpdate = new RealTimeBarUpdate
-            {
-                Date = date,
-                Open = open,
-                High = high,
-                Low = low,
-                Close = close,
-                Volume = volume,
-                Count = count,
-                Vwap = WAP
-            };
-            BarUpdateReceived?.Invoke(this, realtimeBarUpdate);
+            var barUpdate = new Bar(date.ToString(), open,  high, low, close, volume, count, wap );
+            BarUpdateReceived?.Invoke(this, barUpdate);
         }
         void EWrapper.tickOptionComputation(int tickerId, int field, int tickAttrib, double impliedVolatility, double delta, double optPrice, double pvDividend, double gamma, double vega, double theta, double undPrice)
         {
