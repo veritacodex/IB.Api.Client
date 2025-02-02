@@ -106,7 +106,7 @@ namespace IB.Api.Client.Implementation
             DiscardImplementation(isSuccessful, errorText);
             throw new NotImplementedException();
         }
-        void IEWrapper.verifyAndAuthMessageAPI(string apiData, string xyzChallenge)
+        void IEWrapper.verifyAndAuthMessageApi(string apiData, string xyzChallenge)
         {
             DiscardImplementation(apiData, xyzChallenge);
             throw new NotImplementedException();
@@ -206,7 +206,7 @@ namespace IB.Api.Client.Implementation
             DiscardImplementation(requestId, articleType, articleText);
             throw new NotImplementedException();
         }
-        void IEWrapper.replaceFAEnd(int reqId, string text)
+        void IEWrapper.replaceFaEnd(int reqId, string text)
         {
             DiscardImplementation(reqId, text);
             throw new NotImplementedException();

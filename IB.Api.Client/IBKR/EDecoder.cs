@@ -998,7 +998,7 @@ namespace IB.Api.Client.IBKR
             var apiData = ReadString();
             var xyzChallenge = ReadString();
 
-            eWrapper.verifyAndAuthMessageAPI(apiData, xyzChallenge);
+            eWrapper.verifyAndAuthMessageApi(apiData, xyzChallenge);
         }
 
         private void TickPriceEvent()
@@ -1969,7 +1969,7 @@ namespace IB.Api.Client.IBKR
         {
             var reqId = ReadInt();
             var text = ReadString();
-            eWrapper.replaceFAEnd(reqId, text);
+            eWrapper.replaceFaEnd(reqId, text);
         }
 
         private void ProcessWshMetaData()

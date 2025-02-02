@@ -598,7 +598,7 @@ namespace IB.Api.Client.IBKR
         /**
         * @brief Not generally available.
         */
-        void verifyAndAuthMessageAPI(string apiData, string xyzChallenge);
+        void verifyAndAuthMessageApi(string apiData, string xyzChallenge);
 
         /**
          * @brief Not generally available.
@@ -928,7 +928,7 @@ namespace IB.Api.Client.IBKR
          * @param text the message text
          * @sa EClient::replaceFA
          */
-        void replaceFAEnd(int reqId, string text);
+        void replaceFaEnd(int reqId, string text);
 
         /**
          * @brief returns meta data from the WSH calendar
