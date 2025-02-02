@@ -41,13 +41,13 @@ namespace IB.Api.Client.Implementation
             ClientSocket.reqExecutions(reqId, new ExecutionFilter());
         }
 
-        void EWrapper.nextValidId(int orderId)
+        void IEWrapper.nextValidId(int orderId)
         {
             NextOrderId = orderId;
             Notify($"Next valid Order Id ({orderId})");
         }
         
-        void EWrapper.execDetails(int reqId, Contract contract, Execution execution)
+        void IEWrapper.execDetails(int reqId, Contract contract, Execution execution)
         {
             ExecutionUpdateReceived?.Invoke(this, new ExecutionUpdate
             {
@@ -61,15 +61,15 @@ namespace IB.Api.Client.Implementation
                 AvgPrice = execution.AvgPrice
             });
         }
-        void EWrapper.execDetailsEnd(int reqId)
+        void IEWrapper.execDetailsEnd(int reqId)
         {
             DiscardImplementation(reqId);
         }
-        void EWrapper.openOrderEnd()
+        void IEWrapper.openOrderEnd()
         {
             DiscardImplementation();
         }
-        void EWrapper.orderStatus(int orderId, string status, decimal filled, decimal remaining, double avgFillPrice,
+        void IEWrapper.orderStatus(int orderId, string status, decimal filled, decimal remaining, double avgFillPrice,
             int permId, int parentId, double lastFillPrice, int clientId, string whyHeld, double mktCapPrice)
         {
             var orderUpdate = new OrderUpdate
@@ -88,7 +88,7 @@ namespace IB.Api.Client.Implementation
             };
             OrderUpdateReceived?.Invoke(this, orderUpdate);
         }
-        void EWrapper.commissionReport(CommissionReport commissionReport)
+        void IEWrapper.commissionReport(CommissionReport commissionReport)
         {
             CommissionUpdateReceived?.Invoke(this, new CommissionUpdate
             {
@@ -96,7 +96,7 @@ namespace IB.Api.Client.Implementation
                 Commission = commissionReport.Commission
             });
         }
-        void EWrapper.openOrder(int orderId, Contract contract, Order order, OrderState orderState)
+        void IEWrapper.openOrder(int orderId, Contract contract, Order order, OrderState orderState)
         {
             if (order.WhatIf)
                 WhatIfOpenOrderUpdateReceived?.Invoke(this, new OpenOrderUpdate

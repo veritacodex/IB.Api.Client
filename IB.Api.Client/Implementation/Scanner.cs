@@ -14,7 +14,7 @@ public partial class IbClient
         Notify("Scanner parameters requested");
         ClientSocket.reqScannerParameters();
     }    
-    void EWrapper.scannerParameters(string xml)
+    void IEWrapper.scannerParameters(string xml)
     {
         File.WriteAllText(_xmlFilePath, xml);
         Notify($"Scanner parameters saved to {_xmlFilePath}");

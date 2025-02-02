@@ -11,15 +11,15 @@ namespace IB.Api.Client.Implementation
         {
             ClientSocket.reqNewsProviders();
         }
-        void EWrapper.newsProviders(NewsProvider[] newsProviders)
+        void IEWrapper.newsProviders(NewsProvider[] newsProviders)
         {
             NewsProvidersUpdateReceived?.Invoke(this, newsProviders);
         }        
-        void EWrapper.tickNews(int tickerId, long timeStamp, string providerCode, string articleId, string headline, string extraData)
+        void IEWrapper.tickNews(int tickerId, long timeStamp, string providerCode, string articleId, string headline, string extraData)
         {
             DiscardImplementation(tickerId, timeStamp, providerCode, articleId, headline, extraData);
         }
-        void EWrapper.updateNewsBulletin(int msgId, int msgType, string message, string origExchange)
+        void IEWrapper.updateNewsBulletin(int msgId, int msgType, string message, string origExchange)
         {
             var output = $"MsgId:{msgId} MsType:{msgType} Message:{message} Origin:{origExchange}";
             Notify(output);

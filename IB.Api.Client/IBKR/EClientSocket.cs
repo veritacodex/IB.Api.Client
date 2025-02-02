@@ -20,7 +20,7 @@ namespace IB.Api.Client.IBKR
         private int port;
         private TcpClient tcpClient;
 
-        public EClientSocket(EWrapper wrapper, EReaderSignal eReaderSignal) :
+        public EClientSocket(IEWrapper wrapper, EReaderSignal eReaderSignal) :
             base(wrapper) => this.eReaderSignal = eReaderSignal;
 
         void EClientMsgSink.serverVersion(int version, string time)

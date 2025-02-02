@@ -75,11 +75,11 @@ namespace IB.Api.Client.Implementation
                     }
             }
         }
-        void EWrapper.historicalData(int reqId, Bar bar)
+        void IEWrapper.historicalData(int reqId, Bar bar)
         {
             _historicalData[reqId].Add(bar);
         }
-        void EWrapper.historicalDataEnd(int reqId, string start, string end)
+        void IEWrapper.historicalDataEnd(int reqId, string start, string end)
         {
             _ = start;
             _ = end;
@@ -87,7 +87,7 @@ namespace IB.Api.Client.Implementation
             var data = _historicalData[reqId];
             HistoricalDataReceived?.Invoke(this, new Tuple<int, List<Bar>>(reqId, data));
         }
-        void EWrapper.historicalDataUpdate(int reqId, Bar bar)
+        void IEWrapper.historicalDataUpdate(int reqId, Bar bar)
         {
             var barUpdate = new BarUpdate
             {
@@ -96,7 +96,7 @@ namespace IB.Api.Client.Implementation
             };
             HistoricalDataUpdateReceived?.Invoke(this, barUpdate);
         }
-        void EWrapper.historicalTicks(int reqId, HistoricalTick[] ticks, bool done)
+        void IEWrapper.historicalTicks(int reqId, HistoricalTick[] ticks, bool done)
         {
             _historicalTicks[reqId].AddRange(ticks);
             if (done)
@@ -105,7 +105,7 @@ namespace IB.Api.Client.Implementation
                 _historicalTicks[reqId] = [];
             }
         }
-        void EWrapper.historicalTicksBidAsk(int reqId, HistoricalTickBidAsk[] ticks, bool done)
+        void IEWrapper.historicalTicksBidAsk(int reqId, HistoricalTickBidAsk[] ticks, bool done)
         {
             _historicalTickBidAsk[reqId].AddRange(ticks);
             if (done)
@@ -114,7 +114,7 @@ namespace IB.Api.Client.Implementation
                 _historicalTickBidAsk[reqId] = [];
             }
         }
-        void EWrapper.historicalTicksLast(int reqId, HistoricalTickLast[] ticks, bool done)
+        void IEWrapper.historicalTicksLast(int reqId, HistoricalTickLast[] ticks, bool done)
         {
             _historicalTickLast[reqId].AddRange(ticks);
             if (done)

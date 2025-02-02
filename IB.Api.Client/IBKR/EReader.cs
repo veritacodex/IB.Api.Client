@@ -22,7 +22,7 @@
 
         private bool UseV100Plus => eClientSocket.UseV100Plus;
 
-        static readonly EWrapper defaultWrapper = new IbClient();
+        static readonly IEWrapper defaultWrapper = new IbClient();
 
         public EReader(EClientSocket clientSocket, EReaderSignal signal)
         {

@@ -25,22 +25,22 @@ namespace IB.Api.Client.Implementation
             ClientSocket.reqAccountUpdates(true, null);
         }
 
-        void EWrapper.accountDownloadEnd(string account)
+        void IEWrapper.accountDownloadEnd(string account)
         {
             DiscardImplementation(account);
         }
-        void EWrapper.managedAccounts(string accountsList)
+        void IEWrapper.managedAccounts(string accountsList)
         {
             AccountIds = [.. accountsList.Split(',')];
             Notify($"Managed accounts ({accountsList})");
         }
-        void EWrapper.updateAccountTime(string timestamp)
+        void IEWrapper.updateAccountTime(string timestamp)
         {
             _ = timestamp;
             _accountUpdate.UpdatedOn = DateTime.Now;
             AccountUpdateReceived?.Invoke(this, _accountUpdate);
         }
-        void EWrapper.updateAccountValue(string key, string value, string currency, string accountName)
+        void IEWrapper.updateAccountValue(string key, string value, string currency, string accountName)
         {
             _ = accountName;
             _accountUpdate.SetValue(key, value, currency);

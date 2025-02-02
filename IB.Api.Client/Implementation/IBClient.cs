@@ -3,7 +3,7 @@ using IB.Api.Client.IBKR;
 namespace IB.Api.Client.Implementation
 {
     //Main
-    public partial class IbClient : EWrapper
+    public partial class IbClient : IEWrapper
     {
         internal readonly EClientSocket ClientSocket;
         internal readonly EReaderSignal Signal;
@@ -18,11 +18,11 @@ namespace IB.Api.Client.Implementation
             return ClientSocket.IsConnected();
         }
 
-        void EWrapper.connectAck()
+        void IEWrapper.connectAck()
         {
             Notify("Connection Acknowledged");
         }
-        void EWrapper.connectionClosed()
+        void IEWrapper.connectionClosed()
         {
             Notify("Connection Closed");
         }
