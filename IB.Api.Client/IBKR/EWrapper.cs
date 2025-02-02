@@ -588,7 +588,7 @@ namespace IB.Api.Client.IBKR
         /**
          * @brief Not generally available.
          */
-        void verifyMessageAPI(string apiData);
+        void verifyMessageApi(string apiData);
 
         /**
          * @brief Not generally available.

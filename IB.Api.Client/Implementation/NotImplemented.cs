@@ -116,7 +116,7 @@ namespace IB.Api.Client.Implementation
             DiscardImplementation(errorText, isSuccessful);
             throw new NotImplementedException();
         }
-        void IEWrapper.verifyMessageAPI(string apiData)
+        void IEWrapper.verifyMessageApi(string apiData)
         {
             DiscardImplementation(apiData);
             throw new NotImplementedException();

@@ -980,7 +980,7 @@ namespace IB.Api.Client.IBKR
             _ = ReadInt(); //msgVersion
             var apiData = ReadString();
 
-            eWrapper.verifyMessageAPI(apiData);
+            eWrapper.verifyMessageApi(apiData);
         }
 
         private void VerifyAndAuthCompletedEvent()
