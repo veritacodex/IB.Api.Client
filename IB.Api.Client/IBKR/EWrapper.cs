@@ -36,7 +36,7 @@ namespace IB.Api.Client.IBKR
         void error(int id, int errorCode, string errorMsg, string advancedOrderRejectJson);
 
         /**
-         * @brief TWS's current time. TWS is synchronized with the server (not local computer) using NTP and this function will receive the current time in TWS.
+         * @brief TWS current time. TWS is synchronized with the server (not local computer) using NTP and this function will receive the current time in TWS.
          * @sa EClient::reqCurrentTime
          */
         void currentTime(long time);
@@ -104,8 +104,8 @@ namespace IB.Api.Client.IBKR
         void deltaNeutralValidation(int reqId, DeltaNeutralContract deltaNeutralContract);
 
         /**
-         * @brief Receive's option specific market data.
-         * This method is called when the market in an option or its underlier moves. TWS’s option model volatilities, prices, and deltas, along with the present value of dividends expected on that options underlier are received.
+         * @brief Receive option specific market data.
+         * This method is called when the market in an option or its underlying moves. TWS’s option model volatility, prices, and deltas, along with the present value of dividends expected on that options underlying are received.
          * @param tickerId the request's unique identifier.
          * @param field Specifies the type of option computation. Pass the field value into TickType.getField(int tickType) to retrieve the field description. For example, a field value of 13 will map to modelOptComp, etc.
          *      10 = Bid
@@ -130,7 +130,7 @@ namespace IB.Api.Client.IBKR
         void tickSnapshotEnd(int tickerId);
 
         /**
-         * @brief Receives next valid order id. Will be invoked automatically upon successfull API client connection, or after call to EClient::reqIds
+         * @brief Receives next valid order id. Will be invoked automatically upon successful API client connection, or after call to EClient::reqIds
          * Important: the next valid order ID is only valid at the time it is received.
          * @param orderId the next order id
          * @sa EClientSocket::reqIds
@@ -173,10 +173,10 @@ namespace IB.Api.Client.IBKR
          *      - AvailableFunds — This value tells what you have available for trading
          *      - ExcessLiquidity — This value shows your margin cushion, before liquidation
          *      - Cushion — Excess liquidity as a percentage of net liquidation value
-         *      - FullInitMarginReq — Initial Margin of whole portfolio with no discounts or intraday credits
-         *      - FullMaintMarginReq — Maintenance Margin of whole portfolio with no discounts or intraday credits
-         *      - FullAvailableFunds — Available funds of whole portfolio with no discounts or intraday credits
-         *      - FullExcessLiquidity — Excess liquidity of whole portfolio with no discounts or intraday credits
+         *      - FullInitMarginReq — Initial Margin of whole portfolio with no discounts or intra-day credits
+         *      - FullMaintMarginReq — Maintenance Margin of whole portfolio with no discounts or intra-day credits
+         *      - FullAvailableFunds — Available funds of whole portfolio with no discounts or intra-day credits
+         *      - FullExcessLiquidity — Excess liquidity of whole portfolio with no discounts or intra-day credits
          *      - LookAheadNextChange — Time when look-ahead values take effect
          *      - LookAheadInitMarginReq — Initial Margin requirement of whole portfolio as of next period's margin change
          *      - LookAheadMaintMarginReq — Maintenance Margin requirement of whole portfolio as of next period's margin change
@@ -192,7 +192,7 @@ namespace IB.Api.Client.IBKR
         void accountSummary(int reqId, string account, string tag, string value, string currency);
 
         /**
-         * @brief notifies when all the accounts' information has ben received.
+         * @brief notifies when all the accounts' information has been received.
          * Requires TWS 967+ to receive accountSummaryEnd in linked account structures.
          * @param reqId the request's identifier.
          * @sa accountSummary, EClientSocket::reqAccountSummary
@@ -245,18 +245,18 @@ namespace IB.Api.Client.IBKR
          *      - ExcessLiquidity-C — Equity with Loan Value - Maintenance Margin
          *      - ExcessLiquidity-S — Net Liquidation Value - Maintenance Margin
          *      - ExchangeRate — The exchange rate of the currency to your base currency
-         *      - FullAvailableFunds — Available funds of whole portfolio with no discounts or intraday credits
+         *      - FullAvailableFunds — Available funds of whole portfolio with no discounts or intra-day credits
          *      - FullAvailableFunds-C — Net Liquidation Value - Full Initial Margin
          *      - FullAvailableFunds-S — Equity with Loan Value - Full Initial Margin
-         *      - FullExcessLiquidity — Excess liquidity of whole portfolio with no discounts or intraday credits
+         *      - FullExcessLiquidity — Excess liquidity of whole portfolio with no discounts or intra-day credits
          *      - FullExcessLiquidity-C — Net Liquidation Value - Full Maintenance Margin
          *      - FullExcessLiquidity-S — Equity with Loan Value - Full Maintenance Margin
-         *      - FullInitMarginReq — Initial Margin of whole portfolio with no discounts or intraday credits
-         *      - FullInitMarginReq-C — Initial Margin of commodity segment's portfolio with no discounts or intraday credits
-         *      - FullInitMarginReq-S — Initial Margin of security segment's portfolio with no discounts or intraday credits
-         *      - FullMaintMarginReq — Maintenance Margin of whole portfolio with no discounts or intraday credits
-         *      - FullMaintMarginReq-C — Maintenance Margin of commodity segment's portfolio with no discounts or intraday credits
-         *      - FullMaintMarginReq-S — Maintenance Margin of security segment's portfolio with no discounts or intraday credits
+         *      - FullInitMarginReq — Initial Margin of whole portfolio with no discounts or intra-day credits
+         *      - FullInitMarginReq-C — Initial Margin of commodity segment's portfolio with no discounts or intra-day credits
+         *      - FullInitMarginReq-S — Initial Margin of security segment's portfolio with no discounts or intra-day credits
+         *      - FullMaintMarginReq — Maintenance Margin of whole portfolio with no discounts or intra-day credits
+         *      - FullMaintMarginReq-C — Maintenance Margin of commodity segment's portfolio with no discounts or intra-day credits
+         *      - FullMaintMarginReq-S — Maintenance Margin of security segment's portfolio with no discounts or intra-day credits
          *      - FundValue — Value of funds value (money market funds + mutual funds)
          *      - FutureOptionValue — Real-time market-to-market value of futures options
          *      - FuturesPNL — Real-time changes in futures value since last settlement
@@ -365,7 +365,7 @@ namespace IB.Api.Client.IBKR
          *      PendingCancel - indicates that you have sent a request to cancel the order but have not yet received cancel confirmation from the order destination. At this point, your order is not confirmed canceled. It is not guaranteed that the cancellation will be successful.
          *      PreSubmitted - indicates that a simulated order type has been accepted by the IB system and that this order has yet to be elected. The order is held in the IB system until the election criteria are met. At that time the order is transmitted to the order destination as specified .
          *      Submitted - indicates that your order has been accepted by the system.
-         *      ApiCancelled - after an order has been submitted and before it has been acknowledged, an API client client can request its cancelation, producing this state.
+         *      ApiCancelled - after an order has been submitted and before it has been acknowledged, an API client can request its cancellation, producing this state.
          *      Cancelled - indicates that the balance of your order has been confirmed canceled by the IB system. This could occur unexpectedly when IB or the destination has rejected your order.
          *      Filled - indicates that the order has been completely filled. Market orders executions will not always trigger a Filled status.
          *      Inactive - indicates that the order was received by the system but is no longer active because it was rejected or canceled.
@@ -557,7 +557,7 @@ namespace IB.Api.Client.IBKR
 
         /**
          * @brief provides the data resulting from the market scanner request.
-         * @param reqid the request's identifier.
+         * @param reqId the request's identifier.
          * @param rank the ranking within the response of this bar.
          * @param contractDetails the data's ContractDetails
          * @param distance according to query.
@@ -670,7 +670,7 @@ namespace IB.Api.Client.IBKR
          * @param underlyingConId The conID of the underlying security
          * @param tradingClass the option trading class
          * @param multiplier the option multiplier
-         * @param expirations a list of the expiries for the options of this underlying on this exchange
+         * @param expirations a list of the expires for the options of this underlying on this exchange
          * @param strikes a list of the possible strikes for options of this underlying on this exchange
          * @sa EClient::reqSecDefOptParams
          */
@@ -780,7 +780,7 @@ namespace IB.Api.Client.IBKR
         /**
          * @brief - returns beginning of data for contract for specified data type
          * @param requestId
-         * @param headTimestamp - string identifying earliest data date
+         * @param headTimestamp - string identifying the earliest data date
          * @sa EClient::reqHeadTimestamp
          */
         void headTimestamp(int reqId, string headTimestamp);
@@ -821,7 +821,7 @@ namespace IB.Api.Client.IBKR
         /**
          * @brief receives PnL updates in real time for the daily PnL and the total unrealized PnL for an account
          * @param reqId
-         * @param dailyPnL dailyPnL updates for the account in real time
+         * @param dailyPnL updates for the account in real time
          * @param unrealizedPnL total unRealized PnL updates for the account in real time
          * @sa EClient::reqPnL
          */
@@ -831,7 +831,7 @@ namespace IB.Api.Client.IBKR
          * @brief receives real time updates for single position daily PnL values
          * @param reqId
          * @param pos current size of the position
-         * @param dailyPnL dailyPnL for the position
+         * @param dailyPnL for the position
          * @param unrealizedPnL total unrealized PnL for the position (since inception) updating in real time
          * @param value current market value of the position
          * @sa EClient::reqSinglePnL
@@ -893,7 +893,7 @@ namespace IB.Api.Client.IBKR
          * @brief returns "MidPoint" tick-by-tick real-time tick
          * @param reqId - unique identifier of the request
          * @param time - tick-by-tick real-time tick timestamp
-         * @param midPoint - tick-by-tick real-time tick mid point
+         * @param midPoint - tick-by-tick real-time tick mid-point
          * @sa EClient::reqTickByTickData
          */
         void tickByTickMidPoint(int reqId, long time, double midPoint);
