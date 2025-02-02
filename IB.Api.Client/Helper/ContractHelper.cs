@@ -102,7 +102,7 @@ namespace IB.Api.Client.Helper
             ibClient.GetContractDetails(symbol, SecurityType.OPT);
         }
 
-        public static void RequestComodityContract(IbClient ibClient, string symbol, string currency)
+        public static void RequestCommodityContract(IbClient ibClient, string symbol, string currency)
         {
             ibClient.GetContractDetails(new Contract
             {

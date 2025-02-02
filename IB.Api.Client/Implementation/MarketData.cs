@@ -40,11 +40,9 @@ namespace IB.Api.Client.Implementation
             });
             ClientSocket.reqMktData(tickerId, contract, string.Empty, false, false, null);
 
-            if (contract.Strike != 0)
-            {
-                Notify($"Option chain real time data requested for {contract.Symbol}. Strike:{contract.Strike} Side:{contract.Right}");
-            }
-            else Notify($"Real time data for symbol {contract.Symbol} requested");
+            Notify(contract.Strike != 0
+                ? $"Option chain real time data requested for {contract.Symbol}. Strike:{contract.Strike} Side:{contract.Right}"
+                : $"Real time data for symbol {contract.Symbol} requested");
         }
         public void SubscribeToDefaultBar(int tickerId, Contract contract)
         {

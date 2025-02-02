@@ -10,7 +10,7 @@ namespace IB.Api.Client.Implementation
         public event EventHandler<PortfolioUpdate> PortfolioUpdateReceived;
 
         void EWrapper.updatePortfolio(Contract contract, decimal position, double marketPrice, double marketValue,
-            double averageCost, double unrealizedPNL, double realizedPNL, string accountName)
+            double averageCost, double unrealizedPnl, double realizedPnl, string accountName)
         {
             var portfolioUpdate = new PortfolioUpdate
             {
@@ -21,8 +21,8 @@ namespace IB.Api.Client.Implementation
                 AverageCost = averageCost,
                 Contract = contract,
                 Position = position,
-                UnrealizedPnl = unrealizedPNL,
-                RealizedPnl = realizedPNL
+                UnrealizedPnl = unrealizedPnl,
+                RealizedPnl = realizedPnl
             };
             PortfolioUpdateReceived?.Invoke(this, portfolioUpdate);
         }

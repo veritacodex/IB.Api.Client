@@ -2,11 +2,11 @@
 
 namespace IB.Api.Client.Examples
 {
-    static class Program
+    internal static class Program
     {
-        static void Main()
+        private static void Main()
         {
-            //double check your connection details within your TWS/Gateway settings
+            //double-check your connection details within your TWS/Gateway settings
             var connectionDetails = new ConnectionDetails
             {
                 Host = "127.0.0.1",

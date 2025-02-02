@@ -32,7 +32,7 @@ namespace IB.Api.Client.Implementation
             Notify($"Cancel Order Id ({orderId}) requested");
             ClientSocket.cancelOrder(orderId, orderCancel);
         }
-        public void CancellAllOrders()
+        public void CancelAllOrders()
         {
             ClientSocket.reqGlobalCancel();
         }
