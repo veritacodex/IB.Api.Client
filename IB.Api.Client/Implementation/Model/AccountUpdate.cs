@@ -21,7 +21,7 @@ namespace IB.Api.Client.Implementation.Model
         [JsonPropertyName("accountCode")]
         public string AccountCode { get; set; }
 
-        [JsonPropertyName("acountType")]
+        [JsonPropertyName("accountType")]
         public string AccountType { get; set; }
 
         [JsonPropertyName("availableFunds")]
