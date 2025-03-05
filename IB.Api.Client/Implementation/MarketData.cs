@@ -44,9 +44,9 @@ namespace IB.Api.Client.Implementation
                 ? $"Option chain real time data requested for {contract.Symbol}. Strike:{contract.Strike} Side:{contract.Right}"
                 : $"Real time data for symbol {contract.Symbol} requested");
         }
-        public void SubscribeToDefaultBar(int tickerId, Contract contract)
+        public void SubscribeToDefaultBar(int tickerId, Contract contract, WhatToShow whatToShow)
         {
-            ClientSocket.reqRealTimeBars(tickerId, contract, 0, nameof(WhatToShow.TRADES), false, null);
+            ClientSocket.reqRealTimeBars(tickerId, contract, 0, nameof(whatToShow), false, null);
             Notify($"Default bar for symbol {contract.Symbol} requested");
         }
         public void ReqMarketDepth(int reqId, Contract contract, double ratio)
