@@ -46,7 +46,7 @@ namespace IB.Api.Client.Implementation
         }
         public void SubscribeToDefaultBar(int tickerId, Contract contract, WhatToShow whatToShow)
         {
-            ClientSocket.reqRealTimeBars(tickerId, contract, 0, nameof(whatToShow), false, null);
+            ClientSocket.reqRealTimeBars(tickerId, contract, 0, whatToShow.ToString(), false, null);
             Notify($"Default bar for symbol {contract.Symbol} requested");
         }
         public void ReqMarketDepth(int reqId, Contract contract, double ratio)
