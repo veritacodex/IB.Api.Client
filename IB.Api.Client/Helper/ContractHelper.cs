@@ -26,11 +26,14 @@ namespace IB.Api.Client.Helper
                         Symbol = contractDetails.Contract.Symbol,
                         Start = DateTime.ParseExact(hours[0].Trim(), dateFormat, CultureInfo.InvariantCulture).ToLocalTime(),
                         End = DateTime.ParseExact(hours[1].Trim(), dateFormat, CultureInfo.InvariantCulture).ToLocalTime(),
-                        LastTradeDate = contractDetails.Contract.LastTradeDateOrContractMonth != null ? DateTime.ParseExact(contractDetails.Contract.LastTradeDateOrContractMonth.Trim(), "yyyyMMdd", CultureInfo.InvariantCulture).ToShortDateString() : ""
+                        LastTradeDate = contractDetails.Contract.LastTradeDateOrContractMonth != null
+                            ? DateTime.ParseExact(contractDetails.Contract.LastTradeDateOrContractMonth.Trim(), "yyyyMMdd", CultureInfo.InvariantCulture).ToShortDateString()
+                            : ""
                     };
                     output.Add(tradingHour);
                 }
             }
+
             return output.OrderBy(x => x.Start).ToList();
         }
 
@@ -68,7 +71,7 @@ namespace IB.Api.Client.Helper
         /// <param name="currency"></param>
         public static void RequestForexContract(IbClient ibClient, string symbol, string currency)
         {
-            ibClient.GetContractDetails(new Contract
+            ibClient.GetContractDetails(1020, new Contract
             {
                 Symbol = symbol,
                 SecType = nameof(SecurityType.CASH),
@@ -97,14 +100,9 @@ namespace IB.Api.Client.Helper
             ibClient.GetContractDetails(symbol, SecurityType.FOP);
         }
 
-        public static void RequestOptionsContract(IbClient ibClient, string symbol)
-        {
-            ibClient.GetContractDetails(symbol, SecurityType.OPT);
-        }
-
         public static void RequestCommodityContract(IbClient ibClient, string symbol, string currency)
         {
-            ibClient.GetContractDetails(new Contract
+            ibClient.GetContractDetails(1020, new Contract
             {
                 Symbol = symbol,
                 SecType = nameof(SecurityType.CMDTY),
