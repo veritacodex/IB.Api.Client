@@ -5,12 +5,12 @@ namespace IB.Api.Client.Implementation.Model
 {
     public class OptionParameterDefinition
     {
-        public string Exchange { get; internal set; }
-        public int UnderlyingConId { get; internal set; }
-        public string TradingClass { get; internal set; }
-        public string Multiplier { get; internal set; }
-        public HashSet<string> Expirations { get; internal set; }
-        public HashSet<double> Strikes { get; internal set; }
+        public string Exchange { get; internal init; }
+        public int UnderlyingConId { get; internal init; }
+        public string TradingClass { get; internal init; }
+        public string Multiplier { get; internal init; }
+        public HashSet<string> Expirations { get; internal init; }
+        public HashSet<double> Strikes { get; internal init; }
         public int ReqId { get; internal set; }
 
         public override string ToString()
@@ -18,15 +18,9 @@ namespace IB.Api.Client.Implementation.Model
             var output = new StringBuilder();
             output.AppendLine($"Exchange:{Exchange} UnderlyingConId:{UnderlyingConId} TradingClass:{TradingClass} Multiplier:{Multiplier}");
             output.AppendLine("Expirations:");
-            foreach (var expiration in Expirations)
-            {
-                output.AppendLine($"\t{expiration}");
-            }
+            output.AppendLine($"\t{string.Join('|', Expirations)}");
             output.AppendLine("Strikes:");
-            foreach (var strike in Strikes)
-            {
-                output.AppendLine($"\t{strike}");
-            }
+            output.AppendLine($"\t{string.Join('|', Strikes)}");
             return output.ToString();
         }
     }
