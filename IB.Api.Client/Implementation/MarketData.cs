@@ -43,6 +43,11 @@ namespace IB.Api.Client.Implementation
             });
             ClientSocket.reqMktData(tickerId, contract, string.Empty, false, false, null);
         }
+        
+        public void UnsubscribeToRealTimePrice(int tickerId)
+        {
+            ClientSocket.cancelMktData(tickerId);
+        }
 
         public void SubscribeToDefaultBar(int tickerId, Contract contract, WhatToShow whatToShow)
         {
