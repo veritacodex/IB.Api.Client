@@ -22,7 +22,7 @@ namespace IB.Api.Client.Examples
             ibClient.HistoricalDataUpdateReceived += HistoricalDataUpdateEndReceived;
             ConnectionHelper.StartIbClient(ibClient, connectionDetails);
 
-            ibClient.GetHistoricalData(1005, Contract, 1, DurationType.D, 5, BarSizeType.min, WhatToShow.MIDPOINT, Rth.No, false);
+            ibClient.GetHistoricalData(1005, Contract, 1, DurationType.D, 5, BarSizeType.mins, WhatToShow.MIDPOINT, Rth.No, false);
         }
         public static void RunDownloadWithUpdates(ConnectionDetails connectionDetails)
         {
@@ -32,7 +32,7 @@ namespace IB.Api.Client.Examples
             ibClient.BarUpdateReceived += BarUpdateReceived;
             ConnectionHelper.StartIbClient(ibClient, connectionDetails);
             
-            ibClient.GetHistoricalData(1005, Contract, 1, DurationType.D, 5, BarSizeType.min, WhatToShow.MIDPOINT, Rth.No, true);
+            ibClient.GetHistoricalData(1005, Contract, 1, DurationType.D, 5, BarSizeType.mins, WhatToShow.MIDPOINT, Rth.No, true);
         }       
 
         public static void RunGetTimeAndSales(ConnectionDetails connectionDetails)
