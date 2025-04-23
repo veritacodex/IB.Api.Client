@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using IB.Api.Client.Helper;
 using IB.Api.Client.IBKR;
 using IB.Api.Client.Implementation;
+using IB.Api.Client.Implementation.Helper;
 using IB.Api.Client.Implementation.Model;
 
 namespace IB.Api.Client.Examples;
@@ -11,7 +11,6 @@ namespace IB.Api.Client.Examples;
 public static class Options
 {
     private static double _optionChainMidPoint;
-    private static string _expiration;
     private static OptionParameterDefinition _parameterDefinition;
     private const string ContractSymbol = "SPX";
     private const string ContractExchange = "CBOE";
@@ -45,7 +44,7 @@ public static class Options
     {
         // PrintDefinitions(parametersList);
         _parameterDefinition = parametersList.First(x => x.Exchange == ContractExchange && x.TradingClass == ContractSymbol);
-        _expiration = _parameterDefinition.Expirations.ToList()[1]; //Choosing the nearest available expiration for the example
+        var expiration = _parameterDefinition.Expirations.ToList()[1]; //Choosing the nearest available expiration for the example
         _optionChainMidPoint = _parameterDefinition.Strikes.ToList()[_parameterDefinition.Strikes.Count / 2];
         
         Console.WriteLine($"Mid Point: {_optionChainMidPoint}");

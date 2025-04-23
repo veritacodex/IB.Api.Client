@@ -8,7 +8,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using IB.Api.Client.Helper;
+using IB.Api.Client.Implementation.Helper;
 
 namespace IB.Api.Client.IBKR
 {

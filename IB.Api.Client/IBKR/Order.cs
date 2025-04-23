@@ -3,7 +3,7 @@
 
 using System;
 using System.Collections.Generic;
-using IB.Api.Client.Helper;
+using IB.Api.Client.Implementation.Helper;
 
 namespace IB.Api.Client.IBKR
 {

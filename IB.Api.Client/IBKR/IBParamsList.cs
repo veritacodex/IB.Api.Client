@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text;
-using IB.Api.Client.Helper;
+using IB.Api.Client.Implementation.Helper;
 
 namespace IB.Api.Client.IBKR
 {

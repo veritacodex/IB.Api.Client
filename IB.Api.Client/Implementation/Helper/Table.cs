@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IB.Api.Client.Helper;
+namespace IB.Api.Client.Implementation.Helper;
 
 internal class Table
 {

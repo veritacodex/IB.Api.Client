@@ -2,7 +2,7 @@
  * and conditions of the IB API Non-Commercial License or the IB API Commercial License, as applicable. */
 
 using System;
-using IB.Api.Client.Helper;
+using IB.Api.Client.Implementation.Helper;
 
 namespace IB.Api.Client.IBKR
 {

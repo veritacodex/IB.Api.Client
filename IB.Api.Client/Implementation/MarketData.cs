@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using IB.Api.Client.Helper;
 using IB.Api.Client.IBKR;
 using IB.Api.Client.Implementation.Model;
+using DateHelper = IB.Api.Client.Implementation.Helper.DateHelper;
 
 namespace IB.Api.Client.Implementation
 {

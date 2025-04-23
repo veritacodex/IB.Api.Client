@@ -1,8 +1,8 @@
 using System;
-using IB.Api.Client.Helper;
 using IB.Api.Client.IBKR;
 using IB.Api.Client.Implementation.Model;
 using IB.Api.Client.Implementation;
+using IB.Api.Client.Implementation.Helper;
 
 namespace IB.Api.Client.Examples
 {

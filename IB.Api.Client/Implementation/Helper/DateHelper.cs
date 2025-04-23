@@ -1,8 +1,8 @@
-using System.Globalization;
 using System;
+using System.Globalization;
 using System.Text.RegularExpressions;
 
-namespace IB.Api.Client.Helper
+namespace IB.Api.Client.Implementation.Helper
 {
     public static partial class DateHelper
     {

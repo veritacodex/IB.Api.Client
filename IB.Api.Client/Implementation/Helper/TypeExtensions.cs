@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace IB.Api.Client.Helper
+namespace IB.Api.Client.Implementation.Helper
 {
     public static class TypeExtensions
     {

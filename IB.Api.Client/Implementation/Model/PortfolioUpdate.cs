@@ -1,7 +1,7 @@
 using System;
 using System.Text.Json.Serialization;
-using IB.Api.Client.Helper;
 using IB.Api.Client.IBKR;
+using IB.Api.Client.Implementation.Helper;
 
 namespace IB.Api.Client.Implementation.Model
 {
@@ -11,13 +11,7 @@ namespace IB.Api.Client.Implementation.Model
         public DateTime UpdatedOn { get; set; }
 
         [JsonPropertyName("updated")]
-        public string Updated
-        {
-            get
-            {
-                return $"{UpdatedOn.ToShortDateString()} {UpdatedOn.ToShortTimeString()} ";
-            }
-        }
+        public string Updated => $"{UpdatedOn.ToShortDateString()} {UpdatedOn.ToShortTimeString()} ";
 
         [JsonPropertyName("action")]
         public string Action { get; set; }

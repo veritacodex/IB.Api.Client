@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using IB.Api.Client.IBKR;
-using IB.Api.Client.Implementation;
 using IB.Api.Client.Implementation.Model;
 
-namespace IB.Api.Client.Helper
+namespace IB.Api.Client.Implementation.Helper
 {
     public static class ContractHelper
     {

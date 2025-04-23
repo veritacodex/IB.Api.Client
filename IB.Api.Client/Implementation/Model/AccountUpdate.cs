@@ -1,6 +1,6 @@
 using System;
 using System.Text.Json.Serialization;
-using IB.Api.Client.Helper;
+using IB.Api.Client.Implementation.Helper;
 
 namespace IB.Api.Client.Implementation.Model
 {
