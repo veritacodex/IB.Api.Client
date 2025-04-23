@@ -13,7 +13,7 @@ namespace IB.Api.Client.Examples
                 Port = 4001,
                 ClientId = 0
             };
-            Options.Run(connectionDetails);
+            BasicConnection.Run(connectionDetails);
             Common.KeepConsoleAlive();
         }
     }
