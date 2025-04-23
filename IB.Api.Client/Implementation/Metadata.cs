@@ -12,7 +12,7 @@ namespace IB.Api.Client.Implementation
         public event EventHandler<List<ContractDetails>> ContractDetailsReceived;
         public event EventHandler<MarketRule> MarketRuleReceived;
 
-        public void GetContractDetails(string symbol, SecurityType securityType)
+        public void ReqContractDetails(string symbol, SecurityType securityType)
         {
             _contracts = [];
             ClientSocket.reqContractDetails(1020, new Contract
@@ -22,7 +22,7 @@ namespace IB.Api.Client.Implementation
             });
         }
 
-        public void GetContractDetails(int reqId, Contract contract)
+        public void ReqContractDetails(int reqId, Contract contract)
         {
             _contracts = [];
             ClientSocket.reqContractDetails(reqId, contract);

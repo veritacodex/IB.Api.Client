@@ -7,9 +7,8 @@ namespace IB.Api.Client.Implementation
     public partial class IbClient
     {
         public event EventHandler<Notification> NotificationReceived;
-        public event EventHandler<UiNotification> UiNotificationReceived;        
-        
-        public void Notify(string message)
+
+        private void Notify(string message)
         {
             var notification = new Notification
             {
@@ -21,24 +20,13 @@ namespace IB.Api.Client.Implementation
             };
             NotificationReceived?.Invoke(this, notification);
         }
-        public void NotifyUI(string message)
-        {
-            var uiNotification = new UiNotification
-            {
-                At = DateTime.Now,
-                Message = message
-            };
-            UiNotificationReceived?.Invoke(this, uiNotification);
-        } 
-        public static NotificationType GetNotificationType(string message)
+
+        private static NotificationType GetNotificationType(string message)
         {
             if (message.Contains("data farm connection is OK"))
                 return NotificationType.OK;
 
-            if (message.Contains("data farm connection is inactive"))
-                return NotificationType.Error;
-
-            return NotificationType.Information;
+            return message.Contains("data farm connection is inactive") ? NotificationType.Error : NotificationType.Information;
         }
         void IEWrapper.error(Exception e)
         {

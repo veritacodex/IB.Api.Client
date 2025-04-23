@@ -12,26 +12,22 @@ namespace IB.Api.Client.Implementation.Helper
         public static List<TradingHours> GetTradingHours(ContractDetails contractDetails)
         {
             const string dateFormat = "yyyyMMdd:HHmm";
-            var output = new List<TradingHours>();
             var tradingHours = contractDetails.TradingHours.Split(';');
-            foreach (var item in tradingHours)
-            {
-                var tradingHoursItem = item.Trim();
-                if (tradingHoursItem.Length > 0 && ValidTradingHoursItem(tradingHoursItem))
+            var output = (from item in tradingHours
+                select item.Trim()
+                into tradingHoursItem
+                where tradingHoursItem.Length > 0 && ValidTradingHoursItem(tradingHoursItem)
+                select tradingHoursItem.Split('-')
+                into hours
+                select new TradingHours
                 {
-                    var hours = tradingHoursItem.Split('-');
-                    var tradingHour = new TradingHours
-                    {
-                        Symbol = contractDetails.Contract.Symbol,
-                        Start = DateTime.ParseExact(hours[0].Trim(), dateFormat, CultureInfo.InvariantCulture).ToLocalTime(),
-                        End = DateTime.ParseExact(hours[1].Trim(), dateFormat, CultureInfo.InvariantCulture).ToLocalTime(),
-                        LastTradeDate = contractDetails.Contract.LastTradeDateOrContractMonth != null
-                            ? DateTime.ParseExact(contractDetails.Contract.LastTradeDateOrContractMonth.Trim(), "yyyyMMdd", CultureInfo.InvariantCulture).ToShortDateString()
-                            : ""
-                    };
-                    output.Add(tradingHour);
-                }
-            }
+                    Symbol = contractDetails.Contract.Symbol,
+                    Start = DateTime.ParseExact(hours[0].Trim(), dateFormat, CultureInfo.InvariantCulture).ToLocalTime(),
+                    End = DateTime.ParseExact(hours[1].Trim(), dateFormat, CultureInfo.InvariantCulture).ToLocalTime(),
+                    LastTradeDate = contractDetails.Contract.LastTradeDateOrContractMonth != null
+                        ? DateTime.ParseExact(contractDetails.Contract.LastTradeDateOrContractMonth.Trim(), "yyyyMMdd", CultureInfo.InvariantCulture).ToShortDateString()
+                        : ""
+                }).ToList();
 
             return output.OrderBy(x => x.Start).ToList();
         }
@@ -63,14 +59,14 @@ namespace IB.Api.Client.Implementation.Helper
         }
 
         /// <summary>
-        /// An example of EUR/USD would be symbol=EUR and currency=USD
+        /// An example of EUR/USD - symbol=EUR and currency=USD
         /// </summary>
         /// <param name="ibClient"></param>
         /// <param name="symbol"></param>
         /// <param name="currency"></param>
         public static void RequestForexContract(IbClient ibClient, string symbol, string currency)
         {
-            ibClient.GetContractDetails(1020, new Contract
+            ibClient.ReqContractDetails(1020, new Contract
             {
                 Symbol = symbol,
                 SecType = nameof(SecurityType.CASH),
@@ -81,27 +77,27 @@ namespace IB.Api.Client.Implementation.Helper
 
         public static void RequestStockContract(IbClient ibClient, string symbol)
         {
-            ibClient.GetContractDetails(symbol, SecurityType.STK);
+            ibClient.ReqContractDetails(symbol, SecurityType.STK);
         }
 
         public static void RequestFuturesContract(IbClient ibClient, string symbol)
         {
-            ibClient.GetContractDetails(symbol, SecurityType.FUT);
+            ibClient.ReqContractDetails(symbol, SecurityType.FUT);
         }
 
         public static void RequestIndexContract(IbClient ibClient, string symbol)
         {
-            ibClient.GetContractDetails(symbol, SecurityType.IND);
+            ibClient.ReqContractDetails(symbol, SecurityType.IND);
         }
 
         public static void RequestOptionsOnFuturesContract(IbClient ibClient, string symbol)
         {
-            ibClient.GetContractDetails(symbol, SecurityType.FOP);
+            ibClient.ReqContractDetails(symbol, SecurityType.FOP);
         }
 
         public static void RequestCommodityContract(IbClient ibClient, string symbol, string currency)
         {
-            ibClient.GetContractDetails(1020, new Contract
+            ibClient.ReqContractDetails(1020, new Contract
             {
                 Symbol = symbol,
                 SecType = nameof(SecurityType.CMDTY),

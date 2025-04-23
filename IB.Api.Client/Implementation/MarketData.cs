@@ -25,7 +25,7 @@ namespace IB.Api.Client.Implementation
             Notify($"Time and sales for symbol {contract.Symbol} requested");
         }
 
-        public void SubscribeToRealTimePrice(int tickerId, Contract contract, string genericTickList)
+        public void ReqMktData(int tickerId, Contract contract, string genericTickList)
         {
             _priceUpdates.Add(tickerId, new PriceUpdate
             {
@@ -35,21 +35,22 @@ namespace IB.Api.Client.Implementation
             Notify($"Real time data for symbol {contract.Symbol} requested");
         }
 
-        public void SubscribeToRealTimePrice(int tickerId, Contract contract)
+        public void ReqMktData(int tickerId, Contract contract)
         {
             _priceUpdates.Add(tickerId, new PriceUpdate
             {
                 TickerId = tickerId
             });
             ClientSocket.reqMktData(tickerId, contract, string.Empty, false, false, null);
+            Notify($"Real time data for symbol {contract.Symbol} requested");
         }
         
-        public void UnsubscribeToRealTimePrice(int tickerId)
+        public void CancelMktData(int tickerId)
         {
             ClientSocket.cancelMktData(tickerId);
         }
 
-        public void SubscribeToDefaultBar(int tickerId, Contract contract, WhatToShow whatToShow)
+        public void ReqRealTimeBars(int tickerId, Contract contract, WhatToShow whatToShow)
         {
             ClientSocket.reqRealTimeBars(tickerId, contract, 0, whatToShow.ToString(), false, null);
             Notify($"Default bar for symbol {contract.Symbol} requested");
@@ -70,19 +71,12 @@ namespace IB.Api.Client.Implementation
             Notify($"Subscribed to {contract.Symbol} marketDepth");
         }
 
-        public void ReqOptionOnFuturesParameters(int reqId, ContractDetails contractDetails)
+        public void ReqSecDefOptParams(int reqId, ContractDetails contractDetails)
         {
             _optionParameterDefinitions = [];
             Notify($"Derivatives parameters for symbol {contractDetails.Contract.Symbol} requested");
             ClientSocket.reqSecDefOptParams(reqId, contractDetails.Contract.Symbol, contractDetails.Contract.Exchange, contractDetails.Contract.SecType,
                 contractDetails.Contract.ConId);
-        }
-
-        public void ReqOptionParameters(int reqId, ContractDetails contractDetails)
-        {
-            _optionParameterDefinitions = [];
-            Notify($"Derivatives parameters for symbol {contractDetails.Contract.Symbol} requested");
-            ClientSocket.reqSecDefOptParams(reqId, contractDetails.Contract.Symbol, string.Empty, contractDetails.Contract.SecType, contractDetails.Contract.ConId);
         }
 
         void IEWrapper.updateMktDepth(int tickerId, int position, int operation, int side, double price, decimal size)

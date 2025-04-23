@@ -20,7 +20,7 @@ namespace IB.Api.Client.Examples
             {
                 foreach (var accountId in ibClient.AccountIds)
                 {
-                    ibClient.SubscribeToAccountUpdates(accountId);
+                    ibClient.ReqAccountUpdates(accountId);
                 }
             }            
             Common.KeepConsoleAlive();

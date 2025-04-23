@@ -8,7 +8,7 @@ public partial class IbClient
 {
     private string _xmlFilePath;
 
-    public void RequestScannerParameters(string xmlFilePath)
+    public void ReqScannerParameters(string xmlFilePath)
     {
         _xmlFilePath = xmlFilePath;
         Notify("Scanner parameters requested");

@@ -7,7 +7,7 @@ namespace IB.Api.Client.Implementation
     public partial class IbClient
     {
         public event EventHandler<NewsProvider[]> NewsProvidersUpdateReceived;
-        public void GetNewsProviders()
+        public void ReqNewsProviders()
         {
             ClientSocket.reqNewsProviders();
         }

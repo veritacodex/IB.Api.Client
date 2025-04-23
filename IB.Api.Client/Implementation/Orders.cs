@@ -14,7 +14,7 @@ namespace IB.Api.Client.Implementation
         public event EventHandler<OpenOrderUpdate> WhatIfOpenOrderUpdateReceived;
         public int NextOrderId { get; set; }
         
-        public void RequestOrders()
+        public void ReqAllOpenOrders()
         {
             ClientSocket.reqAllOpenOrders();
         }
@@ -32,7 +32,7 @@ namespace IB.Api.Client.Implementation
             Notify($"Cancel Order Id ({orderId}) requested");
             ClientSocket.cancelOrder(orderId, orderCancel);
         }
-        public void CancelAllOrders()
+        public void ReqGlobalCancel()
         {
             ClientSocket.reqGlobalCancel();
         }

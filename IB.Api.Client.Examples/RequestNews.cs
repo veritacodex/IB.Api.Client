@@ -14,7 +14,7 @@ namespace IB.Api.Client.Examples
             ibClient.NotificationReceived += ConnectionHelper.NotificationReceived;
             ibClient.NewsProvidersUpdateReceived += NewsProvidersUpdateReceived;
             ConnectionHelper.StartIbClient(ibClient, connectionDetails);
-            ibClient.GetNewsProviders();
+            ibClient.ReqNewsProviders();
         }
         private static void NewsProvidersUpdateReceived(object sender, NewsProvider[] newsProviders)
         {

@@ -5,20 +5,20 @@ using IB.Api.Client.Implementation.Model;
 
 namespace IB.Api.Client.Implementation
 {
-    //Acounts
+    //Accounts
     public partial class IbClient
     {
-        public List<string> AccountIds { get; set; }
+        public List<string> AccountIds { get; private set; }
         private AccountUpdate _accountUpdate;
         public event EventHandler<AccountUpdate> AccountUpdateReceived;
 
-        public void SubscribeToAccountUpdates(string accountId)
+        public void ReqAccountUpdates(string accountId)
         {
             _accountUpdate = new AccountUpdate();
             Notify($"Account:{accountId} updates requested");
             ClientSocket.reqAccountUpdates(true, accountId);
         }
-        public void SubscribeToDefaultAccountUpdates()
+        public void ReqAccountUpdates()
         {
             _accountUpdate = new AccountUpdate();
             Notify($"Default account updates requested");

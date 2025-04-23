@@ -34,7 +34,7 @@ public static class Options
             }
         };
         
-        ibClient.ReqOptionParameters(1010, contractDetails);
+        ibClient.ReqSecDefOptParams(1010, contractDetails);
         Common.KeepConsoleAlive();
     }
 
