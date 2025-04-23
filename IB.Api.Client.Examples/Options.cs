@@ -10,8 +10,6 @@ namespace IB.Api.Client.Examples;
 
 public static class Options
 {
-    private static double _optionChainMidPoint;
-    private static OptionParameterDefinition _parameterDefinition;
     private const string ContractSymbol = "SPX";
     private const string ContractExchange = "CBOE";
     
@@ -43,11 +41,11 @@ public static class Options
     private static void OptionParametersReceived(object sender, List<OptionParameterDefinition> parametersList)
     {
         // PrintDefinitions(parametersList);
-        _parameterDefinition = parametersList.First(x => x.Exchange == ContractExchange && x.TradingClass == ContractSymbol);
-        var expiration = _parameterDefinition.Expirations.ToList()[1]; //Choosing the nearest available expiration for the example
-        _optionChainMidPoint = _parameterDefinition.Strikes.ToList()[_parameterDefinition.Strikes.Count / 2];
+        var parameterDefinition = parametersList.First(x => x.Exchange == ContractExchange && x.TradingClass == ContractSymbol);
+        var expiration = parameterDefinition.Expirations.ToList()[1]; //Choosing the nearest available expiration for the example
+        var optionChainMidPoint = parameterDefinition.Strikes.ToList()[parameterDefinition.Strikes.Count / 2];
         
-        Console.WriteLine($"Mid Point: {_optionChainMidPoint}");
+        Console.WriteLine($"Mid Point: {optionChainMidPoint}");
     }
 
     private static void PrintDefinitions(List<OptionParameterDefinition> parametersList)
