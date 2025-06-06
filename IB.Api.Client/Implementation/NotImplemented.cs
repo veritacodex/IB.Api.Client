@@ -231,16 +231,6 @@ namespace IB.Api.Client.Implementation
             DiscardImplementation(reqId, whiteBrandingId);
             throw new NotImplementedException();
         }
-        void IEWrapper.completedOrder(Contract contract, Order order, OrderState orderState)
-        {
-            DiscardImplementation(contract, order, orderState);
-            throw new NotImplementedException();
-        }
-        void IEWrapper.completedOrdersEnd()
-        {
-            DiscardImplementation("");
-            throw new NotImplementedException();
-        }
         void IEWrapper.scannerData(int reqId, int rank, ContractDetails contractDetails, string distance, string benchmark, string projection, string legsStr)
         {
             DiscardImplementation(reqId, rank, contractDetails, distance, benchmark, projection, legsStr);

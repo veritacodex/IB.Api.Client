@@ -12,30 +12,41 @@ namespace IB.Api.Client.Implementation
         public event EventHandler<OrderUpdate> OrderUpdateReceived;
         public event EventHandler<OpenOrderUpdate> OpenOrderUpdateReceived;
         public event EventHandler<OpenOrderUpdate> WhatIfOpenOrderUpdateReceived;
+        public event EventHandler<CompletedOrderUpdate> CompletedOrderUpdateReceived;
         public int NextOrderId { get; set; }
-        
+
+        public void ReqCompletedOrders(bool apiOrdersOnly)
+        {
+            ClientSocket.reqCompletedOrders(apiOrdersOnly);
+        }
+
         public void ReqAllOpenOrders()
         {
             ClientSocket.reqAllOpenOrders();
         }
+
         public void PlaceOrder(int orderId, Contract contract, Order order)
         {
             ClientSocket.placeOrder(orderId, contract, order);
         }
+
         public void WhatIf(int orderId, Contract contract, Order order)
         {
             order.WhatIf = true;
             ClientSocket.placeOrder(orderId, contract, order);
         }
+
         public void CancelOrder(int orderId, OrderCancel orderCancel)
         {
             Notify($"Cancel Order Id ({orderId}) requested");
             ClientSocket.cancelOrder(orderId, orderCancel);
         }
+
         public void ReqGlobalCancel()
         {
             ClientSocket.reqGlobalCancel();
         }
+
         public void RequestExecutions(int reqId)
         {
             ClientSocket.reqExecutions(reqId, new ExecutionFilter());
@@ -61,14 +72,22 @@ namespace IB.Api.Client.Implementation
                 AvgPrice = execution.AvgPrice
             });
         }
+
         void IEWrapper.execDetailsEnd(int reqId)
         {
             DiscardImplementation(reqId);
         }
+
         void IEWrapper.openOrderEnd()
         {
             DiscardImplementation();
         }
+
+        void IEWrapper.completedOrdersEnd()
+        {
+            DiscardImplementation();
+        }
+
         void IEWrapper.orderStatus(int orderId, string status, decimal filled, decimal remaining, double avgFillPrice,
             int permId, int parentId, double lastFillPrice, int clientId, string whyHeld, double mktCapPrice)
         {
@@ -88,6 +107,7 @@ namespace IB.Api.Client.Implementation
             };
             OrderUpdateReceived?.Invoke(this, orderUpdate);
         }
+
         void IEWrapper.commissionReport(CommissionReport commissionReport)
         {
             CommissionUpdateReceived?.Invoke(this, new CommissionUpdate
@@ -96,6 +116,7 @@ namespace IB.Api.Client.Implementation
                 Commission = commissionReport.Commission
             });
         }
+
         void IEWrapper.openOrder(int orderId, Contract contract, Order order, OrderState orderState)
         {
             if (order.WhatIf)
@@ -114,6 +135,16 @@ namespace IB.Api.Client.Implementation
                     Order = order,
                     OrderState = orderState
                 });
+        }
+
+        void IEWrapper.completedOrder(Contract contract, Order order, OrderState orderState)
+        {
+            CompletedOrderUpdateReceived?.Invoke(this, new CompletedOrderUpdate
+            {
+                Contract = contract,
+                Order = order,
+                OrderState = orderState
+            });
         }
     }
 }
